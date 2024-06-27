@@ -8,12 +8,6 @@
 #include "Components/CapsuleComponent.h"
 #include "Racer.generated.h"
 
-UENUM(BlueprintType)
-enum CurrentState
-{
-    FLYING,
-    RAGDOLLED,
-};
 
 UCLASS()
 class GALACTICDRIFT_API ARacer : public ACharacter
