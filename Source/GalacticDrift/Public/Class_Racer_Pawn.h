@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/FloatingPawnMovement.h"
+#include "Ragdollable.h"
 #include "Class_Racer_Pawn.generated.h"
 
 UENUM(BlueprintType)
@@ -16,7 +17,7 @@ enum CurrentState
 };
 
 UCLASS()
-class GALACTICDRIFT_API AClass_Racer_Pawn : public APawn
+class GALACTICDRIFT_API AClass_Racer_Pawn : public APawn, public IRagdollable
 {
 	GENERATED_BODY()
 
@@ -29,6 +30,9 @@ public:
     
     UFUNCTION(BlueprintCallable, Category="Action")
         void StunFor(float duration);
+    
+    void RagdollFor(float duration);
+    void UnRagdoll();
     
 protected:
 	// Called when the game starts or when spawned

@@ -47,27 +47,25 @@ void AClass_Racer_Pawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
  */
 void AClass_Racer_Pawn::StartFlying(float initialSpeed, bool accelerate, float floppiness)
 {
-//    if(state == FLYING && GEngine)
-//        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, ["Warning: StartFlying called when already flying, function cancelled"]);
-    UE_LOG(LogTemp, Warning, TEXT("I HAVE BEEN CALLED"));
-    UE_LOG(LogTemp, Warning, TEXT("The skeletal mesh is is %s"), ( skeletalMeshPtr ? TEXT("true"): TEXT("false") ));
-    if(skeletalMeshPtr){
-        UE_LOG(LogTemp, Warning, TEXT("Warning: Pointer for SkeletalMesh is null, function cancelled"));
-    }
+
     if(state == FLYING){
-        UE_LOG(LogTemp, Warning, TEXT("Warning: StartFlying called when already flying, function cancelled"));
+        UE_LOG(LogTemp, Warning, TEXT("Warning: StartFlying called when already flying, method cancelled"));
     } else if(moveComponentPtr){
-        UE_LOG(LogTemp, Warning, TEXT("The boolean value is %s"), ( state == FLYING ? TEXT("true"): TEXT("false") ));
+
         state = FLYING;
-//        moveComponentPtr->AddInputVector(GetActorForwardVector() * initialValue, accelerate);
+
         isAccelerating = accelerate;
         speed = initialSpeed;
-        skeletalMeshPtr->SetPhysicsBlendWeight(floppiness);
+        
+        if(skeletalMeshPtr){
+            skeletalMeshPtr->SetPhysicsBlendWeight(floppiness);
+        }
+        else{ UE_LOG(LogTemp, Warning, TEXT("Warning: Pointer for USkeletalMeshComponent is null, method cancelled")); }
         if(initialSpeed > 1 || initialSpeed < 0)
             UE_LOG(LogTemp, Warning, TEXT("Warning: initial speed not between zero and one"));
     }
     else{
-        UE_LOG(LogTemp, Warning, TEXT("Warning: Pointer for UFloatingPawnMovement is null, function cancelled"));
+        UE_LOG(LogTemp, Warning, TEXT("Warning: Pointer for UFloatingPawnMovement is null, method cancelled"));
     }
 }
 
@@ -76,3 +74,26 @@ void AClass_Racer_Pawn::StunFor(float duration)
     
 }
 
+void AClass_Racer_Pawn::RagdollFor(float duration){
+    state = RAGDOLLED;
+    if(skeletalMeshPtr){
+        skeletalMeshPtr->SetPhysicsBlendWeight(1.0f);
+        skeletalMeshPtr->SetAllBodiesSimulatePhysics(true);
+    }
+    else{ UE_LOG(LogTemp, Warning, TEXT("Warning: Pointer for USkeletalMeshComponent is null, method cancelled")); }
+}
+
+void AClass_Racer_Pawn::UnRagdoll(){
+    if(skeletalMeshPtr){
+//        AActor::K2_SetActorLocationAndRotation(skeletalMeshPtr->GetComponentLocation())
+        FHitResult dummy;
+//        AActor::K2_SetActorLocation(skeletalMeshPtr->GetComponentLocation(), false, dummy, true);
+        AActor::K2_SetActorLocation(skeletalMeshPtr->GetSkeletalCenterOfMass(), false, dummy, true);
+        
+        skeletalMeshPtr->ResetAllBodiesSimulatePhysics();
+        skeletalMeshPtr->SetPhysicsBlendWeight(0.1f);
+        state = FLYING;
+
+    }
+    else{ UE_LOG(LogTemp, Warning, TEXT("Warning: Pointer for USkeletalMeshComponent is null, method cancelled")); }
+}
