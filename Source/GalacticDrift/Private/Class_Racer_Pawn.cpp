@@ -27,7 +27,7 @@ void AClass_Racer_Pawn::BeginPlay()
 void AClass_Racer_Pawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-    if(state == FLYING){
+    if(state == FLYING || state == FLYING_WHILE_DRIFTING){
         moveComponentPtr->AddInputVector(GetActorForwardVector() * speed, isAccelerating);
     }
 }
@@ -47,7 +47,7 @@ void AClass_Racer_Pawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
  */
 void AClass_Racer_Pawn::StartFlying(float initialSpeed, bool accelerate, float floppiness)
 {
-
+    
     if(state == FLYING){
         UE_LOG(LogTemp, Warning, TEXT("Warning: StartFlying called when already flying, method cancelled"));
     } else if(moveComponentPtr){
@@ -68,6 +68,66 @@ void AClass_Racer_Pawn::StartFlying(float initialSpeed, bool accelerate, float f
         UE_LOG(LogTemp, Warning, TEXT("Warning: Pointer for UFloatingPawnMovement is null, method cancelled"));
     }
 }
+
+bool AClass_Racer_Pawn::CanDrift()
+{
+    if(state == FLYING || state == FLYING_WHILE_DRIFTING)
+        return true;
+    return false;
+}
+
+/*
+ The four drift scripts expect the blueprint to manage if legal to drift usually by calling CanDrift before
+    - also expected to be called with delta time
+    - also expect the rotateSpeed to be positive
+ */
+void AClass_Racer_Pawn::DriftUp(float rotateSpeed)
+{
+    if(state == FLYING || state == FLYING_WHILE_DRIFTING){
+        state = FLYING_WHILE_DRIFTING;
+        
+        rotation.Pitch += rotateSpeed;
+        FHitResult dummy;
+        rotation.Clamp();
+        AActor::K2_SetActorRelativeRotation(rotation, true, dummy, true);
+    }
+}
+void AClass_Racer_Pawn::DriftLeft(float rotateSpeed)
+{
+    if(state == FLYING || state == FLYING_WHILE_DRIFTING){
+        state = FLYING_WHILE_DRIFTING;
+        
+        rotation.Yaw -= rotateSpeed;
+        rotation.Roll -= 2 * rotateSpeed;
+        FHitResult dummy;
+        rotation.Clamp();
+        AActor::K2_SetActorRelativeRotation(rotation, true, dummy, true);
+    }
+}
+void AClass_Racer_Pawn::DriftDown(float rotateSpeed)
+{
+    if(state == FLYING || state == FLYING_WHILE_DRIFTING){
+        state = FLYING_WHILE_DRIFTING;
+        
+        rotation.Pitch -= rotateSpeed;
+        FHitResult dummy;
+        rotation.Clamp();
+        AActor::K2_SetActorRelativeRotation(rotation, true, dummy, true);
+    }
+}
+void AClass_Racer_Pawn::DriftRight(float rotateSpeed)
+{
+    if(state == FLYING || state == FLYING_WHILE_DRIFTING){
+        state = FLYING_WHILE_DRIFTING;
+        
+        rotation.Yaw += rotateSpeed;
+        rotation.Roll += 2 * rotateSpeed;
+        FHitResult dummy;
+        rotation.Clamp();
+        AActor::K2_SetActorRelativeRotation(rotation, true, dummy, true);
+    }
+}
+
 
 void AClass_Racer_Pawn::StunFor(float duration)
 {

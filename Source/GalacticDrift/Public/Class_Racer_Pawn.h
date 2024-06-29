@@ -6,12 +6,14 @@
 #include "GameFramework/Pawn.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "Ragdollable.h"
+#include "Math/Rotator.h"
 #include "Class_Racer_Pawn.generated.h"
 
 UENUM(BlueprintType)
 enum CurrentState
 {
     FLYING,
+    FLYING_WHILE_DRIFTING,
     RAGDOLLED,
     DEFAULT,
 };
@@ -27,6 +29,17 @@ public:
 
     UFUNCTION(BlueprintCallable, Category="Movement")
         void StartFlying(float initialSpeed, bool accelerate, float floppiness);
+
+    UFUNCTION(BlueprintCallable, Category="Movement")
+        bool CanDrift();
+    UFUNCTION(BlueprintCallable, Category="Movement")
+        void DriftUp(float rotateSpeed);
+    UFUNCTION(BlueprintCallable, Category="Movement")
+        void DriftLeft(float rotateSpeed);
+    UFUNCTION(BlueprintCallable, Category="Movement")
+        void DriftDown(float rotateSpeed);
+    UFUNCTION(BlueprintCallable, Category="Movement")
+        void DriftRight(float rotateSpeed);
     
     UFUNCTION(BlueprintCallable, Category="Action")
         void StunFor(float duration);
@@ -40,7 +53,6 @@ protected:
     
     UPROPERTY(EditAnywhere)
         float speed = 0;
-    bool isAccelerating = false;
     
     CurrentState state = DEFAULT;
     
@@ -48,6 +60,9 @@ protected:
         UFloatingPawnMovement* moveComponentPtr;    // floating pawn movement
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
         USkeletalMeshComponent* skeletalMeshPtr;
+    
+    bool isAccelerating = false;
+    FRotator rotation = {0,0,0};
     
 public:
 	// Called every frame
