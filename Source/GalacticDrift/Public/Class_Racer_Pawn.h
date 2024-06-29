@@ -40,6 +40,8 @@ public:
         void DriftDown(float rotateSpeed);
     UFUNCTION(BlueprintCallable, Category="Movement")
         void DriftRight(float rotateSpeed);
+    UFUNCTION(BlueprintCallable, Category="Movement")
+        void StopDrift();
     
     UFUNCTION(BlueprintCallable, Category="Action")
         void StunFor(float duration);

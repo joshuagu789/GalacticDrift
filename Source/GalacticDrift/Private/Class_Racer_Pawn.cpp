@@ -29,6 +29,16 @@ void AClass_Racer_Pawn::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
     if(state == FLYING || state == FLYING_WHILE_DRIFTING){
         moveComponentPtr->AddInputVector(GetActorForwardVector() * speed, isAccelerating);
+        if(state != FLYING_WHILE_DRIFTING){
+//            if(rotation.Roll > 2 || rotation.Roll < 2 && rotation.Pitch > 2 || rotation.Pitch < 2){
+            if(rotation.Roll > 2 || rotation.Roll < 2){
+                rotation.Roll += -3 * rotation.Roll * DeltaTime;
+//                rotation.Pitch += -3 * rotation.Pitch * DeltaTime;
+                FHitResult dummy;
+    //            rotation.Roll += 10.0;
+                AActor::K2_SetActorRelativeRotation(rotation, true, dummy, true);
+            }
+        }
     }
 }
 
@@ -86,10 +96,15 @@ void AClass_Racer_Pawn::DriftUp(float rotateSpeed)
     if(state == FLYING || state == FLYING_WHILE_DRIFTING){
         state = FLYING_WHILE_DRIFTING;
         
-        rotation.Pitch += rotateSpeed;
-        FHitResult dummy;
-        rotation.Clamp();
-        AActor::K2_SetActorRelativeRotation(rotation, true, dummy, true);
+//        if(rotation.Pitch <= 90){
+        if(true){
+            rotation.Pitch += rotateSpeed;
+            if(rotation.Pitch >= 360)
+                rotation.Pitch = rotation.Pitch - 360;
+            FHitResult dummy;
+            UE_LOG(LogTemp, Warning, TEXT("The float value is: %f"), rotation.Pitch);
+            AActor::K2_SetActorRelativeRotation(rotation, true, dummy, true);
+        }
     }
 }
 void AClass_Racer_Pawn::DriftLeft(float rotateSpeed)
@@ -98,9 +113,10 @@ void AClass_Racer_Pawn::DriftLeft(float rotateSpeed)
         state = FLYING_WHILE_DRIFTING;
         
         rotation.Yaw -= rotateSpeed;
-        rotation.Roll -= 2 * rotateSpeed;
+        if(rotation.Roll >= -90)
+            rotation.Roll -= 1 * rotateSpeed;
         FHitResult dummy;
-        rotation.Clamp();
+//        rotation.Clamp();
         AActor::K2_SetActorRelativeRotation(rotation, true, dummy, true);
     }
 }
@@ -109,10 +125,13 @@ void AClass_Racer_Pawn::DriftDown(float rotateSpeed)
     if(state == FLYING || state == FLYING_WHILE_DRIFTING){
         state = FLYING_WHILE_DRIFTING;
         
-        rotation.Pitch -= rotateSpeed;
-        FHitResult dummy;
-        rotation.Clamp();
-        AActor::K2_SetActorRelativeRotation(rotation, true, dummy, true);
+//        if(rotation.Pitch >= -90){
+        if(true){
+            rotation.Pitch -= rotateSpeed;
+            FHitResult dummy;
+    //        rotation.Clamp();
+            AActor::K2_SetActorRelativeRotation(rotation, true, dummy, true);
+        }
     }
 }
 void AClass_Racer_Pawn::DriftRight(float rotateSpeed)
@@ -121,11 +140,16 @@ void AClass_Racer_Pawn::DriftRight(float rotateSpeed)
         state = FLYING_WHILE_DRIFTING;
         
         rotation.Yaw += rotateSpeed;
-        rotation.Roll += 2 * rotateSpeed;
+        if(rotation.Roll <= 90)
+            rotation.Roll += 1 * rotateSpeed;
         FHitResult dummy;
-        rotation.Clamp();
+//        rotation.Clamp();
         AActor::K2_SetActorRelativeRotation(rotation, true, dummy, true);
     }
+}
+
+void AClass_Racer_Pawn::StopDrift(){
+    if(state == FLYING_WHILE_DRIFTING){ state = FLYING; }
 }
 
 
