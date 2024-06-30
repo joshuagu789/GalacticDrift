@@ -63,6 +63,6 @@ void AClass_Spawner::SpawnActorsEllipse(int min, int max, float max_x, float max
 		}
 	}
     else{
-        UE_LOG(LogTemp, Warning, TEXT("Warning: Pointer for subclass of AActor is null for spawner, method cancelled"));
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Pointer for subclass of AActor is null for Class_SpawnerAsteroid, method cancelled"));
     }
 }

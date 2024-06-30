@@ -62,7 +62,7 @@ void AClass_Racer_Pawn::StartFlying(float initialSpeed, bool accelerate, float f
 {
     
     if(state == FLYING){
-        UE_LOG(LogTemp, Warning, TEXT("Warning: StartFlying called when already flying, method cancelled"));
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: StartFlying called when already flyin for Class_Racer_Pawn, method cancelled"));
     } else if(moveComponentPtr){
 
         state = FLYING;
@@ -73,12 +73,12 @@ void AClass_Racer_Pawn::StartFlying(float initialSpeed, bool accelerate, float f
         if(skeletalMeshPtr){
             skeletalMeshPtr->SetPhysicsBlendWeight(floppiness);
         }
-        else{ UE_LOG(LogTemp, Warning, TEXT("Warning: Pointer for USkeletalMeshComponent is null, method cancelled")); }
+        else{ GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Pointer for USkeletalMeshComponent for Class_Racer_Pawn is null, method cancelled")); }
         if(initialSpeed > 1 || initialSpeed < 0)
-            UE_LOG(LogTemp, Warning, TEXT("Warning: initial speed not between zero and one"));
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: initial speed not between zero and one for Class_Racer_Pawn"));
     }
     else{
-        UE_LOG(LogTemp, Warning, TEXT("Warning: Pointer for UFloatingPawnMovement is null, method cancelled"));
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Pointer for UFloatingPawnMovement is null for Class_Racer_Pawn, method cancelled"));
     }
 }
 
@@ -167,7 +167,7 @@ void AClass_Racer_Pawn::RagdollFor(float duration){
         skeletalMeshPtr->SetPhysicsBlendWeight(1.0f);
         skeletalMeshPtr->SetAllBodiesSimulatePhysics(true);
     }
-    else{ UE_LOG(LogTemp, Warning, TEXT("Warning: Pointer for USkeletalMeshComponent is null, method cancelled")); }
+    else{ GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Pointer for USkeletalMeshComponent for Class_Racer_Pawn is null, method cancelled"));}
 }
 
 void AClass_Racer_Pawn::UnRagdoll(){
@@ -182,7 +182,7 @@ void AClass_Racer_Pawn::UnRagdoll(){
         state = FLYING;
 
     }
-    else{ UE_LOG(LogTemp, Warning, TEXT("Warning: Pointer for USkeletalMeshComponent is null, method cancelled")); }
+    else{ GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Pointer for USkeletalMeshComponent for Class_Racer_Pawn is null, method cancelled")); }
 }
 
 FString AClass_Racer_Pawn::GetSpeedIntAsString(){
