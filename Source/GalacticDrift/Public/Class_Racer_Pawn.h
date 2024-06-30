@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "Ragdollable.h"
+#include "Class_ActorInformationTracker.h"
 #include "Math/Rotator.h"
 #include "Class_Racer_Pawn.generated.h"
 
@@ -19,7 +20,7 @@ enum CurrentState
 };
 
 UCLASS()
-class GALACTICDRIFT_API AClass_Racer_Pawn : public APawn, public IRagdollable
+class GALACTICDRIFT_API AClass_Racer_Pawn : public APawn, public IRagdollable, public IClass_ActorInformationTracker
 {
 	GENERATED_BODY()
 
@@ -46,8 +47,12 @@ public:
     UFUNCTION(BlueprintCallable, Category="Action")
         void StunFor(float duration);
     
+    // From interfaces
     void RagdollFor(float duration);
     void UnRagdoll();
+    FString GetSpeedIntAsString();
+    float GetSpeedFloat(int decimalPlaces);
+    int GetSpeedInt();
     
 protected:
 	// Called when the game starts or when spawned
@@ -63,6 +68,7 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
         USkeletalMeshComponent* skeletalMeshPtr;
     
+    float popularity = 0;
     bool isAccelerating = false;
     FRotator rotation = {0,0,0};
     

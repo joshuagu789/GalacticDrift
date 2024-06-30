@@ -2,6 +2,9 @@
 
 
 #include "Class_Racer_Pawn.h"
+#include "Kismet/KismetMathLibrary.h"
+
+using namespace std;
 
 /*
  Expects all variables to be initialized in blueprint
@@ -181,3 +184,12 @@ void AClass_Racer_Pawn::UnRagdoll(){
     }
     else{ UE_LOG(LogTemp, Warning, TEXT("Warning: Pointer for USkeletalMeshComponent is null, method cancelled")); }
 }
+
+FString AClass_Racer_Pawn::GetSpeedIntAsString(){
+    int speedInt = static_cast<int>(round( UKismetMathLibrary::VSize(GetVelocity()) ));
+    FString temp = FString(TEXT("Speed: "));
+    temp.AppendInt(speedInt);
+    return temp;
+}
+float AClass_Racer_Pawn::GetSpeedFloat(int decimalPlaces){ return 1.0; }
+int AClass_Racer_Pawn::GetSpeedInt(){ return 1; }
