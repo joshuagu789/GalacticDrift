@@ -39,18 +39,26 @@ void AClass_Spawner::SpawnActorsEllipse(int min, int max, float max_x, float max
 
 			FRotator rotation{UKismetMathLibrary::RandomFloatInRange(0,360),UKismetMathLibrary::RandomFloatInRange(0,360),UKismetMathLibrary::RandomFloatInRange(0,360)};
 			
-			float scale = UKismetMathLibrary::RandomFloatInRange(min_scale,max_scale);
-			FVector scaleVector{scale,scale,scale}; 
+			// float scale = UKismetMathLibrary::RandomFloatInRange(min_scale,max_scale);
+			// FVector scaleVector{scale,scale,scale}; 
 
 			FTransform blankTransform;
 			blankTransform.SetLocation(location);
 			blankTransform.SetRotation(rotation.Quaternion());
-			blankTransform.SetScale3D(scaleVector);
+			// blankTransform.SetScale3D(scaleVector);
 			//plan to also have random rotation and scale
 
        		FActorSpawnParameters spawnParams;
 
 			AActor* temp = GetWorld()->SpawnActor<AActor>(actorPtr, blankTransform, spawnParams);
+			// temp->GetRootComponent()->SetWorldScale3D(scaleVector);
+			// FVector dummyScale{scale,scale,1}; 
+			// temp->GetRootComponent()->SetWorldScale3D(dummyScale);
+			// temp->GetRootComponent()->SetWorldScale3D(scaleVector);
+
+			// temp->GetRootComponent()->SetRelativeScale3D(scaleVector);
+			// temp->GetRootComponent()->SetRelativeScale3D_Direct(scaleVector);
+			// temp->GetRootComponent()->GetComponentTransform().GetScaled(scale);
 			actorList.Add(temp);
 		}
 	}
