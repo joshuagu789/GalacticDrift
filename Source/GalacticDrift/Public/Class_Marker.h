@@ -18,6 +18,7 @@ enum EntityType
     ENVIRONMENT_HAZARD,
     BUFF,
 	HOSTILE_NPC,
+	GOAL,
 	EMPTY,
 };
 
