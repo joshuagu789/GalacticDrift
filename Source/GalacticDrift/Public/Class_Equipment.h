@@ -1,5 +1,6 @@
 /*
   	Any type of damageable component that uses energy, typically does not expect any component to be of this type but rather its children
+		- NOTE: all children of equipment are expected to have worse accuracy/performance based on health
 */
 // Fill out your copyright notice in the Description page of Project Settings.
 
@@ -11,7 +12,8 @@
 #include "Class_Equipment.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+// UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom) )
 class GALACTICDRIFT_API UClass_Equipment : public UClass_DamageableComponent
 {
 	GENERATED_BODY()

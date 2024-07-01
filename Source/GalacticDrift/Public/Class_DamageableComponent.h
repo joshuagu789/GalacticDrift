@@ -10,7 +10,8 @@
 #include "Class_DamageableComponent.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+// UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom) )
 class GALACTICDRIFT_API UClass_DamageableComponent : public UActorComponent
 {
 	GENERATED_BODY()

@@ -105,7 +105,6 @@ void AClass_Racer_Pawn::DriftUp(float rotateSpeed)
             if(rotation.Pitch >= 360)
                 rotation.Pitch = rotation.Pitch - 360;
             FHitResult dummy;
-            UE_LOG(LogTemp, Warning, TEXT("The float value is: %f"), rotation.Pitch);
             AActor::K2_SetActorRelativeRotation(rotation, true, dummy, true);
         }
     }

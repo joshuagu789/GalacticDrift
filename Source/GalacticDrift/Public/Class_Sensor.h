@@ -24,6 +24,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	// UFUNCTION(BlueprintCallable, Category="Ability")
+	// 	TMap<EntityType, FVector> ScanMarkers();
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
