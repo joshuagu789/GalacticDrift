@@ -25,10 +25,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowedClasses = "AClass_GameServer"))
-		// AActor* server;	// pointer to actor in game that contains class AClass_GameServer
-		UClass_RacingGameInstance* server;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TEnumAsByte<EntityType> type;
 
