@@ -15,6 +15,14 @@ AClass_Entity::AClass_Entity()
 void AClass_Entity::BeginPlay()
 {
 	Super::BeginPlay();
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("trying to add to server"));
+	server = Cast<AClass_RacingGameStateBase>(UGameplayStatics::GetGameState( GetOwner() ));
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("success?"));
+	server->AddEntityToServer(type, this);
+	// if(server)
+	// 	server->AddEntityToServer(type, self);
+	// else
+    //     GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: entity's server pointer is null, cannot add to server"));
 	// if(server)
 	// 	server->AddEntityToServer(type, self);
 	// else

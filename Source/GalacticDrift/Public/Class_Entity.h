@@ -1,5 +1,5 @@
 /*
-	Any actor that needs to be registered with the game server for quick access to stuff
+	Any actor that needs to be registered with the game state for quick access to stuff
 */
 // Fill out your copyright notice in the Description page of Project Settings.
 
@@ -7,8 +7,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Class_GameServer.h"
+#include "Class_RacingGameStateBase.h"
 #include "Header_Enumerations.h"
+#include "Kismet/GameplayStatics.h"
 #include "Class_Entity.generated.h"
 
 UCLASS()
@@ -25,8 +26,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowedClasses = "AClass_GameServer"))
-		AActor* server;	// pointer to actor in game that contains class AClass_GameServer
-		// AClass_GameServer* server;
+		// AActor* server;	// pointer to actor in game that contains class AClass_GameServer
+		AClass_RacingGameStateBase* server;
+		
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TEnumAsByte<EntityType> type;
 
