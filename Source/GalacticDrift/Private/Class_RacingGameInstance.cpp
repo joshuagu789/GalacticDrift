@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Class_RacingGameState.h"
+#include "Class_RacingGameInstance.h"
 
-bool AClass_RacingGameState::AddEntityToServer(TEnumAsByte<EntityType> type, AActor* actor){
+bool UClass_RacingGameInstance::AddEntityToServer(TEnumAsByte<EntityType> type, AActor* actor){
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("server received?"));
 	if(!actor){
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: entity tried to send empty actor pointer to game server"));
@@ -13,7 +13,7 @@ bool AClass_RacingGameState::AddEntityToServer(TEnumAsByte<EntityType> type, AAc
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("asdasdas?!!??"));
         // markerList.Add(1);
         // test = test+1;
-        // markerList.Add(actor);
+        markerList.Add(actor);
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("qqq"));
 		// if(markerList.Contains(actor)){
         // 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: entity already added to game server"));
@@ -24,4 +24,9 @@ bool AClass_RacingGameState::AddEntityToServer(TEnumAsByte<EntityType> type, AAc
         // }
 	}
 	return false;
+}
+
+void UClass_RacingGameInstance::testprinting(){
+    test = 5;
+    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("can anyone hear me?"));
 }

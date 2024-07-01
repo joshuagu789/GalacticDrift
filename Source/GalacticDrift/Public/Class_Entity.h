@@ -7,7 +7,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Class_RacingGameStateBase.h"
+#include "Class_RacingGameInstance.h"
 #include "Header_Enumerations.h"
 #include "Kismet/GameplayStatics.h"
 #include "Class_Entity.generated.h"
@@ -27,8 +27,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowedClasses = "AClass_GameServer"))
 		// AActor* server;	// pointer to actor in game that contains class AClass_GameServer
-		AClass_RacingGameStateBase* server;
-		
+		UClass_RacingGameInstance* server;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TEnumAsByte<EntityType> type;
 

@@ -15,10 +15,11 @@ AClass_Entity::AClass_Entity()
 void AClass_Entity::BeginPlay()
 {
 	Super::BeginPlay();
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("trying to add to server"));
-	server = Cast<AClass_RacingGameStateBase>(UGameplayStatics::GetGameState( GetOwner() ));
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("success?"));
-	server->AddEntityToServer(type, this);
+	// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("trying to add to server"));
+	// server = Cast<UClass_RacingGameInstance>(UGameplayStatics::GetGameInstance( GetOwner() ));
+	// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("success?"));
+	// server->testprinting();
+	// server->AddEntityToServer(type, this);
 	// if(server)
 	// 	server->AddEntityToServer(type, self);
 	// else

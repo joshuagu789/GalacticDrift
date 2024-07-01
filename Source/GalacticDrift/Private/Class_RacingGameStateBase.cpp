@@ -3,7 +3,7 @@
 
 #include "Class_RacingGameStateBase.h"
 
-bool AClass_RacingGameStateBase::AddEntityToServer(TEnumAsByte<EntityType> type, AActor* actor){
+bool AClass_RacingGameStateBase::testing(TEnumAsByte<EntityType> type, AActor* actor){
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("server received?"));
 	if(!actor){
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: entity tried to send empty actor pointer to game server"));

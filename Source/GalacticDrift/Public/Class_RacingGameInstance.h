@@ -3,17 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameStateBase.h"
+#include "Engine/GameInstance.h"
 #include "Header_Enumerations.h"
 #include "Containers/Set.h"
 #include "Containers/Array.h"
-#include "Class_RacingGameStateBase.generated.h"
+#include "Class_RacingGameInstance.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class GALACTICDRIFT_API AClass_RacingGameStateBase : public AGameStateBase
+class GALACTICDRIFT_API UClass_RacingGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
@@ -23,11 +23,16 @@ public:
 		Returns true if successfully added, otherwise false
 			- takes in some reference to some actor
 	*/
-	bool testing(TEnumAsByte<EntityType> type, AActor* actor);
+	bool AddEntityToServer(TEnumAsByte<EntityType> type, AActor* actor);
+
+	UFUNCTION(BlueprintCallable, Category="Initialization")
+		void testprinting();
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSet<AActor*> racerList;
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<AActor*> markerList;
+	UPROPERTY()
+		int test = 0;
 };
