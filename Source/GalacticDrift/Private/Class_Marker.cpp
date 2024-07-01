@@ -32,7 +32,7 @@ void UClass_Marker::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	// ...
 }
 
-bool UClass_Marker::SetType(EntityType newType){
+bool UClass_Marker::SetType(MarkerType newType){
 	type = newType;
 	return true;
 }

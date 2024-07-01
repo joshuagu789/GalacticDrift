@@ -6,18 +6,19 @@
 #include "GameFramework/Pawn.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "Ragdollable.h"
+#include "Header_Enumerations.h"
 #include "Class_ActorInformationTracker.h"
 #include "Math/Rotator.h"
 #include "Class_Racer_Pawn.generated.h"
 
-UENUM(BlueprintType)
-enum CurrentState
-{
-    FLYING,
-    FLYING_WHILE_DRIFTING,
-    RAGDOLLED,
-    DEFAULT,
-};
+// UENUM(BlueprintType)
+// enum CurrentState
+// {
+//     FLYING,
+//     FLYING_WHILE_DRIFTING,
+//     RAGDOLLED,
+//     DEFAULT,
+// };
 
 UCLASS()
 class GALACTICDRIFT_API AClass_Racer_Pawn : public APawn, public IRagdollable, public IClass_ActorInformationTracker

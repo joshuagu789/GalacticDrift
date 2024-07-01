@@ -32,10 +32,11 @@ void UClass_Sensor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	// ...
 }
 
-// TMap<EntityType, FVector> UClass_Sensor::ScanMarkers(){
-// 	TMap<EntityType, FVector> temp;
-// 	return temp;
-// }
+TMap<TEnumAsByte<MarkerType>, FVector> UClass_Sensor::ScanMarkers(){
+	
+	TMap<TEnumAsByte<MarkerType>, FVector> temp;
+	return temp;
+}
 
 void UClass_Sensor::TakeDamage(float damage){ health -= damage; }
 void UClass_Sensor::Repair(float amount){ health += amount; }

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Class_Equipment.h"
+#include "Header_Enumerations.h"
 #include "Class_Sensor.generated.h"
 
 
@@ -24,8 +25,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	// UFUNCTION(BlueprintCallable, Category="Ability")
-	// 	TMap<EntityType, FVector> ScanMarkers();
+	UFUNCTION(BlueprintCallable, Category="Ability")
+		TMap<TEnumAsByte<MarkerType>, FVector> ScanMarkers();
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

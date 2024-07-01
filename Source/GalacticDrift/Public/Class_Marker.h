@@ -7,20 +7,21 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Header_Enumerations.h"
 #include "Class_Marker.generated.h"
 
 
-UENUM(BlueprintType)
-enum EntityType
-{
-    RACER,
-	WANTED_RACER,
-    ENVIRONMENT_HAZARD,
-    BUFF,
-	HOSTILE_NPC,
-	GOAL,
-	EMPTY,
-};
+// UENUM(BlueprintType)
+// enum EntityType
+// {
+//     RACER,
+// 	WANTED_RACER,
+//     ENVIRONMENT_HAZARD,
+//     BUFF,
+// 	HOSTILE_NPC,
+// 	GOAL,
+// 	EMPTY,
+// };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class GALACTICDRIFT_API UClass_Marker : public UActorComponent
@@ -35,13 +36,13 @@ public:
 		/*
 			Returns true if successfully changed type, false otherwise, typically set for any marker in blueprints when they first spawn
 		*/
-        bool SetType(EntityType newType);
+        bool SetType(MarkerType newType);
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	EntityType type = EMPTY;
+	MarkerType type = EMPTY_MARKER;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool invisible = false;
