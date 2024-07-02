@@ -28,7 +28,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSet<AActor*> racerList;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<AActor*> markerList;
+		TSet<AActor*> markerList;
 	UPROPERTY()
 		int test = 0;
 };

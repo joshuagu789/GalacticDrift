@@ -7,6 +7,8 @@
 #include "Header_Enumerations.h"
 #include "Containers/Set.h"
 #include "Containers/Array.h"
+// #include "Kismet/KismetMathLibrary.h"
+// #include "Kismet/KismetTextLibrary.h"
 #include "Class_RacingGameInstance.generated.h"
 
 /**
@@ -32,7 +34,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSet<AActor*> racerList;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<AActor*> markerList;
+		TSet<AActor*> markerList;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TSet<AActor*> emptyList;	// WARNING: SHOULD BE EMPTY
 	UPROPERTY()
 		int test = 0;
+
+private:
+
+	UFUNCTION()
+		TSet<AActor*>& ConvertEnumToContainer(TEnumAsByte<EntityType> type);
 };
