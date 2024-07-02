@@ -32,9 +32,22 @@ void UClass_Sensor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	// ...
 }
 
-TMap<TEnumAsByte<MarkerType>, FVector> UClass_Sensor::ScanMarkers(){
+TMap<TEnumAsByte<MarkerType>, FVector> UClass_Sensor::ScanMarkers(const TSet<AActor*> &markers){
 	
 	TMap<TEnumAsByte<MarkerType>, FVector> temp;
+	return temp;
+}
+
+TMap<FString, FVector> UClass_Sensor::ScanMarkersStrings(const TSet<AActor*> &markers){
+	TMap<FString, FVector> temp;
+	for(auto marker: markers){
+		FString markerName = marker->GetComponentByClass<UClass_Marker>()->GetMarkerName();
+		FVector location = marker->GetActorLocation();
+		float inaccuracyValue = 500000-500000*accuracy;	// max inaccuracy offset to add/subtract from a coordinate
+		FVector inaccuracy(UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue), UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue), UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue));
+		location += inaccuracy;
+		temp.Add(markerName, location);
+	}
 	return temp;
 }
 

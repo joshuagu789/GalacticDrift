@@ -27,8 +27,11 @@ public:
 	*/
 	bool AddEntityToServer(TEnumAsByte<EntityType> type, AActor* actor);
 
-	UFUNCTION(BlueprintCallable, Category="Initialization")
-		void testprinting();
+	UFUNCTION(BlueprintCallable, Category="Information")
+	/*
+		Retrieves reference to container of associated enum
+	*/
+		TSet<AActor*>& GetContainerForEnum(TEnumAsByte<EntityType> type);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -41,7 +44,4 @@ protected:
 		int test = 0;
 
 private:
-
-	UFUNCTION()
-		TSet<AActor*>& ConvertEnumToContainer(TEnumAsByte<EntityType> type);
 };

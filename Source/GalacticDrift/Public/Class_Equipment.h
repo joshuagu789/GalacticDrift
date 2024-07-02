@@ -32,6 +32,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float energy = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float accuracy = 1;	// accuracy should be 0-1 and affect how strong/exact equipment is
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

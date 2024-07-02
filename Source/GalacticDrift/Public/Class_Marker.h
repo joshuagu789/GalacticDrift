@@ -38,12 +38,18 @@ public:
 		*/
         bool SetType(MarkerType newType);
 
+	UFUNCTION(BlueprintCallable, Category="Initialization")
+		FString GetMarkerName();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TEnumAsByte<MarkerType> type = EMPTY_MARKER;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString markerName = "empty marker name";
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool invisible = false;

@@ -36,3 +36,6 @@ bool UClass_Marker::SetType(MarkerType newType){
 	type = newType;
 	return true;
 }
+
+FString UClass_Marker::GetMarkerName(){ return markerName; }
+

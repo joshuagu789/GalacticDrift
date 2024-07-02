@@ -5,12 +5,12 @@
 
 bool UClass_RacingGameInstance::AddEntityToServer(TEnumAsByte<EntityType> type, AActor* actor){
     GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("received on instance"));
-	// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, UKismetTextLibrary::Conv_IntToText( UKismetMathLibrary::Conv_ByteToInt(type) ));
+
 	if(!actor){
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: entity tried to send empty actor pointer to game server"));
 		return false;
 	}
-    TSet<AActor*>* containerPtr = &ConvertEnumToContainer(type);
+    TSet<AActor*>* containerPtr = &GetContainerForEnum(type);
     if(containerPtr){
         if(containerPtr->Contains(actor)){
         	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: entity already added to game server"));
@@ -24,24 +24,10 @@ bool UClass_RacingGameInstance::AddEntityToServer(TEnumAsByte<EntityType> type, 
         }
     }
     delete containerPtr;
-	// if(type == MARKER){
-	// 	if(markerList.Contains(actor)){
-    //     	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: entity already added to game server"));
-	// 		return false;
-	// 	} else {
-	// 		markerList.Add(actor);
-	//         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("success?!!??"));
-    //     }
-	// }
 	return false;
 }
 
-void UClass_RacingGameInstance::testprinting(){
-    test = 5;
-    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("can anyone hear me?"));
-}
-
-TSet<AActor*>& UClass_RacingGameInstance::ConvertEnumToContainer(TEnumAsByte<EntityType> type)
+TSet<AActor*>& UClass_RacingGameInstance::GetContainerForEnum(TEnumAsByte<EntityType> type)
 {
     switch(type){
         case RACER:
