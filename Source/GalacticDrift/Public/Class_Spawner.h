@@ -4,11 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Class_Entity.h"
 #include "Class_Spawner.generated.h"
 
 UCLASS()
-class GALACTICDRIFT_API AClass_Spawner : public AClass_Entity
+class GALACTICDRIFT_API AClass_Spawner : public AActor
 {
 	GENERATED_BODY()
 	

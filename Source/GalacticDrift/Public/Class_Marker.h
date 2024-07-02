@@ -42,7 +42,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	MarkerType type = EMPTY_MARKER;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TEnumAsByte<MarkerType> type = EMPTY_MARKER;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool invisible = false;
