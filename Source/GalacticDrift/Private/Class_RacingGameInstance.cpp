@@ -14,16 +14,13 @@ bool UClass_RacingGameInstance::AddEntityToServer(TEnumAsByte<EntityType> type, 
     if(containerPtr){
         if(containerPtr->Contains(actor)){
         	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: entity already added to game server"));
-            delete containerPtr;
 			return false;   
         } else {
 			containerPtr->Add(actor);
 	        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("success?!!??"));
-            delete containerPtr;
             return true;
         }
     }
-    delete containerPtr;
 	return false;
 }
 

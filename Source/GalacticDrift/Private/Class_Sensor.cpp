@@ -50,7 +50,7 @@ TArray<FString> UClass_Sensor::ScanMarkersStrings(const TSet<AActor*> &markers){
 		FString output = markerName + FString(": (") + FString::FromInt(static_cast<int>(location.X)) + FString(",") + FString::FromInt(static_cast<int>(location.Y)) + FString(",") + FString::FromInt(static_cast<int>(location.Z)) + FString(")");
 		// FText::Format(FText::FromString(markerName), UKismetTextLibrary::Conv_VectorToText(location))
 		// temp.Add(markerName, location);
-		temp.Add(output);
+		temp.Add(output);	// sort array by distance?
 	}
 	return temp;
 }
