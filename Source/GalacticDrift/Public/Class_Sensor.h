@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/KismetTextLibrary.h"
 #include "Class_Equipment.h"
 #include "Class_Marker.h"
 #include "Header_Enumerations.h"
@@ -30,7 +31,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category="Ability")
 		TMap<TEnumAsByte<MarkerType>, FVector> ScanMarkers(const TSet<AActor*> &markers);	// for ai
 	UFUNCTION(BlueprintCallable, Category="Ability")
-		TMap<FString, FVector> ScanMarkersStrings(const TSet<AActor*> &markers);	// for player
+		TArray<FString> ScanMarkersStrings(const TSet<AActor*> &markers);	// for player
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

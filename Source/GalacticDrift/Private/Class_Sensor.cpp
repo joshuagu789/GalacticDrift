@@ -38,18 +38,35 @@ TMap<TEnumAsByte<MarkerType>, FVector> UClass_Sensor::ScanMarkers(const TSet<AAc
 	return temp;
 }
 
-TMap<FString, FVector> UClass_Sensor::ScanMarkersStrings(const TSet<AActor*> &markers){
-	TMap<FString, FVector> temp;
+TArray<FString> UClass_Sensor::ScanMarkersStrings(const TSet<AActor*> &markers){
+	TArray<FString> temp;
 	for(auto marker: markers){
 		FString markerName = marker->GetComponentByClass<UClass_Marker>()->GetMarkerName();
 		FVector location = marker->GetActorLocation();
 		float inaccuracyValue = 500000-500000*accuracy;	// max inaccuracy offset to add/subtract from a coordinate
 		FVector inaccuracy(UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue), UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue), UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue));
 		location += inaccuracy;
-		temp.Add(markerName, location);
+		
+		FString output = markerName + FString(": (") + FString::FromInt(static_cast<int>(location.X)) + FString(",") + FString::FromInt(static_cast<int>(location.Y)) + FString(",") + FString::FromInt(static_cast<int>(location.Z)) + FString(")");
+		// FText::Format(FText::FromString(markerName), UKismetTextLibrary::Conv_VectorToText(location))
+		// temp.Add(markerName, location);
+		temp.Add(output);
 	}
 	return temp;
 }
+
+// TMap<FString, FVector> UClass_Sensor::ScanMarkersStrings(const TSet<AActor*> &markers){
+// 	TMap<FString, FVector> temp;
+// 	for(auto marker: markers){
+// 		FString markerName = marker->GetComponentByClass<UClass_Marker>()->GetMarkerName();
+// 		FVector location = marker->GetActorLocation();
+// 		float inaccuracyValue = 500000-500000*accuracy;	// max inaccuracy offset to add/subtract from a coordinate
+// 		FVector inaccuracy(UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue), UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue), UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue));
+// 		location += inaccuracy;
+// 		temp.Add(markerName, location);
+// 	}
+// 	return temp;
+// }
 
 void UClass_Sensor::TakeDamage(float damage){ health -= damage; }
 void UClass_Sensor::Repair(float amount){ health += amount; }

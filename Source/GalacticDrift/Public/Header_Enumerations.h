@@ -32,6 +32,30 @@ enum CurrentState
     RAGDOLLED,
     DEFAULT,
 };
+
+UENUM(BlueprintType)
+enum UI_Text
+{
+    UNINITIALIZED,
+    SPEED_TEXT = 0,
+    SCANNER_TEXT = 1,
+    ALARM_SENSOR = 2,
+    BEACON = 3,
+    E_WAR = 4,
+    THRUSTERS = 5,
+    KICK = 6,
+    COMPASS = 7,
+};
+
+UENUM(BlueprintType)
+enum UI_Command_Menu
+{
+    HIDDEN,
+    ALL_ABILITIES_MENU,
+    BEACON_MENU,
+    E_WAR_MENU,
+};
+
     // FLYING = "FLYING",
     // FLYING_WHILE_DRIFTING = "FLYING_WHILE_DRIFTING",
     // RAGDOLLED = "RAGDOLLED",
