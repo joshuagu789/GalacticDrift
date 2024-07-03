@@ -19,9 +19,8 @@ enum EntityType         // EXPERIMENTAL, proximity sensor?
     RACER = 1,
 	WANTED_RACER = 2,
 	FRIENDLY_NPC = 3,
-    MARKER = 4,
-	NPC_FACTION0 = 5,
-    NPC_FACTION1 = 6,
+	NPC_FACTION0 = 4,
+    NPC_FACTION1 = 5,
 };
 
 UENUM(BlueprintType)

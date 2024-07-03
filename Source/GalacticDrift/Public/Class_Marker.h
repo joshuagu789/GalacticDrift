@@ -23,7 +23,8 @@
 // 	EMPTY,
 // };
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+// UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom), Blueprintable )
 class GALACTICDRIFT_API UClass_Marker : public UActorComponent
 {
 	GENERATED_BODY()

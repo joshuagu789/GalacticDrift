@@ -13,7 +13,8 @@ bool UClass_RacingGameInstance::AddEntityToServer(TEnumAsByte<EntityType> type, 
     TSet<AActor*>* containerPtr = &GetContainerForEnum(type);
     if(containerPtr){
         if(containerPtr->Contains(actor)){
-        	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: entity already added to game server"));
+        	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: entity already added to game server, overriding original actor"));
+			containerPtr->Add(actor);
 			return false;   
         } else {
 			containerPtr->Add(actor);
@@ -23,17 +24,34 @@ bool UClass_RacingGameInstance::AddEntityToServer(TEnumAsByte<EntityType> type, 
 	return false;
 }
 
+bool UClass_RacingGameInstance::AddMarkerToServer(AActor* actor){
+    // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("received on instance"));
+
+	if(!actor){
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: entity tried to send empty actor pointer to game server"));
+		return false;
+	}
+    if(markerList.Contains(actor)){
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: entity already added to game server, overriding original actor"));
+        markerList.Add(actor);
+        return false;   
+    } else {
+        markerList.Add(actor);
+        return true;
+    }
+    
+	return false;
+}
+
 TSet<AActor*>& UClass_RacingGameInstance::GetContainerForEnum(TEnumAsByte<EntityType> type)
 {
     switch(type){
         case RACER:
             return racerList;
             break;
-        case MARKER:
-	        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("marker received"));
-            return markerList;
-            break;
     }
     GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: no valid conversion from entity enum to container in racing game instance"));
     return emptyList;
 }
+
+TSet<AActor*>& UClass_RacingGameInstance::GetMarkers(){ return markerList; }
