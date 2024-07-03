@@ -4,7 +4,7 @@
 #include "Class_RacingGameInstance.h"
 
 bool UClass_RacingGameInstance::AddEntityToServer(TEnumAsByte<EntityType> type, AActor* actor){
-    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("received on instance"));
+    // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("received on instance"));
 
 	if(!actor){
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: entity tried to send empty actor pointer to game server"));
@@ -17,7 +17,6 @@ bool UClass_RacingGameInstance::AddEntityToServer(TEnumAsByte<EntityType> type, 
 			return false;   
         } else {
 			containerPtr->Add(actor);
-	        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("success?!!??"));
             return true;
         }
     }
@@ -31,6 +30,7 @@ TSet<AActor*>& UClass_RacingGameInstance::GetContainerForEnum(TEnumAsByte<Entity
             return racerList;
             break;
         case MARKER:
+	        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("marker received"));
             return markerList;
             break;
     }

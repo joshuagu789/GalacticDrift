@@ -12,7 +12,8 @@
 #include "Class_Sensor.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+// UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom), Blueprintable )
 class GALACTICDRIFT_API UClass_Sensor : public UClass_Equipment
 {
 	GENERATED_BODY()

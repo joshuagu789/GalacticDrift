@@ -17,8 +17,8 @@ void UClass_InGameWidget::PushToOutputConsole(const TArray<FString> &lines){
 
 void UClass_InGameWidget::UpdateOutputConsole(float InDeltaTime){
 
-    if(!linesToPrint.IsEmpty()){
-        if(!line.IsEmpty()){
+    if(!line.IsEmpty()){
+        // if(!linesToPrint.IsEmpty()){    // swap line 21 with 20
 
             if(outputConsoleTimer <= 0){
                 if(outputConsolePtr){
@@ -26,13 +26,15 @@ void UClass_InGameWidget::UpdateOutputConsole(float InDeltaTime){
                     FText temp = outputConsolePtr->GetText();
                     FText character = FText::FromString( line.Mid(lineIndex, 1) );
 
-                    outputConsoleTimer += 0.5;
+                    outputConsoleTimer += 0.05;
                     lineIndex++;
 
-                    if(lineIndex >= line.Len()){
+                    if(lineIndex > line.Len()){
                         character = FText::Join(character, FText::FromString(FString("\n")) );
+	                    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("adding new line character"));
+                        line.Empty();
                     }
-                    outputConsolePtr->SetText( FText::Join(temp, character) );
+                    outputConsolePtr->SetText( FText::Join(NSLOCTEXT("a","b",""), temp, character) );
 
                 } else {
 	                GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: outputConsolePtr null for Class_InGameWidget"));
@@ -40,19 +42,19 @@ void UClass_InGameWidget::UpdateOutputConsole(float InDeltaTime){
             } else {
                 outputConsoleTimer -= InDeltaTime;
             }
+        // }
+    } else if(!linesToPrint.IsEmpty()){
+        lineIndex = 0;
+        outputConsoleTimer = 0;
+        // FString temp = linesToPrint.Peek();
+        // linesToPrint.Pop();
+        // line = temp;
 
-        } else {
-            lineIndex = 0;
-            outputConsoleTimer = 0;
-            // FString temp = linesToPrint.Peek();
-            // linesToPrint.Pop();
-            // line = temp;
-
-            FString temp;
-            linesToPrint.Dequeue(temp);     // does dequeue store into temp???
-            line = temp;
-            // line = linesToPrint.Dequeue();
-            // add next line to output
-        }
+        FString temp;
+        linesToPrint.Dequeue(temp);     // does dequeue store into temp???
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("dequeue called"));
+        line = temp;
+        // line = linesToPrint.Dequeue();
+        // add next line to output
     }
 }
