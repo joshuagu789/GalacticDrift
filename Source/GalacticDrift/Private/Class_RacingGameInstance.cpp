@@ -21,6 +21,7 @@ bool UClass_RacingGameInstance::AddEntityToServer(TEnumAsByte<EntityType> type, 
             return true;
         }
     }
+
 	return false;
 }
 
@@ -65,17 +66,13 @@ AActor* UClass_RacingGameInstance::GetClosestEntityTo(const TArray<TEnumAsByte<E
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: passd in actor pointer is nullptr for GetClosestEntityTo in racing game instance, returning nullptr"));  
         return currentClosest;
     }
-    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("getclosestentityto"));
 
     for(TEnumAsByte<EntityType> type: entityTypes){
-        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("going through types"));
 
         TSet<AActor*>* containerPtr = &GetContainerForEnum(type);
         if(containerPtr){
-            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("containerPtr is not null"));
 
-            for(AActor* entity: *containerPtr){
-                GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("comparing racer"));
+            for(auto &entity: *containerPtr){
                 if(!currentClosest){    // first entity always closest to prevent currentClosest from staying null
                     currentClosest = entity;
                     currentClosestDistanceSquared = actor->GetSquaredDistanceTo(currentClosest);

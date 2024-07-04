@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Class_Equipment.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "GameFramework/FloatingPawnMovement.h"
 #include "Class_OrbitMovement.generated.h"
 
 
@@ -17,9 +19,30 @@ public:
 	// Sets default values for this component's properties
 	UClass_OrbitMovement();
 
+	UFUNCTION(BlueprintCallable)
+		void BeginOrbiting(AActor* actor);
+	UFUNCTION(BlueprintCallable)
+		void StopOrbiting();
+	UFUNCTION(BlueprintCallable)
+		bool IsOrbiting();
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+        UFloatingPawnMovement* moveComponentPtr;
+
+	UPROPERTY()
+		AActor* orbitTarget;
+	UPROPERTY()
+		FVector currentTargetOffset;
+
+	UPROPERTY()
+		FRotator angleOfOrbit;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int orbitRange;
+
+	bool isOrbiting;
 
 public:	
 	// Called every frame

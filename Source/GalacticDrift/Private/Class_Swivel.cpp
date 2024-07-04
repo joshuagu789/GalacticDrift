@@ -31,9 +31,14 @@ void UClass_Swivel::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 	// ...
 	if(isRotating && rotateTarget){
-		FRotator requiredRotation = UKismetMathLibrary::FindLookAtRotation(GetOwner()->GetActorLocation(), rotateTarget->GetActorLocation());
+		FRotator destinationRotation = UKismetMathLibrary::FindLookAtRotation(GetOwner()->GetRootComponent()->K2_GetComponentLocation(), rotateTarget->GetActorLocation());
 		FHitResult dummy;
-		GetOwner()->GetRootComponent()->K2_SetWorldRotation(requiredRotation, true, dummy, true);
+		// GetOwner()->GetRootComponent()->K2_SetWorldRotation(requiredRotation, true, dummy, true);
+		FRotator currentRotation = GetOwner()->GetRootComponent()->K2_GetComponentRotation();
+		// GetOwner()->GetRootComponent()->K2_AddWorldRotation( 10 * DeltaTime * (destinationRotation - currentRotation), true, dummy, true);
+
+		// warning: entity sometimes spazzes out after rotating in complete circle, probably because some issue of adding rotation over 360 or under 0
+		GetOwner()->GetRootComponent()->K2_AddRelativeRotation( 10 * DeltaTime * (destinationRotation - currentRotation), true, dummy, true);
 	}
 }
 
