@@ -41,16 +41,20 @@ TMap<TEnumAsByte<MarkerType>, FVector> UClass_Sensor::ScanMarkers(const TSet<AAc
 TArray<FString> UClass_Sensor::ScanMarkersStrings(const TSet<AActor*> &markers){
 	TArray<FString> temp;
 	for(auto marker: markers){
-		FString markerName = marker->GetComponentByClass<UClass_Marker>()->GetMarkerName();
-		FVector location = marker->GetActorLocation();
-		float inaccuracyValue = 500000-500000*accuracy;	// max inaccuracy offset to add/subtract from a coordinate
-		FVector inaccuracy(UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue), UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue), UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue));
-		location += inaccuracy;
-		
-		FString output = markerName + FString(": (") + FString::FromInt(static_cast<int>(location.X)) + FString(",") + FString::FromInt(static_cast<int>(location.Y)) + FString(",") + FString::FromInt(static_cast<int>(location.Z)) + FString(")");
-		// FText::Format(FText::FromString(markerName), UKismetTextLibrary::Conv_VectorToText(location))
-		// temp.Add(markerName, location);
-		temp.Add(output);	// sort array by distance?
+		if(marker){
+			FString markerName = marker->GetComponentByClass<UClass_Marker>()->GetMarkerName();
+			FVector location = marker->GetActorLocation();
+			float inaccuracyValue = 500000-500000*accuracy;	// max inaccuracy offset to add/subtract from a coordinate
+			FVector inaccuracy(UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue), UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue), UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue));
+			location += inaccuracy;
+			
+			FString output = markerName + FString(": (") + FString::FromInt(static_cast<int>(location.X)) + FString(",") + FString::FromInt(static_cast<int>(location.Y)) + FString(",") + FString::FromInt(static_cast<int>(location.Z)) + FString(")");
+			// FText::Format(FText::FromString(markerName), UKismetTextLibrary::Conv_VectorToText(location))
+			// temp.Add(markerName, location);
+			temp.Add(output);	// sort array by distance?
+		} else {
+        	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: dangling pointer in Class_Sensors's ScanMarkersStrings from game instance markerList"));
+		}
 	}
 	return temp;
 }

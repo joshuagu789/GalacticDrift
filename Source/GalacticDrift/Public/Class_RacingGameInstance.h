@@ -37,10 +37,16 @@ public:
 	/*
 		Retrieves reference to container of associated enum
 	*/
-		TSet<AActor*>& GetContainerForEnum(TEnumAsByte<EntityType> type);
+		TSet<AActor*>& GetContainerForEnum(const TEnumAsByte<EntityType> type);
 
 	UFUNCTION(BlueprintCallable)
 		TSet<AActor*>& GetMarkers();
+
+	UFUNCTION(BlueprintCallable)
+		/*
+			WARNING: THIS CAN RETURN NULL POINTER
+		*/
+		AActor* GetClosestEntityTo(const TArray<TEnumAsByte<EntityType>> &entityTypes, const AActor* actor);
 
 protected:	// below should be private but public for now because testing
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

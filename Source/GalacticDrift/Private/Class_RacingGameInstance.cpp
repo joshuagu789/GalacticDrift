@@ -43,7 +43,7 @@ bool UClass_RacingGameInstance::AddMarkerToServer(AActor* actor){
 	return false;
 }
 
-TSet<AActor*>& UClass_RacingGameInstance::GetContainerForEnum(TEnumAsByte<EntityType> type)
+TSet<AActor*>& UClass_RacingGameInstance::GetContainerForEnum(const TEnumAsByte<EntityType> type)
 {
     switch(type){
         case RACER:
@@ -55,3 +55,38 @@ TSet<AActor*>& UClass_RacingGameInstance::GetContainerForEnum(TEnumAsByte<Entity
 }
 
 TSet<AActor*>& UClass_RacingGameInstance::GetMarkers(){ return markerList; }
+
+AActor* UClass_RacingGameInstance::GetClosestEntityTo(const TArray<TEnumAsByte<EntityType>> &entityTypes, const AActor* actor){
+
+    AActor* currentClosest = nullptr;
+    float currentClosestDistanceSquared;
+
+    if(!actor){
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: passd in actor pointer is nullptr for GetClosestEntityTo in racing game instance, returning nullptr"));  
+        return currentClosest;
+    }
+    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("getclosestentityto"));
+
+    for(TEnumAsByte<EntityType> type: entityTypes){
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("going through types"));
+
+        TSet<AActor*>* containerPtr = &GetContainerForEnum(type);
+        if(containerPtr){
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("containerPtr is not null"));
+
+            for(AActor* entity: *containerPtr){
+                GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("comparing racer"));
+                if(!currentClosest){    // first entity always closest to prevent currentClosest from staying null
+                    currentClosest = entity;
+                    currentClosestDistanceSquared = actor->GetSquaredDistanceTo(currentClosest);
+                } else if ( currentClosestDistanceSquared > actor->GetSquaredDistanceTo(entity) ){
+                    currentClosest = entity;
+                    currentClosestDistanceSquared = actor->GetSquaredDistanceTo(currentClosest);                    
+                }
+            }
+        } else {
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: containerPtr is nullptr for GetClosestEntityTo in racing game instance"));
+        }
+    }
+    return currentClosest;
+}

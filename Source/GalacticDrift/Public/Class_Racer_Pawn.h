@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Class_Combatant.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "Ragdollable.h"
 #include "Header_Enumerations.h"
@@ -12,7 +13,7 @@
 #include "Class_Racer_Pawn.generated.h"
 
 UCLASS()
-class GALACTICDRIFT_API AClass_Racer_Pawn : public APawn, public IRagdollable, public IClass_ActorInformationTracker
+class GALACTICDRIFT_API AClass_Racer_Pawn : public AClass_Combatant, public IRagdollable, public IClass_ActorInformationTracker
 {
 	GENERATED_BODY()
 

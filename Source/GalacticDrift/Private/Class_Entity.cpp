@@ -32,3 +32,15 @@ void UClass_Entity::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	// ...
 }
 
+TArray<TEnumAsByte<EntityType>> UClass_Entity::GetEnemyTypes(){
+	TArray<TEnumAsByte<EntityType>> temp;
+	switch(type){
+		case RACER:
+			break;
+		case NPC_FACTION0:
+			temp.Add(RACER);
+			break;
+	}
+	return temp;
+}
+
