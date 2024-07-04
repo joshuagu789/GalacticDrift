@@ -47,6 +47,7 @@ private:
 	UFUNCTION()
 		void UpdateOutputConsole(float InDeltaTime);
 	float outputConsoleTimer = 0;
+	float outputConsoleTextLifetimeTimer = 0;
 	int lineIndex = 0;
 public:
 	void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;

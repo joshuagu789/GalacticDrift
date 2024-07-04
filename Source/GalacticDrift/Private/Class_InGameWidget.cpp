@@ -26,7 +26,8 @@ void UClass_InGameWidget::UpdateOutputConsole(float InDeltaTime){
                     FText temp = outputConsolePtr->GetText();
                     FText character = FText::FromString( line.Mid(lineIndex, 1) );
 
-                    outputConsoleTimer += 0.05;
+                    outputConsoleTimer += 0.005;
+                    outputConsoleTextLifetimeTimer = 10.0;
                     lineIndex++;
 
                     if(lineIndex > line.Len()){
@@ -56,5 +57,10 @@ void UClass_InGameWidget::UpdateOutputConsole(float InDeltaTime){
         line = temp;
         // line = linesToPrint.Dequeue();
         // add next line to output
+    }
+    else{
+        outputConsoleTextLifetimeTimer -= InDeltaTime;
+        if(outputConsoleTextLifetimeTimer <= 0)
+            outputConsolePtr->SetText( FText::FromString(FString("")) );
     }
 }
