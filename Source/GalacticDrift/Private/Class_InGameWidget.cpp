@@ -26,7 +26,8 @@ void UClass_InGameWidget::UpdateOutputConsole(float InDeltaTime){
                     FText temp = outputConsolePtr->GetText();
                     FText character = FText::FromString( line.Mid(lineIndex, 1) );
 
-                    outputConsoleTimer += 0.005;
+                    // outputConsoleTimer += 0.005;
+                    outputConsoleTimer = 0.005;
                     outputConsoleTextLifetimeTimer = 10.0;
                     lineIndex++;
 

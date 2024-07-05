@@ -36,12 +36,14 @@ void UClass_OrbitMovement::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 		if(FVector::DistSquared(destination, position) <= 100){
 			currentTargetOffset = angleOfOrbit.RotateVector(currentTargetOffset);
+
+			moveComponentPtr->AddInputVector(currentTargetOffset + orbitTarget->GetRootComponent()->K2_GetComponentLocation() - position, false);
 		}
 		else if(moveComponentPtr){
 			// moveComponentPtr->AddInputVector(destination, true);
 			moveComponentPtr->AddInputVector(destination - position, true);
 		} else {
-        	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: actor is nullptr in BeginOrbiting parameter of Class OrbitMovement"));	
+        	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: move component ptr is nullptr in TickComponent of Class OrbitMovement"));	
 		}
 	}
 }
@@ -51,9 +53,14 @@ void UClass_OrbitMovement::BeginOrbiting(AActor* actor){
 		orbitTarget = actor;
 		isOrbiting = true;
 
-		angleOfOrbit.Pitch = UKismetMathLibrary::RandomFloatInRange(-1,1);
-		angleOfOrbit.Roll = UKismetMathLibrary::RandomFloatInRange(-1,1);
-		angleOfOrbit.Yaw = UKismetMathLibrary::RandomFloatInRange(-1,1);
+		// angleOfOrbit.Pitch = UKismetMathLibrary::RandomFloatInRange(0,360);
+		// angleOfOrbit.Roll = UKismetMathLibrary::RandomFloatInRange(0,360);
+		// angleOfOrbit.Yaw = UKismetMathLibrary::RandomFloatInRange(0,360);
+		// angleOfOrbit.Normalize();
+		angleOfOrbit.Pitch = 20 * UKismetMathLibrary::RandomFloatInRange(-1,1);
+		angleOfOrbit.Roll = 20 * UKismetMathLibrary::RandomFloatInRange(-1,1);
+		angleOfOrbit.Yaw = 20 * UKismetMathLibrary::RandomFloatInRange(-1,1);
+		// angleOfOrbit.Normalize();
 
 		currentTargetOffset = GetOwner()->GetRootComponent()->K2_GetComponentLocation() - actor->GetRootComponent()->K2_GetComponentLocation();
 		currentTargetOffset = currentTargetOffset.GetSafeNormal() * orbitRange;

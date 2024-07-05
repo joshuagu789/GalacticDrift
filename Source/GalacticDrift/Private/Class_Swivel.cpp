@@ -31,7 +31,7 @@ void UClass_Swivel::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 	// ...
 	if(isRotating && rotateTarget){
-		FRotator destinationRotation = UKismetMathLibrary::FindLookAtRotation(GetOwner()->GetRootComponent()->K2_GetComponentLocation(), rotateTarget->GetActorLocation());
+		FRotator destinationRotation = UKismetMathLibrary::FindLookAtRotation(GetOwner()->GetRootComponent()->K2_GetComponentLocation(), rotateTarget->GetRootComponent()->K2_GetComponentLocation());
 		FHitResult dummy;
 		// GetOwner()->GetRootComponent()->K2_SetWorldRotation(requiredRotation, true, dummy, true);
 		FRotator currentRotation = GetOwner()->GetRootComponent()->K2_GetComponentRotation();
