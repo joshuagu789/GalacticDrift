@@ -46,29 +46,35 @@ void UClass_Cannon::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
                             //Shooting bullet
                             FVector spawnLocation = Cast<USceneComponent>(bulletSpawnPoints[turretIndex])->K2_GetComponentLocation();
-                            //fire
                         		
-                                FTransform blankTransform;
-			                    blankTransform.SetLocation(spawnLocation);	
-                                FActorSpawnParameters spawnParams;
+                            FTransform blankTransform;
+                            blankTransform.SetLocation(spawnLocation);	
+                            FActorSpawnParameters spawnParams;
 
-                    			AActor* bullet = GetWorld()->SpawnActor<AActor>(projectilePtr, blankTransform, spawnParams);
-                                UPrimitiveComponent* bulletBody = Cast<UPrimitiveComponent>(bullet->GetRootComponent());
+                            AActor* bullet = GetWorld()->SpawnActor<AActor>(projectilePtr, blankTransform, spawnParams);
+                            UPrimitiveComponent* bulletBody = Cast<UPrimitiveComponent>(bullet->GetRootComponent());
 
-                                if(bulletBody){
-                                    // predicted location is where target will be in x amount of time where x is time for projectile to travel distance between cannon and its max range
-                                    FVector predictedTargetLocation = targetLocation + ( attackTarget->GetRootComponent()->GetComponentVelocity() * (attackRange)/(projectileSpeed));   //(distanceSquaredToTarget)/(projectileSpeed * projectileSpeed)
-                                    FRotator angleToTarget = UKismetMathLibrary::FindLookAtRotation(bulletBody->K2_GetComponentLocation(), predictedTargetLocation);
-                            		FHitResult dummy;
-                                    bulletBody->K2_SetWorldRotation(angleToTarget, false, dummy, false);
-                                    // bulletBody->K2_SetRelativeRotation(angleToTarget, false, dummy, false);
+                            if(bulletBody){
+                                // predicted location is where target will be in x amount of time where x is time for projectile to travel distance between cannon and its max range
+                                float inaccuracyValue = UKismetMathLibrary::RandomFloatInRange(1,1+accuracy);
+                                // FVector predictedTargetLocation = targetLocation + ( attackTarget->GetRootComponent()->GetComponentVelocity() * (inaccuracyValue * attackRange)/(projectileSpeed));   //(distanceSquaredToTarget)/(projectileSpeed * projectileSpeed)
+                                FVector predictedTargetLocation = targetLocation + ( attackTarget->GetRootComponent()->GetComponentVelocity() * (inaccuracyValue * distanceSquaredToTarget)/(projectileSpeed * projectileSpeed));   //(distanceSquaredToTarget)/(projectileSpeed * projectileSpeed)
+                                
+                                // float inaccuracyValue = 0.1 * (distanceSquaredToTarget - distanceSquaredToTarget * accuracy);
+                                // FVector inaccuracyOffset{ UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue), UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue), UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue)};
+                                // predictedTargetLocation += inaccuracyOffset;
 
-                                    FVector impulseVector = (predictedTargetLocation - bulletBody->K2_GetComponentLocation()).GetSafeNormal() * projectileSpeed;
-                                    bulletBody->AddImpulse(impulseVector, "", true);
+                                FRotator angleToTarget = UKismetMathLibrary::FindLookAtRotation(bulletBody->K2_GetComponentLocation(), predictedTargetLocation);
+                                FHitResult dummy;
+                                bulletBody->K2_SetWorldRotation(angleToTarget, false, dummy, false);
+                                // bulletBody->K2_SetRelativeRotation(angleToTarget, false, dummy, false);
 
-                                } else {
-                                    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: bullet spawned does not have primitive component as root for class cannon"));	        
-                                }
+                                FVector impulseVector = (predictedTargetLocation - bulletBody->K2_GetComponentLocation()).GetSafeNormal() * projectileSpeed;
+                                bulletBody->AddImpulse(impulseVector, "", true);
+
+                            } else {
+                                GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: bullet spawned does not have primitive component as root for class cannon"));	        
+                            }
 
                             timeBetweenEachTurretTimer = timeBetweenEachTurret;
                             turretIndex++;

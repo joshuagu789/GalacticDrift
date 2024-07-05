@@ -174,11 +174,14 @@ void AClass_Racer_Pawn::UnRagdoll(){
 //        AActor::K2_SetActorLocationAndRotation(skeletalMeshPtr->GetComponentLocation())
         FHitResult dummy;
 //        AActor::K2_SetActorLocation(skeletalMeshPtr->GetComponentLocation(), false, dummy, true);
-        AActor::K2_SetActorLocation(skeletalMeshPtr->GetSkeletalCenterOfMass(), false, dummy, true);
+        AActor::K2_SetActorLocation(skeletalMeshPtr->GetSkeletalCenterOfMass(), true, dummy, true);
+        // skeletalMeshPtr->K2_SetRelativeLocation(FVector{0,0,0}, true, dummy, true);
         
+        state = FLYING;
+        DriftUp(1.0);
         skeletalMeshPtr->ResetAllBodiesSimulatePhysics();
         skeletalMeshPtr->SetPhysicsBlendWeight(0.1f);
-        state = FLYING;
+        DriftUp(1.0);   // to fix glitch of torso and chest being separated
 
     }
     else{ GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Pointer for USkeletalMeshComponent for Class_Racer_Pawn is null, method cancelled")); }
