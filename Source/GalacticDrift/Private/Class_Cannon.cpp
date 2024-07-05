@@ -30,8 +30,9 @@ void UClass_Cannon::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
             
             FVector selfLocation = GetOwner()->GetRootComponent()->K2_GetComponentLocation();
             FVector targetLocation = attackTarget->GetRootComponent()->K2_GetComponentLocation();
-
-            if(FVector::DistSquared(selfLocation, targetLocation) <= attackRange * attackRange){
+            float distanceSquaredToTarget = FVector::DistSquared(selfLocation, targetLocation);
+            
+            if(distanceSquaredToTarget <= attackRange * attackRange){
 
                 FRotator rotationToTarget = UKismetMathLibrary::FindLookAtRotation(GetOwner()->GetRootComponent()->K2_GetComponentLocation(), attackTarget->GetActorLocation());
                 float angleToTargetSquared = (rotationToTarget - GetOwner()->GetRootComponent()->K2_GetComponentRotation()).Euler().SizeSquared();
@@ -55,12 +56,14 @@ void UClass_Cannon::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
                                 UPrimitiveComponent* bulletBody = Cast<UPrimitiveComponent>(bullet->GetRootComponent());
 
                                 if(bulletBody){
-                                    
-                                    FRotator angleToTarget = UKismetMathLibrary::FindLookAtRotation(bulletBody->K2_GetComponentLocation(), targetLocation);
+                                    // predicted location is where target will be in x amount of time where x is time for projectile to travel distance between cannon and its max range
+                                    FVector predictedTargetLocation = targetLocation + ( attackTarget->GetRootComponent()->GetComponentVelocity() * (attackRange)/(projectileSpeed));   //(distanceSquaredToTarget)/(projectileSpeed * projectileSpeed)
+                                    FRotator angleToTarget = UKismetMathLibrary::FindLookAtRotation(bulletBody->K2_GetComponentLocation(), predictedTargetLocation);
                             		FHitResult dummy;
-                                    bulletBody->K2_SetWorldRotation(angleToTarget, false, dummy, true);
+                                    bulletBody->K2_SetWorldRotation(angleToTarget, false, dummy, false);
+                                    // bulletBody->K2_SetRelativeRotation(angleToTarget, false, dummy, false);
 
-                                    FVector impulseVector = (targetLocation-selfLocation).GetSafeNormal() * projectileSpeed;
+                                    FVector impulseVector = (predictedTargetLocation - bulletBody->K2_GetComponentLocation()).GetSafeNormal() * projectileSpeed;
                                     bulletBody->AddImpulse(impulseVector, "", true);
 
                                 } else {
