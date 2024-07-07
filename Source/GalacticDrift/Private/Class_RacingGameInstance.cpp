@@ -25,6 +25,28 @@ bool UClass_RacingGameInstance::AddEntityToServer(TEnumAsByte<EntityType> type, 
 	return false;
 }
 
+bool UClass_RacingGameInstance::RemoveEntityFromServer(TEnumAsByte<EntityType> type, AActor* actor){
+    // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("received on instance"));
+
+	if(!actor){
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: entity tried to send empty actor pointer to game server"));
+		return false;
+	}
+    TSet<AActor*>* containerPtr = &GetContainerForEnum(type);
+    if(containerPtr){
+        if(!containerPtr->Contains(actor)){
+        	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: entity not found in game server, overriding original actor"));
+			// containerPtr->Add(actor);
+			return false;   
+        } else {
+			containerPtr->Remove(actor);
+            return true;
+        }
+    }
+
+	return false;
+}
+
 bool UClass_RacingGameInstance::AddMarkerToServer(AActor* actor){
     // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("received on instance"));
 

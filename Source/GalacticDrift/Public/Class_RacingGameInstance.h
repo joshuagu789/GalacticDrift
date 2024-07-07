@@ -29,6 +29,13 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	/*
+		Returns true if successfully removed, otherwise false
+			- takes in some reference to some actor
+	*/
+	bool RemoveEntityFromServer(TEnumAsByte<EntityType> type, AActor* actor);
+
+	UFUNCTION(BlueprintCallable)
+	/*
 		Same as AddEntityToServer but just for markers
 	*/
 	bool AddMarkerToServer(AActor* actor);

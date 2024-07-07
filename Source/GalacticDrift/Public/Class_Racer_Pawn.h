@@ -44,6 +44,7 @@ public:
     void RagdollFor(float duration);
     void UnRagdoll();
     FString GetSpeedIntAsString();
+    FString GetRootComponentSpeedIntAsString();
     float GetSpeedFloat(int decimalPlaces);
     int GetSpeedInt();
     

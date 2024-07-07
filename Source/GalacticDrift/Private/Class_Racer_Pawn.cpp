@@ -193,5 +193,13 @@ FString AClass_Racer_Pawn::GetSpeedIntAsString(){
     temp.AppendInt(speedInt);
     return temp;
 }
+
+FString AClass_Racer_Pawn::GetRootComponentSpeedIntAsString(){
+    int speedInt = static_cast<int>(round( GetRootComponent()->GetComponentVelocity().Size() ));
+    FString temp = FString(TEXT("Speed: "));
+    temp.AppendInt(speedInt);
+    return temp;
+}
+
 float AClass_Racer_Pawn::GetSpeedFloat(int decimalPlaces){ return 1.0; }
 int AClass_Racer_Pawn::GetSpeedInt(){ return 1; }

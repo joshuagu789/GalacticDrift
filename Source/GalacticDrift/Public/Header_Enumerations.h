@@ -56,6 +56,14 @@ enum UI_Command_Menu
     E_WAR_MENU,
 };
 
+UENUM(BlueprintType)
+enum DamageableActor_Type
+{
+    GEOMETRY_COLLECTION,
+    EXPLODABLE,
+    RAGDOLLABLE,
+};
+
     // FLYING = "FLYING",
     // FLYING_WHILE_DRIFTING = "FLYING_WHILE_DRIFTING",
     // RAGDOLLED = "RAGDOLLED",

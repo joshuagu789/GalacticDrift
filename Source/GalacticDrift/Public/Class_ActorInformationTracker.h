@@ -29,6 +29,8 @@ public:
     UFUNCTION(BlueprintCallable, Category="Information")
         virtual FString GetSpeedIntAsString();
     UFUNCTION(BlueprintCallable, Category="Information")
+        virtual FString GetRootComponentSpeedIntAsString();
+    UFUNCTION(BlueprintCallable, Category="Information")
         virtual float GetSpeedFloat(int decimalPlaces);
     UFUNCTION(BlueprintCallable, Category="Information")
         virtual int GetSpeedInt();
