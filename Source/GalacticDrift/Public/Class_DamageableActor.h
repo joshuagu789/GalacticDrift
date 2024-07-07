@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 // #include "GeometryCollection/GeometryCollectionComponent.h"
+#include "Class_FracturedActor.h"
 #include "Components/ActorComponent.h"
 #include "Header_Enumerations.h"
 #include "Class_DamageableActor.generated.h"
@@ -35,8 +36,8 @@ protected:
 		TEnumAsByte<DamageableActor_Type> type;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float health;
-	// UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	// 	UActorComponent* spawnOnDestroyPtr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TSubclassOf<AClass_FracturedActor> destroyedVersionPtr;
 
 
 
