@@ -32,8 +32,12 @@ void UClass_DamageableActor::TickComponent(float DeltaTime, ELevelTick TickType,
 	// ...
 }
 
-float UClass_DamageableActor::CalculateAndApplyDamage(){
-	float damage = GetOwner()->GetRootComponent()->GetComponentVelocity().Size() * 0.1;
+float UClass_DamageableActor::CalculateAndApplyDamage(UPrimitiveComponent* collisionSource){
+	float damage = GetOwner()->GetRootComponent()->GetComponentVelocity().Size();
+	if(collisionSource){
+		damage += collisionSource->GetComponentVelocity().Size();
+	}
+	damage *= 0.1;
 	health -= damage;
 	return damage;
 }
@@ -41,4 +45,26 @@ float UClass_DamageableActor::CalculateAndApplyDamage(){
 TEnumAsByte<DamageableActor_Type> UClass_DamageableActor::GetType(){ return type; }
 
 bool UClass_DamageableActor::IsDestroyed(){ return health <= 0; }
+
+// void UClass_DamageableActor::SelfDestruct(AActor* collisionSource){
+// 	if(type != EXPLODABLE){
+//         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: SelfDestruct not intended for non EXPLODABLE of Class_DamageableActor"));
+// 		return;
+// 	}
+// 	if(destroyedVersionPtr){
+// 		FActorSpawnParameters spawnParams;
+// 		// spawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+// 		AActor* temp = GetWorld()->SpawnActor<AActor>(destroyedVersionPtr, GetOwner()->GetTransform(), spawnParams);
+// 		// UGeometryCollectionComponent* collection = Cast<UGeometryCollectionComponent>(temp->GetRootComponent());
+
+// 		UPrimitiveComponent* collection = Cast<UPrimitiveComponent>(temp->GetRootComponent());
+// 		UMeshComponent* collection2 = Cast<UMeshComponent>(collection);
+// 		// UGeometryCollectionComponent* collection3 = Cast<UGeometryCollectionComponent>(collection2);
+
+
+// 		// UGeometryCollectionComponent* collection = temp->GetComponentByClass<UGeometryCollectionComponent>();
+// 	}
+
+// }
+
 

@@ -3,8 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Components/ActorComponent.h"
-// #include "GeometryCollection/GeometryCollectionComponent.h"
+#include "Components/PrimitiveComponent.h"
+#include "Components/MeshComponent.h"
+#include "GeometryCollection/GeometryCollectionComponent.h"
+
+// #include "Engine/EngineTypes.h"	// spawn collision resolution enum
 #include "Class_FracturedActor.h"
 #include "Components/ActorComponent.h"
 #include "Header_Enumerations.h"
@@ -22,11 +27,18 @@ public:
 	UClass_DamageableActor();
 
 	UFUNCTION(BlueprintCallable)
-		float CalculateAndApplyDamage();
+		float CalculateAndApplyDamage(UPrimitiveComponent* collisionSource);
 	UFUNCTION(BlueprintCallable)
 		TEnumAsByte<DamageableActor_Type> GetType();
 	UFUNCTION(BlueprintCallable)
 		bool IsDestroyed();
+
+	// UFUNCTION(BlueprintCallable)
+	// /*
+	// 	intended for EXPLODABLE type only, destroys owner actor in process
+	// */
+	// 	[[deprecated]]
+	// 	void SelfDestruct(AActor* collisionSource);
 
 protected:
 	// Called when the game starts
@@ -38,7 +50,8 @@ protected:
 		float health;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSubclassOf<AClass_FracturedActor> destroyedVersionPtr;
-
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// 	UGeometryCollectionComponent* geometryCollectionPtr;
 
 
 public:	

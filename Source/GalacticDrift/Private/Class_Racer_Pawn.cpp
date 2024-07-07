@@ -182,7 +182,6 @@ void AClass_Racer_Pawn::UnRagdoll(){
         skeletalMeshPtr->ResetAllBodiesSimulatePhysics();
         skeletalMeshPtr->SetPhysicsBlendWeight(0.1f);
         DriftUp(1.0);   // to fix glitch of torso and chest being separated
-
     }
     else{ GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Pointer for USkeletalMeshComponent for Class_Racer_Pawn is null, method cancelled")); }
 }
