@@ -154,6 +154,8 @@ void AClass_Racer_Pawn::StopDrift(){
     if(state == FLYING_WHILE_DRIFTING){ state = FLYING; }
 }
 
+void AClass_Racer_Pawn::SetState(TEnumAsByte<CurrentState> newState){state = newState;}
+
 
 void AClass_Racer_Pawn::StunFor(float duration)
 {

@@ -38,6 +38,9 @@ public:
         void StopDrift();
     
     UFUNCTION(BlueprintCallable, Category="Action")
+        void SetState(TEnumAsByte<CurrentState> newState);
+
+    UFUNCTION(BlueprintCallable, Category="Action")
         void StunFor(float duration);
     
     // From interfaces

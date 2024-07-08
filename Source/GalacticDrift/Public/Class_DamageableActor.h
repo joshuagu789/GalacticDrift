@@ -5,10 +5,12 @@
 #include "CoreMinimal.h"
 
 #include "Components/ActorComponent.h"
-#include "Components/PrimitiveComponent.h"
-#include "Components/MeshComponent.h"
-#include "GeometryCollection/GeometryCollectionComponent.h"
-
+// #include "Components/PrimitiveComponent.h"
+// #include "Components/MeshComponent.h"
+// #include "GeometryCollection/GeometryCollectionComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Class_Racer_Pawn.h"
+#include "Kismet/KismetMathLibrary.h"
 // #include "Engine/EngineTypes.h"	// spawn collision resolution enum
 #include "Class_FracturedActor.h"
 #include "Components/ActorComponent.h"
@@ -32,7 +34,12 @@ public:
 		TEnumAsByte<DamageableActor_Type> GetType();
 	UFUNCTION(BlueprintCallable)
 		bool IsDestroyed();
-
+	UFUNCTION(BlueprintCallable)
+		void ResetHealth();
+	UFUNCTION(BlueprintCallable)
+		void Ragdoll();
+	UFUNCTION(BlueprintCallable)
+		void UnRagdoll();
 	// UFUNCTION(BlueprintCallable)
 	// /*
 	// 	intended for EXPLODABLE type only, destroys owner actor in process
@@ -49,11 +56,16 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float health;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float maxRagdollTime = 4;	// for Ragdollable only
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSubclassOf<AClass_FracturedActor> destroyedVersionPtr;
 	// UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	// 	UGeometryCollectionComponent* geometryCollectionPtr;
 
-
+	float actualHealth;
+	float mostRecentDamage;
+	float ragdollTimer;
+	float collisionTimer;
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
