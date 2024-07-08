@@ -24,14 +24,14 @@ enum EntityType         // EXPERIMENTAL, proximity sensor?
     NPC_FACTION2 = 6,
 };
 
-UENUM(BlueprintType)
-enum CurrentState
-{
-    FLYING,
-    FLYING_WHILE_DRIFTING,
-    RAGDOLLED,
-    DEFAULT,
-};
+// UENUM(BlueprintType)
+// enum CurrentState
+// {
+//     FLYING,
+//     FLYING_WHILE_DRIFTING,
+//     RAGDOLLED,
+//     DEFAULT,
+// };
 
 UENUM(BlueprintType)
 enum UI_Text
@@ -62,6 +62,16 @@ enum DamageableActor_Type
     GEOMETRY_COLLECTION,
     EXPLODABLE,
     RAGDOLLABLE,
+};
+
+UENUM(BlueprintType)
+enum EntityState
+{
+    DEFAULT,
+    IDLE,
+    FLYING,
+    FLYING_WHILE_DRIFTING,
+    RAGDOLLED,
 };
 
     // FLYING = "FLYING",

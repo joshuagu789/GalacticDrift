@@ -81,9 +81,13 @@ void UClass_DamageableActor::Ragdoll(){
 	}
 	USkeletalMeshComponent* skeletalMeshPtr = Cast<USkeletalMeshComponent>(GetOwner()->GetRootComponent());
     if(skeletalMeshPtr){
-		AClass_Racer_Pawn* racerPtr = Cast<AClass_Racer_Pawn>(GetOwner());
-		if(racerPtr){
-			racerPtr->SetState(RAGDOLLED);
+		// AClass_Racer_Pawn* racerPtr = Cast<AClass_Racer_Pawn>(GetOwner());
+		// if(racerPtr){
+		// 	racerPtr->SetState(RAGDOLLED);
+		// }
+		UClass_Entity* entityPtr = GetOwner()->FindComponentByClass<UClass_Entity>();
+		if(entityPtr){
+			entityPtr->SetState(RAGDOLLED);
 		}
         skeletalMeshPtr->SetPhysicsBlendWeight(1.0f);
         skeletalMeshPtr->SetAllBodiesSimulatePhysics(true);
@@ -107,9 +111,13 @@ void UClass_DamageableActor::UnRagdoll(){
         FHitResult dummy;
         GetOwner()->K2_SetActorLocation(skeletalMeshPtr->GetSkeletalCenterOfMass(), true, dummy, true);
         
-		AClass_Racer_Pawn* racerPtr = Cast<AClass_Racer_Pawn>(GetOwner());
-		if(racerPtr){
-			racerPtr->SetState(FLYING);
+		// AClass_Racer_Pawn* racerPtr = Cast<AClass_Racer_Pawn>(GetOwner());
+		// if(racerPtr){
+		// 	racerPtr->SetState(FLYING);
+		// }
+		UClass_Entity* entityPtr = GetOwner()->FindComponentByClass<UClass_Entity>();
+		if(entityPtr){
+			entityPtr->SetState(FLYING);
 		}
 
 		GetOwner()->K2_SetActorRelativeRotation( GetOwner()->GetTransform().Rotator(), true, dummy, true);

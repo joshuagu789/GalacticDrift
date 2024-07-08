@@ -23,14 +23,18 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		TArray<TEnumAsByte<EntityType>> GetEnemyTypes();
-
+	UFUNCTION(BlueprintCallable)
+		TEnumAsByte<EntityState> GetState();
+	UFUNCTION(BlueprintCallable)
+		void SetState(TEnumAsByte<EntityState> newState);		
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TEnumAsByte<EntityType> type;
-
+	UPROPERTY()
+		TEnumAsByte<EntityState> state = DEFAULT;
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

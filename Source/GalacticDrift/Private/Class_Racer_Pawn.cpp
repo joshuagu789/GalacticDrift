@@ -30,9 +30,9 @@ void AClass_Racer_Pawn::BeginPlay()
 void AClass_Racer_Pawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-    if(state == FLYING || state == FLYING_WHILE_DRIFTING){
+    if(CanDrift()){
         moveComponentPtr->AddInputVector(GetActorForwardVector() * speed, isAccelerating);
-        if(state != FLYING_WHILE_DRIFTING){
+        if(entityPtr->GetState() != FLYING_WHILE_DRIFTING){
 //            if(rotation.Roll > 2 || rotation.Roll < 2 && rotation.Pitch > 2 || rotation.Pitch < 2){
             if(rotation.Roll > 2 || rotation.Roll < 2){
                 rotation.Roll += -3 * rotation.Roll * DeltaTime;
@@ -61,11 +61,12 @@ void AClass_Racer_Pawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 void AClass_Racer_Pawn::StartFlying(float initialSpeed, bool accelerate, float floppiness)
 {
     
-    if(state == FLYING){
+    if(entityPtr && entityPtr->GetState() == FLYING){
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: StartFlying called when already flyin for Class_Racer_Pawn, method cancelled"));
-    } else if(moveComponentPtr){
+    } else if(entityPtr && moveComponentPtr){
 
-        state = FLYING;
+        // state = FLYING;
+        entityPtr->SetState(FLYING);
 
         isAccelerating = accelerate;
         speed = initialSpeed;
@@ -84,7 +85,7 @@ void AClass_Racer_Pawn::StartFlying(float initialSpeed, bool accelerate, float f
 
 bool AClass_Racer_Pawn::CanDrift()
 {
-    if(state == FLYING || state == FLYING_WHILE_DRIFTING)
+    if(entityPtr && entityPtr->GetState() == FLYING || entityPtr->GetState() == FLYING_WHILE_DRIFTING)
         return true;
     return false;
 }
@@ -96,9 +97,10 @@ bool AClass_Racer_Pawn::CanDrift()
  */
 void AClass_Racer_Pawn::DriftUp(float rotateSpeed)
 {
-    if(state == FLYING || state == FLYING_WHILE_DRIFTING){
-        state = FLYING_WHILE_DRIFTING;
-        
+    if(CanDrift()){
+        // state = FLYING_WHILE_DRIFTING;
+        entityPtr->SetState(FLYING_WHILE_DRIFTING);
+
 //        if(rotation.Pitch <= 90){
         if(true){
             rotation.Pitch += rotateSpeed;
@@ -111,9 +113,10 @@ void AClass_Racer_Pawn::DriftUp(float rotateSpeed)
 }
 void AClass_Racer_Pawn::DriftLeft(float rotateSpeed)
 {
-    if(state == FLYING || state == FLYING_WHILE_DRIFTING){
-        state = FLYING_WHILE_DRIFTING;
-        
+    if(CanDrift()){
+        // state = FLYING_WHILE_DRIFTING;
+        entityPtr->SetState(FLYING_WHILE_DRIFTING);
+
         rotation.Yaw -= rotateSpeed;
         if(rotation.Roll >= -90)
             rotation.Roll -= 1 * rotateSpeed;
@@ -124,9 +127,10 @@ void AClass_Racer_Pawn::DriftLeft(float rotateSpeed)
 }
 void AClass_Racer_Pawn::DriftDown(float rotateSpeed)
 {
-    if(state == FLYING || state == FLYING_WHILE_DRIFTING){
-        state = FLYING_WHILE_DRIFTING;
-        
+    if(CanDrift()){
+        // state = FLYING_WHILE_DRIFTING;
+        entityPtr->SetState(FLYING_WHILE_DRIFTING);
+    
 //        if(rotation.Pitch >= -90){
         if(true){
             rotation.Pitch -= rotateSpeed;
@@ -138,8 +142,9 @@ void AClass_Racer_Pawn::DriftDown(float rotateSpeed)
 }
 void AClass_Racer_Pawn::DriftRight(float rotateSpeed)
 {
-    if(state == FLYING || state == FLYING_WHILE_DRIFTING){
-        state = FLYING_WHILE_DRIFTING;
+    if(CanDrift()){
+        // state = FLYING_WHILE_DRIFTING;
+        entityPtr->SetState(FLYING_WHILE_DRIFTING);
         
         rotation.Yaw += rotateSpeed;
         if(rotation.Roll <= 90)
@@ -151,10 +156,10 @@ void AClass_Racer_Pawn::DriftRight(float rotateSpeed)
 }
 
 void AClass_Racer_Pawn::StopDrift(){
-    if(state == FLYING_WHILE_DRIFTING){ state = FLYING; }
+    if(entityPtr && entityPtr->GetState() == FLYING_WHILE_DRIFTING){ entityPtr->SetState(FLYING); }
 }
 
-void AClass_Racer_Pawn::SetState(TEnumAsByte<CurrentState> newState){state = newState;}
+void AClass_Racer_Pawn::SetState(TEnumAsByte<EntityState> newState){entityPtr->SetState(newState);}
 
 
 void AClass_Racer_Pawn::StunFor(float duration)
@@ -163,7 +168,9 @@ void AClass_Racer_Pawn::StunFor(float duration)
 }
 
 void AClass_Racer_Pawn::RagdollFor(float duration){
-    state = RAGDOLLED;
+    // state = RAGDOLLED;
+    entityPtr->SetState(RAGDOLLED);
+
     if(skeletalMeshPtr){
         skeletalMeshPtr->SetPhysicsBlendWeight(1.0f);
         skeletalMeshPtr->SetAllBodiesSimulatePhysics(true);
@@ -179,7 +186,9 @@ void AClass_Racer_Pawn::UnRagdoll(){
         AActor::K2_SetActorLocation(skeletalMeshPtr->GetSkeletalCenterOfMass(), true, dummy, true);
         // skeletalMeshPtr->K2_SetRelativeLocation(FVector{0,0,0}, true, dummy, true);
         
-        state = FLYING;
+        // state = FLYING;
+        entityPtr->SetState(FLYING);
+
         DriftUp(1.0);
         skeletalMeshPtr->ResetAllBodiesSimulatePhysics();
         skeletalMeshPtr->SetPhysicsBlendWeight(0.1f);

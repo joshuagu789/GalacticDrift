@@ -44,3 +44,7 @@ TArray<TEnumAsByte<EntityType>> UClass_Entity::GetEnemyTypes(){
 	return temp;
 }
 
+TEnumAsByte<EntityState> UClass_Entity::GetState(){ return state; }
+
+void UClass_Entity::SetState(TEnumAsByte<EntityState> newState){ state = newState; }
+

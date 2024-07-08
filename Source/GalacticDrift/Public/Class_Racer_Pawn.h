@@ -6,9 +6,11 @@
 #include "GameFramework/Pawn.h"
 #include "Class_Combatant.h"
 #include "GameFramework/FloatingPawnMovement.h"
+#include "Class_Entity.h"
 #include "Ragdollable.h"
 #include "Header_Enumerations.h"
 #include "Class_ActorInformationTracker.h"
+
 #include "Math/Rotator.h"
 #include "Class_Racer_Pawn.generated.h"
 
@@ -38,7 +40,7 @@ public:
         void StopDrift();
     
     UFUNCTION(BlueprintCallable, Category="Action")
-        void SetState(TEnumAsByte<CurrentState> newState);
+        void SetState(TEnumAsByte<EntityState> newState);
 
     UFUNCTION(BlueprintCallable, Category="Action")
         void StunFor(float duration);
@@ -57,14 +59,16 @@ protected:
     
     UPROPERTY(EditAnywhere)
         float speed = 0;
-    
-    CurrentState state = DEFAULT;
+    UPROPERTY(BlueprintReadWrite)
+        UClass_Entity* entityPtr;
+
+    // TEnumAsByte<EntityState> state = DEFAULT;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
         UFloatingPawnMovement* moveComponentPtr;    // floating pawn movement
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
         USkeletalMeshComponent* skeletalMeshPtr;
-    
+
     float popularity = 0;
     bool isAccelerating = false;
     FRotator rotation = {0,0,0};

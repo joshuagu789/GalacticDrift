@@ -13,7 +13,8 @@
 #include "Kismet/KismetMathLibrary.h"
 // #include "Engine/EngineTypes.h"	// spawn collision resolution enum
 #include "Class_FracturedActor.h"
-#include "Components/ActorComponent.h"
+// #include "Components/ActorComponent.h"
+#include "Class_Entity.h"
 #include "Header_Enumerations.h"
 #include "Class_DamageableActor.generated.h"
 
