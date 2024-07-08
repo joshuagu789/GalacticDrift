@@ -7,6 +7,7 @@
 // #include "CascadeParticleSystemComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Class_Entity.h"
+#include "Engine/EngineTypes.h"
 #include "Class_VisualEffects.generated.h"
 
 
@@ -19,6 +20,11 @@ class GALACTICDRIFT_API UClass_VisualEffects : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UClass_VisualEffects();
+
+	UFUNCTION(BlueprintCallable)
+		void DisableParticlesOf(TArray<UParticleSystemComponent*> &particleComponents);
+	UFUNCTION(BlueprintCallable)
+		void EnableParticlesOf(TArray<UParticleSystemComponent*> &particleComponents);
 
 protected:
 	// Called when the game starts

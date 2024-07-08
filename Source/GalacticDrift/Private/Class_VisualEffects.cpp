@@ -30,5 +30,37 @@ void UClass_VisualEffects::TickComponent(float DeltaTime, ELevelTick TickType, F
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+	if(checkTimer < 0 && entityPtr){
+
+		checkTimer += 0.1;
+
+		if(entityPtr->GetState() == RAGDOLLED && !thrustersDisabled){
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("disabling thrusters"));
+			thrustersDisabled = true;
+			DisableParticlesOf(thrusters);
+			// for(auto &particleComponent: particleComponents){
+			// 	particleComponent->EndTrails();
+			// }
+		}
+		else if(entityPtr->GetState() != RAGDOLLED && thrustersDisabled){
+			thrustersDisabled = false;
+			EnableParticlesOf(thrusters);
+			// for(auto &particleComponent: particleComponents){
+			// 	particleComponent->BeginTrails();
+			// }	
+		}
+	} else {
+		checkTimer -= DeltaTime;
+	}
 }
 
+void UClass_VisualEffects::DisableParticlesOf(TArray<UParticleSystemComponent*> &particleComponents){
+	for(auto &particleComponent: particleComponents){
+		particleComponent->EndTrails();
+	}
+}
+void UClass_VisualEffects::EnableParticlesOf(TArray<UParticleSystemComponent*> &particleComponents){
+	for(auto &particleComponent: particleComponents){
+		particleComponent->BeginTrails("","",ETrailWidthMode_FromCentre,1.0);
+	}	
+}
