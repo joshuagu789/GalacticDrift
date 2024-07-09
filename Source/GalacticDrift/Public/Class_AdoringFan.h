@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Class_Racer_Pawn.h"
 #include "Class_AdoringFan.generated.h"
 
 UCLASS()
@@ -19,6 +20,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AClass_Racer_Pawn* racer;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
