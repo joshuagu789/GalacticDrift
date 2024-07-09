@@ -42,6 +42,7 @@ void UClass_OrbitMovement::TickComponent(float DeltaTime, ELevelTick TickType, F
 		else if(moveComponentPtr){
 			// moveComponentPtr->AddInputVector(destination, true);
 			moveComponentPtr->AddInputVector(destination - position, true);
+
 		} else {
         	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: move component ptr is nullptr in TickComponent of Class OrbitMovement"));	
 		}
