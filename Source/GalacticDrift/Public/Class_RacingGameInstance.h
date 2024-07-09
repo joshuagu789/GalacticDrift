@@ -7,7 +7,7 @@
 #include "Header_Enumerations.h"
 // #include "Containers/Set.h"
 // #include "Containers/Array.h"
-// #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/KismetMathLibrary.h"
 // #include "Kismet/KismetTextLibrary.h"
 #include "Class_RacingGameInstance.generated.h"
 
@@ -54,6 +54,12 @@ public:
 			WARNING: THIS CAN RETURN NULL POINTER
 		*/
 		AActor* GetClosestEntityTo(const TArray<TEnumAsByte<EntityType>> &entityTypes, const AActor* actor);
+
+	UFUNCTION(BlueprintCallable)
+		/*
+			WARNING: THIS CAN RETURN NULL POINTER
+		*/
+		AActor* GetClosestEntityToFOV(const TArray<TEnumAsByte<EntityType>> &entityTypes, const AActor* actor, const FVector& actorDirection, float angle, float range);
 
 protected:	// below should be private but public for now because testing
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

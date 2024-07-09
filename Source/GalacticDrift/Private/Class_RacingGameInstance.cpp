@@ -109,3 +109,37 @@ AActor* UClass_RacingGameInstance::GetClosestEntityTo(const TArray<TEnumAsByte<E
     }
     return currentClosest;
 }
+
+AActor* UClass_RacingGameInstance::GetClosestEntityToFOV(const TArray<TEnumAsByte<EntityType>> &entityTypes, const AActor* actor, const FVector& actorDirection, float angle, float range){
+
+    AActor* currentClosest = nullptr;
+    float currentClosestDistanceSquared;
+
+    if(!actor){
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: passd in actor pointer is nullptr for GetClosestEntityTo in racing game instance, returning nullptr"));  
+        return currentClosest;
+    }
+
+    for(TEnumAsByte<EntityType> type: entityTypes){
+
+        TSet<AActor*>* containerPtr = &GetContainerForEnum(type);
+        if(containerPtr){
+
+            for(auto &entity: *containerPtr){
+                if(!currentClosest){    // first entity always closest to prevent currentClosest from staying null
+                    currentClosest = entity;
+                    currentClosestDistanceSquared = actor->GetSquaredDistanceTo(currentClosest);
+                
+                // comparing cosines of angles (rather not take inverse cosine)
+                } else if ( currentClosestDistanceSquared > actor->GetSquaredDistanceTo(entity) && entity->GetActorLocation().CosineAngle2D(actorDirection) <= UKismetMathLibrary::Cos(angle*3.14/180)){
+                    currentClosest = entity;
+                    currentClosestDistanceSquared = actor->GetSquaredDistanceTo(currentClosest);                    
+                }
+            }
+        } else {
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: containerPtr is nullptr for GetClosestEntityToFOV in racing game instance"));
+        }
+    }
+
+    return currentClosest;
+}
