@@ -58,9 +58,9 @@ void UClass_OrbitMovement::BeginOrbiting(AActor* actor){
 		// angleOfOrbit.Roll = UKismetMathLibrary::RandomFloatInRange(0,360);
 		// angleOfOrbit.Yaw = UKismetMathLibrary::RandomFloatInRange(0,360);
 		// angleOfOrbit.Normalize();
-		angleOfOrbit.Pitch = 20 * UKismetMathLibrary::RandomFloatInRange(-1,1);
-		angleOfOrbit.Roll = 20 * UKismetMathLibrary::RandomFloatInRange(-1,1);
-		angleOfOrbit.Yaw = 20 * UKismetMathLibrary::RandomFloatInRange(-1,1);
+		angleOfOrbit.Pitch = 45 * UKismetMathLibrary::RandomFloatInRange(-1,1);
+		angleOfOrbit.Roll = 45 * UKismetMathLibrary::RandomFloatInRange(-1,1);
+		angleOfOrbit.Yaw = 45 * UKismetMathLibrary::RandomFloatInRange(-1,1);
 		// angleOfOrbit.Normalize();
 
 		currentTargetOffset = GetOwner()->GetRootComponent()->K2_GetComponentLocation() - actor->GetRootComponent()->K2_GetComponentLocation();

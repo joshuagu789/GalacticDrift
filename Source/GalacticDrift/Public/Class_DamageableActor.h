@@ -67,6 +67,11 @@ protected:
 	float mostRecentDamage;
 	float ragdollTimer;
 	float collisionTimer;
+
+	bool recoveringFromRagdoll;
+	UPROPERTY()
+		USkeletalMeshComponent* skeletalMeshPtr; 		// for ragdolls
+	float ragdollBlendWeight;
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

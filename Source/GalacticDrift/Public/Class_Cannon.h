@@ -29,8 +29,13 @@ public:
 		void StopAttacking();	
 	UFUNCTION(BlueprintCallable)
 		bool IsAttacking();
+	UFUNCTION(BlueprintCallable)
+		void ShootAt(AActor* target, float distanceSquaredToTarget);
+		// void ShootAt(AActor* target, FVector& distanceSquaredToTarget = FVector::DistSquared( GetOwner()->GetRootComponent()->K2_GetComponentLocation(), attackTarget->GetRootComponent()->K2_GetComponentLocation() ));
 
 protected:
+	virtual void BeginPlay() override;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSubclassOf<AClass_Projectile> projectilePtr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -50,6 +55,7 @@ protected:
 
 	UPROPERTY()
 		AActor* attackTarget;
+	// void (UClass_Cannon::*shootAtFuncPtr)(AActor* target, float distanceSquaredToTarget);
 	bool isAttacking;
 	float cooldownTimer;
 	float timeBetweenEachTurretTimer;

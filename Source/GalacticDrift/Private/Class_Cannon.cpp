@@ -13,14 +13,13 @@
 // }
 
 
-// // Called when the game starts
-// void UClass_Sensor::BeginPlay()
-// {
-// 	Super::BeginPlay();
+// Called when the game starts
+void UClass_Cannon::BeginPlay()
+{
+	Super::BeginPlay();
 
-// 	// ...
-	
-// }
+	// ...
+}
 
 void UClass_Cannon::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction){
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -44,37 +43,42 @@ void UClass_Cannon::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
                         
                         if(bulletSpawnPoints.Num() > 0){
 
+                            ShootAt(attackTarget, distanceSquaredToTarget);
+                            // if(shootAtFuncPtr){
+                            //     // this->*shootAtFuncPtr(attackTarget, distanceSquaredToTarget);
+                            //     *shootAtFuncPtr(attackTarget, distanceSquaredToTarget);
+                            // }
                             //Shooting bullet
-                            FVector spawnLocation = Cast<USceneComponent>(bulletSpawnPoints[turretIndex])->K2_GetComponentLocation();
+                            // FVector spawnLocation = Cast<USceneComponent>(bulletSpawnPoints[turretIndex])->K2_GetComponentLocation();
                         		
-                            FTransform blankTransform;
-                            blankTransform.SetLocation(spawnLocation);	
-                            FActorSpawnParameters spawnParams;
+                            // FTransform blankTransform;
+                            // blankTransform.SetLocation(spawnLocation);	
+                            // FActorSpawnParameters spawnParams;
 
-                            AActor* bullet = GetWorld()->SpawnActor<AActor>(projectilePtr, blankTransform, spawnParams);
-                            UPrimitiveComponent* bulletBody = Cast<UPrimitiveComponent>(bullet->GetRootComponent());
+                            // AActor* bullet = GetWorld()->SpawnActor<AActor>(projectilePtr, blankTransform, spawnParams);
+                            // UPrimitiveComponent* bulletBody = Cast<UPrimitiveComponent>(bullet->GetRootComponent());
 
-                            if(bulletBody){
-                                // predicted location is where target will be in x amount of time where x is time for projectile to travel distance between cannon and its max range
-                                float inaccuracyValue = UKismetMathLibrary::RandomFloatInRange(1,1+accuracy);
-                                // FVector predictedTargetLocation = targetLocation + ( attackTarget->GetRootComponent()->GetComponentVelocity() * (inaccuracyValue * attackRange)/(projectileSpeed));   //(distanceSquaredToTarget)/(projectileSpeed * projectileSpeed)
-                                FVector predictedTargetLocation = targetLocation + ( attackTarget->GetRootComponent()->GetComponentVelocity() * (inaccuracyValue * distanceSquaredToTarget)/(projectileSpeed * projectileSpeed));   //(distanceSquaredToTarget)/(projectileSpeed * projectileSpeed)
+                            // if(bulletBody){
+                            //     // predicted location is where target will be in x amount of time where x is time for projectile to travel distance between cannon and its max range
+                            //     float inaccuracyValue = UKismetMathLibrary::RandomFloatInRange(1,1+accuracy);
+                            //     // FVector predictedTargetLocation = targetLocation + ( attackTarget->GetRootComponent()->GetComponentVelocity() * (inaccuracyValue * attackRange)/(projectileSpeed));   //(distanceSquaredToTarget)/(projectileSpeed * projectileSpeed)
+                            //     FVector predictedTargetLocation = targetLocation + ( attackTarget->GetRootComponent()->GetComponentVelocity() * (inaccuracyValue * distanceSquaredToTarget)/(projectileSpeed * projectileSpeed));   //(distanceSquaredToTarget)/(projectileSpeed * projectileSpeed)
                                 
-                                // float inaccuracyValue = 0.1 * (distanceSquaredToTarget - distanceSquaredToTarget * accuracy);
-                                // FVector inaccuracyOffset{ UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue), UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue), UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue)};
-                                // predictedTargetLocation += inaccuracyOffset;
+                            //     // float inaccuracyValue = 0.1 * (distanceSquaredToTarget - distanceSquaredToTarget * accuracy);
+                            //     // FVector inaccuracyOffset{ UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue), UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue), UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue)};
+                            //     // predictedTargetLocation += inaccuracyOffset;
 
-                                FRotator angleToTarget = UKismetMathLibrary::FindLookAtRotation(bulletBody->K2_GetComponentLocation(), predictedTargetLocation);
-                                FHitResult dummy;
-                                bulletBody->K2_SetWorldRotation(angleToTarget, false, dummy, false);
-                                // bulletBody->K2_SetRelativeRotation(angleToTarget, false, dummy, false);
+                            //     FRotator angleToTarget = UKismetMathLibrary::FindLookAtRotation(bulletBody->K2_GetComponentLocation(), predictedTargetLocation);
+                            //     FHitResult dummy;
+                            //     bulletBody->K2_SetWorldRotation(angleToTarget, false, dummy, false);
+                            //     // bulletBody->K2_SetRelativeRotation(angleToTarget, false, dummy, false);
 
-                                FVector impulseVector = (predictedTargetLocation - bulletBody->K2_GetComponentLocation()).GetSafeNormal() * projectileSpeed;
-                                bulletBody->AddImpulse(impulseVector, "", true);
+                            //     FVector impulseVector = (predictedTargetLocation - bulletBody->K2_GetComponentLocation()).GetSafeNormal() * projectileSpeed;
+                            //     bulletBody->AddImpulse(impulseVector, "", true);
 
-                            } else {
-                                GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: bullet spawned does not have primitive component as root for class cannon"));	        
-                            }
+                            // } else {
+                            //     GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: bullet spawned does not have primitive component as root for class cannon"));	        
+                            // }
 
                             timeBetweenEachTurretTimer = timeBetweenEachTurret;
                             turretIndex++;
@@ -119,3 +123,40 @@ void UClass_Cannon::StopAttacking(){
 }	
 
 bool UClass_Cannon::IsAttacking(){ return isAttacking; }
+
+void UClass_Cannon::ShootAt(AActor* target, float distanceSquaredToTarget = 0){
+    if(distanceSquaredToTarget == 0){
+        distanceSquaredToTarget = FVector::DistSquared( GetOwner()->GetRootComponent()->K2_GetComponentLocation(), attackTarget->GetRootComponent()->K2_GetComponentLocation() );
+    }
+    FVector spawnLocation = Cast<USceneComponent>(bulletSpawnPoints[turretIndex])->K2_GetComponentLocation();
+        
+    FTransform blankTransform;
+    blankTransform.SetLocation(spawnLocation);	
+    FActorSpawnParameters spawnParams;
+
+    AActor* bullet = GetWorld()->SpawnActor<AActor>(projectilePtr, blankTransform, spawnParams);
+    UPrimitiveComponent* bulletBody = Cast<UPrimitiveComponent>(bullet->GetRootComponent());
+
+    if(bulletBody){
+        // predicted location is where target will be in x amount of time where x is time for projectile to travel distance between cannon and its max range
+        float inaccuracyValue = UKismetMathLibrary::RandomFloatInRange(1,1+accuracy);
+        // FVector predictedTargetLocation = targetLocation + ( attackTarget->GetRootComponent()->GetComponentVelocity() * (inaccuracyValue * attackRange)/(projectileSpeed));   //(distanceSquaredToTarget)/(projectileSpeed * projectileSpeed)
+        FVector predictedTargetLocation = attackTarget->GetRootComponent()->K2_GetComponentLocation() + ( attackTarget->GetRootComponent()->GetComponentVelocity() * (inaccuracyValue * distanceSquaredToTarget)/(projectileSpeed * projectileSpeed));   //(distanceSquaredToTarget)/(projectileSpeed * projectileSpeed)
+        
+        // float inaccuracyValue = 0.1 * (distanceSquaredToTarget - distanceSquaredToTarget * accuracy);
+        // FVector inaccuracyOffset{ UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue), UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue), UKismetMathLibrary::RandomFloatInRange(-inaccuracyValue,inaccuracyValue)};
+        // predictedTargetLocation += inaccuracyOffset;
+
+        FRotator angleToTarget = UKismetMathLibrary::FindLookAtRotation(bulletBody->K2_GetComponentLocation(), predictedTargetLocation);
+        FHitResult dummy;
+        bulletBody->K2_SetWorldRotation(angleToTarget, false, dummy, false);
+        // bulletBody->K2_SetRelativeRotation(angleToTarget, false, dummy, false);
+
+        FVector impulseVector = (predictedTargetLocation - bulletBody->K2_GetComponentLocation()).GetSafeNormal() * projectileSpeed;
+        bulletBody->AddImpulse(impulseVector, "", true);
+
+    } else {
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: bullet spawned does not have primitive component as root for class cannon"));	        
+    }
+}
+
