@@ -44,6 +44,17 @@ TArray<TEnumAsByte<EntityType>> UClass_Entity::GetEnemyTypes(){
 	return temp;
 }
 
+bool UClass_Entity::IsEnemyWith(TEnumAsByte<EntityType> otherEntity){
+	switch(type){
+		case FRIENDLY_NPC:
+			if(otherEntity == NPC_FACTION0)
+				return true;
+			return false;
+	}
+	return false;
+}
+
+
 TEnumAsByte<EntityState> UClass_Entity::GetState(){ return state; }
 
 void UClass_Entity::SetState(TEnumAsByte<EntityState> newState){ state = newState; }

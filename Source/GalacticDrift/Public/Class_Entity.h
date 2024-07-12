@@ -24,6 +24,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		TArray<TEnumAsByte<EntityType>> GetEnemyTypes();
 	UFUNCTION(BlueprintCallable)
+		bool IsEnemyWith(TEnumAsByte<EntityType> otherEntity);
+	UFUNCTION(BlueprintCallable)
 		TEnumAsByte<EntityState> GetState();
 	UFUNCTION(BlueprintCallable)
 		void SetState(TEnumAsByte<EntityState> newState);		
