@@ -75,5 +75,5 @@ void UClass_OrbitMovement::StopOrbiting(){
 	isOrbiting = false;
 }
 
-bool UClass_OrbitMovement::IsOrbiting(){ return isOrbiting && orbitTarget; }
+bool UClass_OrbitMovement::IsOrbiting(){ return isOrbiting && orbitTarget && !orbitTarget->IsPendingKillPending(); }
 

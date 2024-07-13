@@ -22,7 +22,6 @@ void AClass_Combatant::BeginPlay()
 void AClass_Combatant::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -32,6 +31,6 @@ void AClass_Combatant::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 }
 
-bool AClass_Combatant::HasTarget(){ return target; }
+bool AClass_Combatant::HasTarget(){ return target && !target->IsPendingKillPending(); }
 
 bool AClass_Combatant::IsDespawning(){ return despawning; }

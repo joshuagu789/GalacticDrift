@@ -135,6 +135,7 @@ void UClass_Cannon::ShootAt(AActor* target, float distanceSquaredToTarget = 0){
     FActorSpawnParameters spawnParams;
 
     AActor* bullet = GetWorld()->SpawnActor<AActor>(projectilePtr, blankTransform, spawnParams);
+    bullet->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
     UPrimitiveComponent* bulletBody = Cast<UPrimitiveComponent>(bullet->GetRootComponent());
 
     if(bulletBody){
