@@ -34,3 +34,4 @@ void AClass_Combatant::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 bool AClass_Combatant::HasTarget(){ return target; }
 
+bool AClass_Combatant::IsDespawning(){ return despawning; }

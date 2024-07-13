@@ -20,11 +20,13 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		bool HasTarget();
-
+	UFUNCTION(BlueprintCallable)
+		bool IsDespawning();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	bool despawning;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
