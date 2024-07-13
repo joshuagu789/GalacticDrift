@@ -9,6 +9,7 @@
 // #include "Components/MeshComponent.h"
 // #include "GeometryCollection/GeometryCollectionComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "GameFramework/PawnMovementComponent.h"
 #include "Class_Racer_Pawn.h"
 #include "Kismet/KismetMathLibrary.h"
 // #include "Engine/EngineTypes.h"	// spawn collision resolution enum

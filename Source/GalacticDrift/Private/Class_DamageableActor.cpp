@@ -107,6 +107,10 @@ void UClass_DamageableActor::Ragdoll(){
     }
     else{ GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Actor with Class_DamageableActor component of type RAGDOLLABLE doesn't have skeletal mesh as root component"));}
 	
+	UPawnMovementComponent* pawnMovementPtr = GetOwner()->FindComponentByClass<UPawnMovementComponent>();
+	if(pawnMovementPtr){
+		pawnMovementPtr->ConsumeInputVector();
+	}
 	// if(mostRecentDamage/40.0 > maxRagdollTime)
 	// 	return maxRagdollTime;
 	// return mostRecentDamage/40.0; 
@@ -129,12 +133,12 @@ void UClass_DamageableActor::UnRagdoll(){
 			entityPtr->SetState(FLYING);
 		}
 
-		// GetOwner()->K2_SetActorRelativeRotation( GetOwner()->GetTransform().Rotator(), true, dummy, true);
+		GetOwner()->K2_SetActorRelativeRotation( GetOwner()->GetTransform().Rotator(), true, dummy, true);
         skeletalMeshPtr->ResetAllBodiesSimulatePhysics();
         skeletalMeshPtr->SetPhysicsBlendWeight(0.5f);
 		ragdollBlendWeight = 0.5;
 		recoveringFromRagdoll = true;
-        // GetOwner()->K2_SetActorRelativeRotation( GetOwner()->GetTransform().Rotator(), true, dummy, true);   // to fix glitch of torso and chest being separated
+        GetOwner()->K2_SetActorRelativeRotation( GetOwner()->GetTransform().Rotator(), true, dummy, true);   // to fix glitch of torso and chest being separated
     }
     else{ GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Actor with Class_DamageableActor component of type RAGDOLLABLE doesn't have skeletal mesh as root component"));}	
 }
