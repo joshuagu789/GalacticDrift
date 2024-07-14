@@ -28,17 +28,17 @@ void UClass_NoHitOnSpawning::BeginPlay()
         	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: rootPrimitiveComponentPtr is nullptr in Class_NoHitOnSpawning"));	
 		}
 	}
-	// if(rootPrimitiveComponentPtr){
-	// 	if(disableThenEnablePhysics){
-	// 		rootPrimitiveComponentPtr->SetSimulatePhysics(false);
-	// 	}
-	// 	if(disableThenEnableHitEvents){
-	// 		rootPrimitiveComponentPtr->SetNotifyRigidBodyCollision(false);
-	// 	}
-	// 	if(disableThenEnableOverlapEvents){
-	// 		rootPrimitiveComponentPtr->SetGenerateOverlapEvents(false);
-	// 	}
-	// }
+	if(rootPrimitiveComponentPtr){
+		if(disableThenEnablePhysics){
+			rootPrimitiveComponentPtr->SetSimulatePhysics(false);
+		}
+		if(disableThenEnableHitEvents){
+			rootPrimitiveComponentPtr->SetNotifyRigidBodyCollision(false);
+		}
+		if(disableThenEnableOverlapEvents){
+			rootPrimitiveComponentPtr->SetGenerateOverlapEvents(false);
+		}
+	}
 	
 }
 

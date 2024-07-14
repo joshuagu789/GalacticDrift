@@ -28,6 +28,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		TEnumAsByte<EntityState> GetState();
 	UFUNCTION(BlueprintCallable)
+		TEnumAsByte<EntityType> GetType();
+	UFUNCTION(BlueprintCallable)
 		void SetState(TEnumAsByte<EntityState> newState);		
 protected:
 	// Called when the game starts

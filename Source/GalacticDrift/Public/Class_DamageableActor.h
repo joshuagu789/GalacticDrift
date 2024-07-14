@@ -5,12 +5,8 @@
 #include "CoreMinimal.h"
 
 #include "Components/ActorComponent.h"
-// #include "Components/PrimitiveComponent.h"
-// #include "Components/MeshComponent.h"
-// #include "GeometryCollection/GeometryCollectionComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
-#include "Class_Racer_Pawn.h"
 #include "Kismet/KismetMathLibrary.h"
 // #include "Engine/EngineTypes.h"	// spawn collision resolution enum
 #include "Class_FracturedActor.h"
@@ -58,16 +54,25 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float health;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float timeImmuneAfterSpawning;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float maxRagdollTime = 4;	// for Ragdollable only
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSubclassOf<AClass_FracturedActor> destroyedVersionPtr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UClass_Entity* entityPtr;
+	
 	// UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	// 	UGeometryCollectionComponent* geometryCollectionPtr;
+
+	UPROPERTY()
+		FRotator skeletonFixer;
 
 	float actualHealth;
 	float mostRecentDamage;
 	float ragdollTimer;
 	float collisionTimer;
+	float immunityTimer;
 
 	bool recoveringFromRagdoll;
 	UPROPERTY()

@@ -24,6 +24,7 @@ void UClass_DamageableActor::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+	immunityTimer = timeImmuneAfterSpawning;
 	actualHealth = health;
 	if(type == RAGDOLLABLE){
 		skeletalMeshPtr = Cast<USkeletalMeshComponent>(GetOwner()->GetRootComponent());
@@ -53,21 +54,32 @@ void UClass_DamageableActor::TickComponent(float DeltaTime, ELevelTick TickType,
 		if(skeletalMeshPtr && ragdollBlendWeight > 0.1){
 			ragdollBlendWeight -= DeltaTime;
 			skeletalMeshPtr->SetPhysicsBlendWeight(ragdollBlendWeight);
+
+	        FHitResult dummy;
+			skeletonFixer.Pitch += DeltaTime;
+			skeletonFixer.Roll += DeltaTime;
+			skeletonFixer.Yaw += DeltaTime;
+			GetOwner()->K2_SetActorRelativeRotation( skeletonFixer, true, dummy, true);
 		}
 		else{
         	FHitResult dummy;
 
 			recoveringFromRagdoll = false;
+        	skeletalMeshPtr->ResetAllBodiesSimulatePhysics();
 			skeletalMeshPtr->SetPhysicsBlendWeight(0.1);
 		}
 	}
+	if(immunityTimer > 0){ immunityTimer -= DeltaTime; }
 }
 
 float UClass_DamageableActor::CalculateAndApplyDamage(UPrimitiveComponent* collisionSource){
-	if(collisionTimer > 0){
+
+	UClass_Entity* collisionEntity = collisionSource->GetOwner()->FindComponentByClass<UClass_Entity>();
+	if(collisionTimer > 0 || immunityTimer > 0 || collisionEntity && entityPtr && collisionEntity->GetType() == entityPtr->GetType()){
 		return 0;
 	}
 	collisionTimer += 0.05;	//Damaging collisions can only occur every 0.05 seconds
+
 	float damage = GetOwner()->GetRootComponent()->GetComponentVelocity().SizeSquared();
 
 	if(collisionSource){
@@ -98,7 +110,7 @@ void UClass_DamageableActor::Ragdoll(){
 		return;
 	}
     if(skeletalMeshPtr){
-		UClass_Entity* entityPtr = GetOwner()->FindComponentByClass<UClass_Entity>();
+		// UClass_Entity* entityPtr = GetOwner()->FindComponentByClass<UClass_Entity>();
 		if(entityPtr){
 			entityPtr->SetState(RAGDOLLED);
 		}
@@ -125,21 +137,34 @@ void UClass_DamageableActor::UnRagdoll(){
 		return;
 	}
     if(skeletalMeshPtr){
+        skeletalMeshPtr->SetAllBodiesSimulatePhysics(false);
+
+        // skeletalMeshPtr->ResetAllBodiesSimulatePhysics();
+
         FHitResult dummy;
-        GetOwner()->K2_SetActorLocation(skeletalMeshPtr->GetSkeletalCenterOfMass(), true, dummy, true);
-        
-		UClass_Entity* entityPtr = GetOwner()->FindComponentByClass<UClass_Entity>();
+		FVector teleportLocation = skeletalMeshPtr->GetSkeletalCenterOfMass();
+		skeletonFixer = GetOwner()->GetRootComponent()->GetComponentRotation();
+		skeletonFixer.Pitch++;
+
+        GetOwner()->K2_SetActorLocation(teleportLocation, false, dummy, true);
+
+        // skeletalMeshPtr->ResetAllBodiesSimulatePhysics();
+
+		// UClass_Entity* entityPtr = GetOwner()->FindComponentByClass<UClass_Entity>();
 		if(entityPtr){
 			entityPtr->SetState(FLYING);
 		}
 
-		GetOwner()->K2_SetActorRelativeRotation( GetOwner()->GetTransform().Rotator(), true, dummy, true);
-        skeletalMeshPtr->ResetAllBodiesSimulatePhysics();
-        skeletalMeshPtr->SetPhysicsBlendWeight(0.5f);
+		GetOwner()->K2_SetActorRelativeRotation( skeletonFixer, true, dummy, true);
+
+        // skeletalMeshPtr->ResetAllBodiesSimulatePhysics();
 		ragdollBlendWeight = 0.5;
 		recoveringFromRagdoll = true;
-        GetOwner()->K2_SetActorRelativeRotation( GetOwner()->GetTransform().Rotator(), true, dummy, true);   // to fix glitch of torso and chest being separated
-    }
+
+		skeletonFixer.Pitch++;
+        GetOwner()->K2_SetActorRelativeRotation( skeletonFixer, true, dummy, true);   // to fix glitch of torso and chest being separated
+        // GetOwner()->K2_SetActorLocation(teleportLocation, true, dummy, false);
+	}
     else{ GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Actor with Class_DamageableActor component of type RAGDOLLABLE doesn't have skeletal mesh as root component"));}	
 }
 

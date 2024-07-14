@@ -1,3 +1,6 @@
+/*
+	Class not working exactly as intended, feature of not taking damage on spawn is now moved to Class_DamageableActor
+*/
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
@@ -31,7 +34,7 @@ protected:
 		bool disableThenEnableHitEvents;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool disableThenEnableOverlapEvents;	
-		
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UPrimitiveComponent* rootPrimitiveComponentPtr;	// expects root component to be primitive
 

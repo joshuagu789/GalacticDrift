@@ -57,5 +57,7 @@ bool UClass_Entity::IsEnemyWith(TEnumAsByte<EntityType> otherEntity){
 
 TEnumAsByte<EntityState> UClass_Entity::GetState(){ return state; }
 
+TEnumAsByte<EntityType> UClass_Entity::GetType(){ return type; };
+
 void UClass_Entity::SetState(TEnumAsByte<EntityState> newState){ state = newState; }
 
