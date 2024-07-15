@@ -34,3 +34,45 @@ void AClass_Combatant::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 bool AClass_Combatant::HasTarget(){ return target && !target->IsPendingKillPending(); }
 
 bool AClass_Combatant::IsDespawning(){ return despawning; }
+
+bool AClass_Combatant::AddTarget(AActor* actor){
+	if(!actor){
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: actor is null for AddTarget for Class_Combatant"));
+		return false;
+	}
+	if(!targetList.Contains(actor)){
+		if(!HasTarget()){
+			target = actor;
+		}
+		else{
+			targetList.Insert(actor, 0);
+		}
+		return true;
+	}
+	return false;
+}
+
+void AClass_Combatant::RemoveTarget(AActor* actor){ targetList.Remove(actor); };
+
+
+bool AClass_Combatant::CycleNextTarget(){
+	while(!HasTarget()){
+		if(targetList.Num() >= 1){
+			AActor* actor = targetList[0];
+			if(actor){
+				if(!actor->IsPendingKillPending()){
+					target = actor;
+					targetList.RemoveAt(0);
+					return true;
+				}
+				targetList.RemoveAt(0);
+			}
+		}
+		else{
+			return false;
+		}	
+	}
+	return false;
+}
+
+bool AClass_Combatant::HasActorInTargetList(AActor* actor){ return targetList.Contains(actor); }
