@@ -32,3 +32,11 @@ void AClass_AdoringFan::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 }
 
+void AClass_AdoringFan::SetRacer(AClass_Racer_Pawn* newRacer){
+	if(newRacer){
+		racer = newRacer;
+	}
+	else{
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: newRacer is null for SetRacer for Class_AdoringFan"));
+	}
+}

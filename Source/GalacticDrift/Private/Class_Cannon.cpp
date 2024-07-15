@@ -135,6 +135,12 @@ void UClass_Cannon::ShootAt(AActor* target, float distanceSquaredToTarget = 0){
     FActorSpawnParameters spawnParams;
 
     AActor* bullet = GetWorld()->SpawnActor<AActor>(projectilePtr, blankTransform, spawnParams);
+
+    if(!bullet){
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: bullet not spawned for class cannon"));	        
+        return;
+    }
+    
     bullet->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
     UPrimitiveComponent* bulletBody = Cast<UPrimitiveComponent>(bullet->GetRootComponent());
 

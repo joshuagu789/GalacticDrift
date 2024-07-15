@@ -33,6 +33,8 @@ void AClass_Combatant::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 bool AClass_Combatant::HasTarget(){ return target && !target->IsPendingKillPending(); }
 
+bool AClass_Combatant::HasBackupTargets(){ return targetList.Num() >= 1 && targetList[0] && !targetList[0]->IsPendingKillPending(); }
+
 bool AClass_Combatant::IsDespawning(){ return despawning; }
 
 bool AClass_Combatant::AddTarget(AActor* actor){

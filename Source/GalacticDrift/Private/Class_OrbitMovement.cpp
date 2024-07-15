@@ -31,13 +31,16 @@ void UClass_OrbitMovement::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 	// ...
 	if(isOrbiting && orbitTarget){
-		FVector destination = currentTargetOffset + orbitTarget->GetRootComponent()->K2_GetComponentLocation();
-		FVector position = GetOwner()->GetRootComponent()->K2_GetComponentLocation();
+		// FVector destination = currentTargetOffset + orbitTarget->GetRootComponent()->K2_GetComponentLocation();
+		// FVector position = GetOwner()->GetRootComponent()->K2_GetComponentLocation();
+		FVector destination = currentTargetOffset + orbitTarget->GetRootComponent()->GetComponentLocation();
+		FVector position = GetOwner()->GetRootComponent()->GetComponentLocation();
 
 		if(FVector::DistSquared(destination, position) <= 100){
 			currentTargetOffset = angleOfOrbit.RotateVector(currentTargetOffset);
 
-			moveComponentPtr->AddInputVector(currentTargetOffset + orbitTarget->GetRootComponent()->K2_GetComponentLocation() - position, false);
+			// moveComponentPtr->AddInputVector(currentTargetOffset + orbitTarget->GetRootComponent()->K2_GetComponentLocation() - position, false);
+			moveComponentPtr->AddInputVector(currentTargetOffset + orbitTarget->GetRootComponent()->GetComponentLocation() - position, false);
 		}
 		else if(moveComponentPtr){
 			// moveComponentPtr->AddInputVector(destination, true);
@@ -63,7 +66,8 @@ void UClass_OrbitMovement::BeginOrbiting(AActor* actor){
 		angleOfOrbit.Yaw = 45 * UKismetMathLibrary::RandomFloatInRange(-1,1);
 		// angleOfOrbit.Normalize();
 
-		currentTargetOffset = GetOwner()->GetRootComponent()->K2_GetComponentLocation() - actor->GetRootComponent()->K2_GetComponentLocation();
+		// currentTargetOffset = GetOwner()->GetRootComponent()->K2_GetComponentLocation() - actor->GetRootComponent()->K2_GetComponentLocation();
+		currentTargetOffset = GetOwner()->GetRootComponent()->GetComponentLocation() - actor->GetRootComponent()->GetComponentLocation();
 		currentTargetOffset = currentTargetOffset.GetSafeNormal() * orbitRange;
 	} else {
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: actor is nullptr in BeginOrbiting parameter of Class OrbitMovement"));

@@ -15,7 +15,8 @@ class GALACTICDRIFT_API AClass_AdoringFan : public APawn
 public:
 	// Sets default values for this pawn's properties
 	AClass_AdoringFan();
-
+	UFUNCTION(BlueprintCallable)
+		void SetRacer(AClass_Racer_Pawn* newRacer);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

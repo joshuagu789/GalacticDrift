@@ -22,6 +22,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool HasTarget();
 	UFUNCTION(BlueprintCallable)
+		bool HasBackupTargets();
+	UFUNCTION(BlueprintCallable)
 		bool IsDespawning();
 	UFUNCTION(BlueprintCallable)
 		/*
