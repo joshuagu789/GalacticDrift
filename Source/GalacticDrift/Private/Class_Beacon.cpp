@@ -63,9 +63,75 @@ void UClass_Beacon::SpawnFan(){
 }
 void UClass_Beacon::SpawnPolice(){
 
+    FTransform blankTransform;
+	FVector spawnLocationOffset{UKismetMathLibrary::RandomFloatInRange(2000,4000 + 50000 - 50000 * accuracy),0,0};
+	FRotator offsetRotation{UKismetMathLibrary::RandomFloatInRange(-30,30),UKismetMathLibrary::RandomFloatInRange(-30,30), UKismetMathLibrary::RandomFloatInRange(0,360)};
+	spawnLocationOffset = offsetRotation.RotateVector(spawnLocationOffset);
+
+    blankTransform.SetLocation(GetOwner()->GetRootComponent()->GetComponentLocation() + spawnLocationOffset);	
+
+    FActorSpawnParameters spawnParams;
+	// AClass_AdoringFan* fan = Cast<AClass_AdoringFan>(fanPtr);
+
+    AActor* police = GetWorld()->SpawnActor<AActor>(policePtr, blankTransform, spawnParams);
+
+	if(!police){  
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: police not spawned (nullptr) for SpawnPolice of Class_Beacon"));
+		return;
+	}
+
+	police->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	AClass_Combatant* combatantClass = Cast<AClass_Combatant>(police);
+
+	if(!combatantClass){  
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: spawned police is not combatant (nullptr) for SpawnAttacker of Class_Beacon"));
+		return;
+	}
+	
+	combatantClass->SpawnDefaultController();
+
+	UClass_OrbitMovement* orbitMovement = police->FindComponentByClass<UClass_OrbitMovement>();
+	UClass_Swivel* swivel = police->FindComponentByClass<UClass_Swivel>();
+	
+	if(orbitMovement){
+		orbitMovement->BeginOrbiting(GetOwner());
+	}
+	if(swivel){
+		swivel->BeginFacing(GetOwner());
+	}
+
 }
 void UClass_Beacon::SpawnAttacker(AActor* target){
+    FTransform blankTransform;
+	FVector spawnLocationOffset{UKismetMathLibrary::RandomFloatInRange(2000,4000 + 50000 - 50000 * accuracy),0,0};
+	FRotator offsetRotation{UKismetMathLibrary::RandomFloatInRange(-30,30),UKismetMathLibrary::RandomFloatInRange(-30,30), UKismetMathLibrary::RandomFloatInRange(0,360)};
+	spawnLocationOffset = offsetRotation.RotateVector(spawnLocationOffset);
 
+    blankTransform.SetLocation(target->GetRootComponent()->GetComponentLocation() + spawnLocationOffset);	
+
+    FActorSpawnParameters spawnParams;
+	// AClass_AdoringFan* fan = Cast<AClass_AdoringFan>(fanPtr);
+
+    AActor* attacker = GetWorld()->SpawnActor<AActor>(attackerPtr, blankTransform, spawnParams);
+
+	if(!attacker){  
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: attacker not spawned (nullptr) for SpawnAttacker of Class_Beacon"));
+		return;
+	}
+
+	attacker->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	AClass_Combatant* combatantClass = Cast<AClass_Combatant>(attacker);
+
+	if(!combatantClass){  
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: spawned attacker is not combatant (nullptr) for SpawnAttacker of Class_Beacon"));
+		return;
+	}
+
+	// fanClass->SetRacer(Cast<AClass_Racer_Pawn>(GetOwner()));
+
+	combatantClass->SpawnDefaultController();
 }
 
 bool UClass_Beacon::CanSpawnFan(){ return fanTimer <= 0; }

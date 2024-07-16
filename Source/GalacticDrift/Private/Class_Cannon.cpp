@@ -24,7 +24,7 @@ void UClass_Cannon::BeginPlay()
 void UClass_Cannon::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction){
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-    if(isAttacking && attackTarget){
+    if(isAttacking && attackTarget && !attackTarget->IsPendingKillPending()){
         if(cooldownTimer <= 0){
             
             FVector selfLocation = GetOwner()->GetRootComponent()->K2_GetComponentLocation();
@@ -140,7 +140,7 @@ void UClass_Cannon::ShootAt(AActor* target, float distanceSquaredToTarget = 0){
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: bullet not spawned for class cannon"));	        
         return;
     }
-    
+
     bullet->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
     UPrimitiveComponent* bulletBody = Cast<UPrimitiveComponent>(bullet->GetRootComponent());
 

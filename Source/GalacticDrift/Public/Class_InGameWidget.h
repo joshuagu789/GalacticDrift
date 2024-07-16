@@ -5,10 +5,12 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
+#include "Components/CanvasPanel.h"
 // #include "Internationalization/Text.h"
 // #include "Containers/Array.h"
 // #include "Containers/Queue.h"
 #include "Header_Enumerations.h"
+#include "Class_Racer_Pawn.h"
 #include "Class_InGameWidget.generated.h"
 
 /**
@@ -22,10 +24,42 @@ public:
 	UFUNCTION(BlueprintCallable, Category="UI")
 		void PushToOutputConsole(const TArray<FString> &lines);
 
+	UFUNCTION(BlueprintCallable)
+		/*
+		Handles transitions between menu canvases, but does not check if transition is legal
+		*/
+		void SwitchToMenu(TEnumAsByte<UI_Command_Menu> newMenuState);
+
+	UFUNCTION()
+		UCanvasPanel* GetCanvasCorrespondingToEnum(TEnumAsByte<UI_Command_Menu> menuEnum);
+
+	UFUNCTION(BlueprintCallable)
+		/*
+		Whenever player presses button that corresponds to action in menu
+		*/
+		void ProcessInputForMenu(FString input);
+
+	UFUNCTION(BlueprintCallable)
+		/*
+		Typically when player presses Z to go back
+		*/
+		void StepBackwardsInMenu();
+
+	UFUNCTION(BlueprintCallable)
+		TEnumAsByte<UI_Command_Menu> GetMenuState();
+
+	UFUNCTION(BlueprintCallable)
+		/*
+		For effects such as text for equipment shake when take damage
+		*/
+		void MonitorPlayerEquipments();
 protected:
 	/*
 	NOTE: ALL VARIABLES EXPECTED FOR BLUEPRINT TO INITIALIZE
 	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AClass_Racer_Pawn* player;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UTextBlock* speedPtr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -33,6 +67,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UTextBlock* outputConsolePtr;
 		
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UCanvasPanel* allAbilitiesCanvasPtr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UCanvasPanel* beaconCanvasPtr;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TEnumAsByte<UI_Command_Menu> menuState = ALL_ABILITIES_MENU;
 
@@ -51,5 +90,5 @@ private:
 	int lineIndex = 0;
 public:
 	void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
-
+	void NativeConstruct() override;
 };

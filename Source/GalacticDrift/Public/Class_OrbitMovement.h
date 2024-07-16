@@ -22,6 +22,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void BeginOrbiting(AActor* actor);
 	UFUNCTION(BlueprintCallable)
+		/*
+		Beware of null pointers
+		*/
+		AActor* GetOrbitTarget();
+	UFUNCTION(BlueprintCallable)
 		void StopOrbiting();
 	UFUNCTION(BlueprintCallable)
 		bool IsOrbiting();

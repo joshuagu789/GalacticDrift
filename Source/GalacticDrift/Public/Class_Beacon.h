@@ -9,7 +9,8 @@
 #include "Class_AdoringFan.h"
 #include "Class_Combatant.h"
 #include "Class_Racer_Pawn.h"
-
+#include "Class_Swivel.h"
+#include "Class_OrbitMovement.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Class_Beacon.generated.h"
 
@@ -53,9 +54,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSubclassOf<AActor> fanPtr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TSubclassOf<AClass_Combatant> policePtr;
+		TSubclassOf<AActor> policePtr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TSubclassOf<AClass_Combatant> attackerPtr;	
+		TSubclassOf<AActor> attackerPtr;	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float fanCooldown;

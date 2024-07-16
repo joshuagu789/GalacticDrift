@@ -10,10 +10,70 @@ void UClass_InGameWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaT
     UpdateOutputConsole(InDeltaTime);
 }
 
+void UClass_InGameWidget::NativeConstruct(){
+    Super::NativeConstruct();
+
+    if(beaconCanvasPtr){
+        beaconCanvasPtr->SetVisibility(ESlateVisibility::Hidden);
+    }
+    if(allAbilitiesCanvasPtr){
+        allAbilitiesCanvasPtr->SetVisibility(ESlateVisibility::Visible);
+    }
+    menuState = ALL_ABILITIES_MENU;
+}
+
 void UClass_InGameWidget::PushToOutputConsole(const TArray<FString> &lines){    
     for(auto i: lines)
         linesToPrint.Enqueue(i);
 }
+
+void UClass_InGameWidget::SwitchToMenu(TEnumAsByte<UI_Command_Menu> newMenuState){
+    UCanvasPanel* oldCanvas = GetCanvasCorrespondingToEnum(menuState);
+    if(oldCanvas){
+        oldCanvas->SetVisibility(ESlateVisibility::Hidden);
+    }
+    UCanvasPanel* newCanvas = GetCanvasCorrespondingToEnum(newMenuState);
+    if(newCanvas){
+        newCanvas->SetVisibility(ESlateVisibility::Visible);
+    }
+    menuState = newMenuState;
+}
+
+UCanvasPanel* UClass_InGameWidget::GetCanvasCorrespondingToEnum(TEnumAsByte<UI_Command_Menu> menuEnum){
+    switch(menuEnum){
+        case ALL_ABILITIES_MENU:
+            return allAbilitiesCanvasPtr;
+        case BEACON_MENU:
+            return beaconCanvasPtr;
+    }
+    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: returned allAbilitiesCanvasPtr bc nothing found in switch statement in class_ingamewidget"));
+    return allAbilitiesCanvasPtr;
+}
+
+void UClass_InGameWidget::ProcessInputForMenu(FString input){
+
+    if(input.Equals(TEXT("z")), ESearchCase::Type::IgnoreCase ){
+        StepBackwardsInMenu();
+    }
+    else if(input.Equals(TEXT("3")), ESearchCase::Type::IgnoreCase ){
+        if(menuState == ALL_ABILITIES_MENU){
+            SwitchToMenu(BEACON_MENU);
+        }   
+    }
+}
+
+void UClass_InGameWidget::StepBackwardsInMenu(){
+    switch(menuState){
+        case BEACON_MENU:
+            SwitchToMenu(ALL_ABILITIES_MENU);
+            return;
+
+    }
+}
+
+TEnumAsByte<UI_Command_Menu> UClass_InGameWidget::GetMenuState(){return menuState;}
+
+void UClass_InGameWidget::MonitorPlayerEquipments(){}
 
 void UClass_InGameWidget::UpdateOutputConsole(float InDeltaTime){
 

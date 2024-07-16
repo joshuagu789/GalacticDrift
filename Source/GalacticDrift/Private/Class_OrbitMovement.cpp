@@ -74,6 +74,8 @@ void UClass_OrbitMovement::BeginOrbiting(AActor* actor){
 	}
 }
 
+AActor* UClass_OrbitMovement::GetOrbitTarget(){ return orbitTarget; }
+
 void UClass_OrbitMovement::StopOrbiting(){
 	orbitTarget = nullptr;
 	isOrbiting = false;
