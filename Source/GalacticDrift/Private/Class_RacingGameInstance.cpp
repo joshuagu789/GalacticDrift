@@ -44,7 +44,7 @@ bool UClass_RacingGameInstance::RemoveEntityFromServer(TEnumAsByte<EntityType> t
         }
     }
 
-	return false;
+	return true;
 }
 
 bool UClass_RacingGameInstance::AddMarkerToServer(AActor* actor){
@@ -73,7 +73,7 @@ TSet<AActor*>& UClass_RacingGameInstance::GetContainerForEnum(const TEnumAsByte<
             return racerList;
             break;
     }
-    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: no valid conversion from entity enum to container in racing game instance"));
+    // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: no valid conversion from entity enum to container in racing game instance"));
     return emptyList;
 }
 

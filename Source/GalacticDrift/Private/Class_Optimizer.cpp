@@ -20,9 +20,12 @@ void UClass_Optimizer::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	if(collider){
-		collider->OnComponentBeginOverlap.AddDynamic(this, &UClass_Optimizer::OnOverlapBegin);
-	}
+	// actorCollider = GetOwner();
+	// if(collider){
+	// 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("initialize overlap"));
+	// 	// collider->OnComponentBeginOverlap.AddDynamic(this, &UClass_Optimizer::OnComponentBeginOverlap);
+	// }
+	// actorCollider->OnActorBeginOverlap.AddDynamic(this, &UClass_Optimizer::OnActorBeginOverlap);
 }
 
 
@@ -34,8 +37,16 @@ void UClass_Optimizer::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// ...
 }
 
-void UClass_Optimizer::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, 
-									bool bFromSweep, const FHitResult& SweepResult){
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("OVERLLAPPINGGG"));
-	// Super::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-}
+// void UClass_Optimizer::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, 
+// 									bool bFromSweep, const FHitResult& SweepResult){
+// 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("OVERLLAPPINGGG"));
+// 	// Super::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+// }
+
+// void UClass_Optimizer::OnActorBeginOverlap(AActor* OtherActor){
+// 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("u shall work!"));
+// }
+
+// void UClass_Optimizer::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex){
+
+// }	

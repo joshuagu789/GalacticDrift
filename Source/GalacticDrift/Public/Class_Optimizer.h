@@ -24,13 +24,17 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		UPrimitiveComponent* collider;
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// 	UPrimitiveComponent* collider;
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// 	AActor* actorCollider;
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, 
-									bool bFromSweep, const FHitResult& SweepResult);
-		
+	// //OnOverlapBegin
+	// void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, 
+	// 								bool bFromSweep, const FHitResult& SweepResult);
+	// void OnActorBeginOverlap(AActor* OtherActor);
+	// void OnComponentEndOverlap	(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);	
 };

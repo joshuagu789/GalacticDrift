@@ -40,3 +40,15 @@ bool UClass_Freezable::GetIsFrozen(){
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: there typically shouldn't be instances of UClass_Freezable instead of a child class"));
 	return isFrozen; 
 }
+
+void UClass_Freezable::AddOptimizerInRange(){numberOfOptimizersInRange++;}	// add by 1
+
+void UClass_Freezable::RemoveOptimizerInRange(){numberOfOptimizersInRange--;}	//minus 1
+
+bool UClass_Freezable::HasNoOptimizersInRange(){
+	if(numberOfOptimizersInRange < 0){
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: numberOfOptimizersInRange is negative for Class_Freezable"));
+	}
+
+	return numberOfOptimizersInRange == 0;
+}

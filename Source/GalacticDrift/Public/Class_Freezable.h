@@ -18,17 +18,24 @@ public:
 	UClass_Freezable();
 
 	UFUNCTION(BlueprintCallable)
-		void Freeze();
+		virtual void Freeze();
 	UFUNCTION(BlueprintCallable)
-		void UnFreeze();
+		virtual void UnFreeze();
 	UFUNCTION(BlueprintCallable)
 		bool GetIsFrozen();
-
+	UFUNCTION(BlueprintCallable)
+		void AddOptimizerInRange();	// add by 1
+	UFUNCTION(BlueprintCallable)
+		void RemoveOptimizerInRange();	//minus 1
+	UFUNCTION(BlueprintCallable)
+		bool HasNoOptimizersInRange();
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 	bool isFrozen = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool freezeOnPlay;
 	int numberOfOptimizersInRange;	// only freeze if zero optimizers in range (cannot freeze if one optimizer leaves and another still remains)
 public:	
 	// Called every frame
