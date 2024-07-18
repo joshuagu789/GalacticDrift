@@ -6,7 +6,7 @@ Entities with this component (typically racers both npc and player) unfreezes an
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Components/PrimitiveComponent.h"
-
+#include "Class_Freezable.h"
 #include "Class_Optimizer.generated.h"
 
 
@@ -20,6 +20,16 @@ public:
 	// Sets default values for this component's properties
 	UClass_Optimizer();
 
+	UFUNCTION(BlueprintCallable)
+		/*
+		Tries to enable actor by unfreezing actor's freezable components
+		*/
+		void AttemptToEnableActor(AActor* actor);
+	UFUNCTION(BlueprintCallable)
+		/*
+		Tries to disable actor by freezing actor's freezable components
+		*/
+		void AttemptToDisableActor(AActor* actor);
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

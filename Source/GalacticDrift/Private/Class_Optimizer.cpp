@@ -36,6 +36,32 @@ void UClass_Optimizer::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 	// ...
 }
+void UClass_Optimizer::AttemptToEnableActor(AActor* actor){
+	if(!actor){
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: actor is null in AttemptToEnableActor for Class_Optimizer"));
+	}
+	// TInlineComponentArray<UClass_Freezable*> components(actor);	// is this necessary? this done to avoid memory allocation costs, but there not much freezable components to begin with
+	TInlineComponentArray<UClass_Freezable*, 10> components;	// reserve 10 for now
+
+	actor->GetComponents<UClass_Freezable>(components, true);
+
+	for(UClass_Freezable* component: components){
+		component->AddOptimizerInRange();
+	}
+}
+
+void UClass_Optimizer::AttemptToDisableActor(AActor* actor){
+	if(!actor){
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: actor is null in AttemptToDisableActor for Class_Optimizer"));
+	}
+	TInlineComponentArray<UClass_Freezable*, 10> components;	// reserve 10 for now
+
+	actor->GetComponents<UClass_Freezable>(components, true);
+
+	for(UClass_Freezable* component: components){
+		component->RemoveOptimizerInRange();
+	}
+}
 
 // void UClass_Optimizer::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, 
 // 									bool bFromSweep, const FHitResult& SweepResult){

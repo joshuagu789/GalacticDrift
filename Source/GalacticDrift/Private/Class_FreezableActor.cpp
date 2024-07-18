@@ -32,6 +32,28 @@ void UClass_FreezableActor::TickComponent(float DeltaTime, ELevelTick TickType, 
 	// ...
 }
 
-void UClass_FreezableActor::Freeze(){}
+void UClass_FreezableActor::Freeze(){
+	TSet<UActorComponent*> components = GetOwner()->GetComponents();
 
-void UClass_FreezableActor::UnFreeze(){}
+	for(UActorComponent* component: components){
+		component->SetComponentTickEnabled(false);
+	}
+	GetOwner()->SetActorTickEnabled(false);	
+
+	if(makeActorInvisibleOnFreeze){
+		GetOwner()->SetActorHiddenInGame(true);
+	}
+}
+
+void UClass_FreezableActor::UnFreeze(){
+	GetOwner()->SetActorTickEnabled(true);
+
+	TSet<UActorComponent*> components = GetOwner()->GetComponents();
+	for(UActorComponent* component: components){
+		component->SetComponentTickEnabled(true);
+	}
+
+	if(makeActorInvisibleOnFreeze){
+		GetOwner()->SetActorHiddenInGame(false);
+	}
+}

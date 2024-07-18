@@ -20,6 +20,9 @@ void UClass_Freezable::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+	if(freezeOnPlay){
+		Freeze();
+	}
 	
 }
 
@@ -41,14 +44,27 @@ bool UClass_Freezable::GetIsFrozen(){
 	return isFrozen; 
 }
 
-void UClass_Freezable::AddOptimizerInRange(){numberOfOptimizersInRange++;}	// add by 1
-
-void UClass_Freezable::RemoveOptimizerInRange(){numberOfOptimizersInRange--;}	//minus 1
-
-bool UClass_Freezable::HasNoOptimizersInRange(){
-	if(numberOfOptimizersInRange < 0){
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: numberOfOptimizersInRange is negative for Class_Freezable"));
+void UClass_Freezable::AddOptimizerInRange(){
+	numberOfOptimizersInRange++;
+	if(numberOfOptimizersInRange == 1){
+		UnFreeze();
 	}
+}	
 
-	return numberOfOptimizersInRange == 0;
-}
+void UClass_Freezable::RemoveOptimizerInRange(){
+	numberOfOptimizersInRange--;
+	if(numberOfOptimizersInRange == 0){
+		Freeze();
+	}
+	else if(numberOfOptimizersInRange < 0){
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: numberOfOptimizersInRange is negative for Class_Freezable after RemoveOptimizerInRange call"));
+	}
+}	
+
+// bool UClass_Freezable::HasNoOptimizersInRange(){
+// 	if(numberOfOptimizersInRange < 0){
+// 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: numberOfOptimizersInRange is negative for Class_Freezable"));
+// 	}
+
+// 	return numberOfOptimizersInRange == 0;
+// }

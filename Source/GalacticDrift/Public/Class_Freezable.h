@@ -27,8 +27,8 @@ public:
 		void AddOptimizerInRange();	// add by 1
 	UFUNCTION(BlueprintCallable)
 		void RemoveOptimizerInRange();	//minus 1
-	UFUNCTION(BlueprintCallable)
-		bool HasNoOptimizersInRange();
+	// UFUNCTION(BlueprintCallable)
+	// 	bool HasNoOptimizersInRange();
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
