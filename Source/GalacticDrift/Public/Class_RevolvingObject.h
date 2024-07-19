@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Class_Freezable.h"
+#include "Components/PrimitiveComponent.h"
+#include "GameFramework/FloatingPawnMovement.h"
 #include "Class_RevolvingObject.generated.h"
 
 
@@ -21,9 +23,34 @@ public:
 	void Freeze() override;
 	void UnFreeze() override;
 
+	UFUNCTION(BlueprintCallable)
+		void SetRevolveTarget(AActor* target, float pitch, float roll, float yaw);
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float rotateSpeed = 0;	// will not rotate upon itself if rotateSpeed is zero	
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+        UFloatingPawnMovement* moveComponentPtr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UPrimitiveComponent* test;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AActor* revolveTarget;
+	UPROPERTY()
+		FVector revolveLocation;
+	UPROPERTY()
+		AActor* componentOwner;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FVector vectorFromRevolveTarget;
+	UPROPERTY()
+		FRotator revolver;
+	UPROPERTY()
+		FRotator rotater;
+
+	float tickFrequency;
 
 public:	
 	// Called every frame

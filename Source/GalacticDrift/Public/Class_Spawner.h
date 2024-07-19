@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Class_RevolvingObject.h"
 #include "Class_Spawner.generated.h"
 
 UCLASS()

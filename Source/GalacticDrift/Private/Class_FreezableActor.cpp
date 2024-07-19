@@ -36,6 +36,10 @@ void UClass_FreezableActor::Freeze(){
 	TSet<UActorComponent*> components = GetOwner()->GetComponents();
 
 	for(UActorComponent* component: components){
+		UClass_Freezable* freezable = Cast<UClass_Freezable>(component);
+		if(!freezable){
+			component->SetComponentTickEnabled(false);
+		}
 		component->SetComponentTickEnabled(false);
 	}
 	GetOwner()->SetActorTickEnabled(false);	
@@ -43,6 +47,7 @@ void UClass_FreezableActor::Freeze(){
 	if(makeActorInvisibleOnFreeze){
 		GetOwner()->SetActorHiddenInGame(true);
 	}
+	SetComponentTickEnabled(false);
 }
 
 void UClass_FreezableActor::UnFreeze(){
@@ -56,4 +61,5 @@ void UClass_FreezableActor::UnFreeze(){
 	if(makeActorInvisibleOnFreeze){
 		GetOwner()->SetActorHiddenInGame(false);
 	}
+	SetComponentTickEnabled(true);
 }

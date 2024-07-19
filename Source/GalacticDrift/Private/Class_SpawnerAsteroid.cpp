@@ -53,6 +53,17 @@ void AClass_Spawner::SpawnActorsEllipse(int min, int max, float max_x, float max
 			AActor* temp = GetWorld()->SpawnActor<AActor>(actorPtr, blankTransform, spawnParams);
 			if(temp){
 				temp->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+				UClass_RevolvingObject* revolvingObject = temp->FindComponentByClass<UClass_RevolvingObject>();
+
+				if(revolvingObject){
+					revolvingObject->SetRevolveTarget(this, 0, 0, 100);;
+				}
+				APawn* pawn = Cast<APawn>(temp);
+				if(pawn){
+					pawn->SpawnDefaultController();
+				}
+
+
 				actorList.Add(temp);
 			}
 

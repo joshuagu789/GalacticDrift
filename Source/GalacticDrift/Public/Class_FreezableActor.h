@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Class_Freezable.h"
+#include "Kismet/KismetSystemLibrary.h"
+
 #include "Class_FreezableActor.generated.h"
 
 
