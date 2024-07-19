@@ -23,6 +23,8 @@ void AClass_Spawner::BeginPlay()
 void AClass_Spawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	FHitResult* dummy = nullptr;
+	GetRootComponent()->AddWorldRotation(FRotator{0,10 * DeltaTime,0}, true, dummy, ETeleportType::TeleportPhysics);
 
 }
 
@@ -55,8 +57,10 @@ void AClass_Spawner::SpawnActorsEllipse(int min, int max, float max_x, float max
 				temp->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 				UClass_RevolvingObject* revolvingObject = temp->FindComponentByClass<UClass_RevolvingObject>();
 
+				// temp->AttachToActor(this, FAttachmentTransformRules{ EAttachmentRule::KeepWorld, EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative,  true});
+				temp->GetRootComponent()->AttachToComponent(GetRootComponent(), FAttachmentTransformRules{ EAttachmentRule::KeepWorld, EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative,  true});
 				if(revolvingObject){
-					revolvingObject->SetRevolveTarget(this, 0, 0, 100);;
+					// revolvingObject->SetRevolveTarget(this, 0, 0, 100);;
 				}
 				APawn* pawn = Cast<APawn>(temp);
 				if(pawn){

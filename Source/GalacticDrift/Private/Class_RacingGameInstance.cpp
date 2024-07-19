@@ -69,6 +69,9 @@ bool UClass_RacingGameInstance::AddMarkerToServer(AActor* actor){
 TSet<AActor*>& UClass_RacingGameInstance::GetContainerForEnum(const TEnumAsByte<EntityType> type)
 {
     switch(type){
+        case EMPTY:
+            return emptyList;   
+            break;
         case RACER:
             return racerList;
             break;

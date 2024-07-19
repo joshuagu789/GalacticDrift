@@ -37,6 +37,7 @@ void UClass_RevolvingObject::TickComponent(float DeltaTime, ELevelTick TickType,
 	// ...
 	if(revolveTarget && revolveTarget != componentOwner){
 		revolver *= DeltaTime;
+		// vectorFromRevolveTarget = GetOwner()->GetActorLocation() - revolveTarget->GetActorLocation();
 		vectorFromRevolveTarget = revolver.RotateVector(vectorFromRevolveTarget);
 
 		revolver *= 1/DeltaTime;
@@ -48,7 +49,7 @@ void UClass_RevolvingObject::TickComponent(float DeltaTime, ELevelTick TickType,
 		
 		// GetOwner()->SetActorLocation(revolveTarget->GetRootComponent()->GetComponentLocation() + vectorFromRevolveTarget, true, dummy, ETeleportType::None);
 		// GetOwner()->K2_SetActorLocation(revolveTarget->GetRootComponent()->GetComponentLocation() + vectorFromRevolveTarget, false, dummy, true);
-		GetOwner()->K2_SetActorLocation(revolveLocation + vectorFromRevolveTarget, false, dummy, true);
+		// GetOwner()->K2_SetActorLocation(revolveTarget->GetActorLocation() + vectorFromRevolveTarget, false, dummy, true);
 
 		// if(!test){
 		// 	test = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
@@ -58,9 +59,9 @@ void UClass_RevolvingObject::TickComponent(float DeltaTime, ELevelTick TickType,
 		// 	direction = direction.GetSafeNormal();
 		// 	test->AddForce(1000 * FVector{-1,0,0}, "", true);
 		// }
-		// if(moveComponentPtr){
-		// 	moveComponentPtr->AddInputVector(revolveTarget->GetRootComponent()->GetComponentLocation() + vectorFromRevolveTarget, true);
-		// }
+		if(moveComponentPtr){
+			moveComponentPtr->AddInputVector(revolveTarget->GetActorLocation() + vectorFromRevolveTarget - GetOwner()->GetActorLocation(), true);
+		}
 	}
 }
 
@@ -82,5 +83,6 @@ void UClass_RevolvingObject::SetRevolveTarget(AActor* target, float pitch, float
 	revolver.Roll = roll;
 	revolver.Yaw = yaw;
 	revolveLocation = target->GetRootComponent()->GetComponentLocation();
-	vectorFromRevolveTarget = GetOwner()->GetRootComponent()->GetComponentLocation() - target->GetRootComponent()->GetComponentLocation();
+	vectorFromRevolveTarget = GetOwner()->GetActorLocation() - target->GetActorLocation();
+	// vectorFromRevolveTarget = GetOwner()->GetRootComponent()->GetComponentLocation() - target->GetRootComponent()->GetComponentLocation();
 }
