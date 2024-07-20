@@ -57,6 +57,7 @@ void UClass_Freezable::RemoveOptimizerInRange(){
 		Freeze();
 	}
 	else if(numberOfOptimizersInRange < 0){
+		numberOfOptimizersInRange = 0;
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: numberOfOptimizersInRange is negative for Class_Freezable after RemoveOptimizerInRange call"));
 	}
 }	

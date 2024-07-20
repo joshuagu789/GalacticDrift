@@ -78,7 +78,6 @@ float UClass_DamageableActor::CalculateAndApplyDamage(UPrimitiveComponent* colli
 	if(collisionTimer > 0 || immunityTimer > 0 || collisionEntity && entityPtr && collisionEntity->GetType() == entityPtr->GetType()){
 		return 0;
 	}
-    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("not ignoring damage"));
 	collisionTimer += 0.05;	//Damaging collisions can only occur every 0.05 seconds
 
 	float damage = GetOwner()->GetRootComponent()->GetComponentVelocity().SizeSquared();

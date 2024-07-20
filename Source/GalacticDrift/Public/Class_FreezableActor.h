@@ -29,6 +29,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool makeActorInvisibleOnFreeze = true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool destroyRootComponentOnFreeze = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TSubclassOf<USceneComponent> rootComponentCopy;
 
 public:	
 	// Called every frame

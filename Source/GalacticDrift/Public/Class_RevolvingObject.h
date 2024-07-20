@@ -7,6 +7,7 @@
 #include "Class_Freezable.h"
 #include "Components/PrimitiveComponent.h"
 #include "GameFramework/FloatingPawnMovement.h"
+// #include "GameFramework/RotatingMovementComponent.h"
 #include "Class_RevolvingObject.generated.h"
 
 
@@ -33,6 +34,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float rotateSpeed = 0;	// will not rotate upon itself if rotateSpeed is zero	
 
+    // UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    //     UFloatingPawnMovement* moveComponentPtr;
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
         UFloatingPawnMovement* moveComponentPtr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
