@@ -20,6 +20,7 @@ void UClass_Entity::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+	SetComponentTickEnabled(false);
 	
 }
 

@@ -32,6 +32,7 @@ void UClass_DamageableActor::BeginPlay()
     		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Actor of type RAGDOLLABLE has no skeleton as root component in Class_DamageableActor"));
 		}
 	}
+	SetComponentTickInterval(0.1);
 }
 
 

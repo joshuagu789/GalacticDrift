@@ -70,6 +70,7 @@ void UClass_RevolvingObject::Freeze(){
 
 void UClass_RevolvingObject::UnFreeze(){ 
 	SetComponentTickInterval(tickFrequency); 
+	// TickComponent()	need way to advance to next tick
 }
 
 void UClass_RevolvingObject::SetRevolveTarget(AActor* target, float pitch, float roll, float yaw){

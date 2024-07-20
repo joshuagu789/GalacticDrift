@@ -31,6 +31,7 @@ protected:
 		TSet<AActor*> actorList;	
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSubclassOf<AActor> actorPtr;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -51,7 +51,7 @@ void AClass_Spawner::SpawnActorsEllipse(int min, int max, float max_x, float max
 			blankTransform.SetScale3D(scaleVector);
 			//plan to also have random rotation and scale
 
-       		FActorSpawnParameters spawnParams;
+       		FActorSpawnParameters spawnParams;			
 
 			AActor* temp = GetWorld()->SpawnActor<AActor>(actorPtr, blankTransform, spawnParams);
 			if(temp){
@@ -76,15 +76,6 @@ void AClass_Spawner::SpawnActorsEllipse(int min, int max, float max_x, float max
 
 				actorList.Add(temp);
 			}
-
-			// temp->GetRootComponent()->SetWorldScale3D(scaleVector);
-			// FVector dummyScale{scale,scale,1}; 
-			// temp->GetRootComponent()->SetWorldScale3D(dummyScale);
-			// temp->GetRootComponent()->SetWorldScale3D(scaleVector);
-
-			// temp->GetRootComponent()->SetRelativeScale3D(scaleVector);
-			// temp->GetRootComponent()->SetRelativeScale3D_Direct(scaleVector);
-			// temp->GetRootComponent()->GetComponentTransform().GetScaled(scale);
 		}
 	}
     else{
