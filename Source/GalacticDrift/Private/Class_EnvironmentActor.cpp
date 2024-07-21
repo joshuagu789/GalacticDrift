@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Class_FracturedActor.h"
+#include "Class_EnvironmentActor.h"
 
 // Sets default values
-AClass_FracturedActor::AClass_FracturedActor()
+AClass_EnvironmentActor::AClass_EnvironmentActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -12,19 +12,16 @@ AClass_FracturedActor::AClass_FracturedActor()
 }
 
 // Called when the game starts or when spawned
-void AClass_FracturedActor::BeginPlay()
+void AClass_EnvironmentActor::BeginPlay()
 {
 	Super::BeginPlay();
-	SetActorTickInterval(1);
+	
 }
 
 // Called every frame
-void AClass_FracturedActor::Tick(float DeltaTime)
+void AClass_EnvironmentActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	lifeTime -= DeltaTime;
-	if(lifeTime <= 0){
-		K2_DestroyActor();
-	}
+
 }
 

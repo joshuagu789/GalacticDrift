@@ -20,6 +20,7 @@ void UClass_Entity::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+	SetComponentTickEnabled(false);
 	
 }
 
@@ -48,6 +49,22 @@ bool UClass_Entity::IsEnemyWith(TEnumAsByte<EntityType> otherEntity){
 	switch(type){
 		case FRIENDLY_NPC:
 			if(otherEntity == NPC_FACTION0)
+				return true;
+			return false;
+	}
+	return false;
+}
+bool UClass_Entity::IsFriendlyWith(TEnumAsByte<EntityType> otherEntity){
+	if(otherEntity == type){
+		return true;
+	}
+	switch(type){
+		case FRIENDLY_NPC:
+			if(otherEntity == FRIENDLY_NPC || otherEntity == RACER)
+				return true;
+			return false;
+		case RACER:
+			if(otherEntity == FRIENDLY_NPC || otherEntity == RACER)
 				return true;
 			return false;
 	}

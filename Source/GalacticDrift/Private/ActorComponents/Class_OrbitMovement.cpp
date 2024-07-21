@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Class_OrbitMovement.h"
+#include "ActorComponents/Class_OrbitMovement.h"
 
 // Sets default values for this component's properties
 UClass_OrbitMovement::UClass_OrbitMovement()
@@ -20,7 +20,10 @@ void UClass_OrbitMovement::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+	moveComponentPtr = GetOwner()->GetComponentByClass<UFloatingPawnMovement>();
+	if(!moveComponentPtr){
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: actor with Class_OrbitMovment component doesnt have floating pawn movement component"));		
+	}
 }
 
 
@@ -36,7 +39,7 @@ void UClass_OrbitMovement::TickComponent(float DeltaTime, ELevelTick TickType, F
 		FVector destination = currentTargetOffset + orbitTarget->GetRootComponent()->GetComponentLocation();
 		FVector position = GetOwner()->GetRootComponent()->GetComponentLocation();
 
-		if(FVector::DistSquared(destination, position) <= 100){
+		if(FVector::DistSquared(destination, position) <= 100 && moveComponentPtr){
 			currentTargetOffset = angleOfOrbit.RotateVector(currentTargetOffset);
 
 			// moveComponentPtr->AddInputVector(currentTargetOffset + orbitTarget->GetRootComponent()->K2_GetComponentLocation() - position, false);

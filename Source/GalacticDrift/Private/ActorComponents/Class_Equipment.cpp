@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Class_Equipment.h"
+#include "ActorComponents/Class_Equipment.h"
 
 // Sets default values for this component's properties
 UClass_Equipment::UClass_Equipment()

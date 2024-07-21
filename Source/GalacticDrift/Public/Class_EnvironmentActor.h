@@ -4,23 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Class_FracturedActor.generated.h"
+#include "Class_EnvironmentActor.generated.h"
 
 UCLASS()
-class GALACTICDRIFT_API AClass_FracturedActor : public AActor
+class GALACTICDRIFT_API AClass_EnvironmentActor : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AClass_FracturedActor();
+	AClass_EnvironmentActor();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float lifeTime = 30;
 
 public:	
 	// Called every frame

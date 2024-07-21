@@ -26,6 +26,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool IsEnemyWith(TEnumAsByte<EntityType> otherEntity);
 	UFUNCTION(BlueprintCallable)
+		bool IsFriendlyWith(TEnumAsByte<EntityType> otherEntity);
+	UFUNCTION(BlueprintCallable)
 		TEnumAsByte<EntityState> GetState();
 	UFUNCTION(BlueprintCallable)
 		TEnumAsByte<EntityType> GetType();

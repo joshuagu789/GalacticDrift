@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Class_Cannon.h"
+#include "ActorComponents/Class_Cannon.h"
 
 // UClass_Sensor::UClass_Sensor()
 // {

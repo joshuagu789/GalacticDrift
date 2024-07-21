@@ -47,7 +47,8 @@ bool AClass_Combatant::AddTarget(AActor* actor){
 			target = actor;
 		}
 		else{
-			targetList.Insert(actor, 0);
+			// targetList.Insert(actor, 0);
+			targetList.Add(actor);
 		}
 		return true;
 	}
@@ -58,6 +59,9 @@ void AClass_Combatant::RemoveTarget(AActor* actor){ targetList.Remove(actor); };
 
 
 bool AClass_Combatant::CycleNextTarget(){
+	if(targetList.Num() == 0 && HasTarget()){
+		return true;
+	}
 	while(!HasTarget()){
 		if(targetList.Num() >= 1){
 			AActor* actor = targetList[0];
