@@ -25,6 +25,7 @@ void UClass_RevolvingObject::BeginPlay()
 	Super::BeginPlay();
 
 	// ...	
+	SetComponentTickEnabled(false);
 }
 
 
@@ -65,11 +66,14 @@ void UClass_RevolvingObject::TickComponent(float DeltaTime, ELevelTick TickType,
 }
 
 void UClass_RevolvingObject::Freeze(){ 
-	SetComponentTickInterval(100); 
+	SetComponentTickInterval(1); 
 }
 
 void UClass_RevolvingObject::UnFreeze(){ 
+	// ReceiveTick(tickFrequency);
 	SetComponentTickInterval(tickFrequency); 
+	SetComponentTickEnabled(false);
+	SetComponentTickEnabled(true);
 	// TickComponent()	need way to advance to next tick
 }
 
@@ -85,4 +89,5 @@ void UClass_RevolvingObject::SetRevolveTarget(AActor* target, float pitch, float
 	revolveLocation = target->GetRootComponent()->GetComponentLocation();
 	vectorFromRevolveTarget = GetOwner()->GetActorLocation() - target->GetActorLocation();
 	// vectorFromRevolveTarget = GetOwner()->GetRootComponent()->GetComponentLocation() - target->GetRootComponent()->GetComponentLocation();
+	SetComponentTickEnabled(true);
 }

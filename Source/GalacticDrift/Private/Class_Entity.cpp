@@ -54,6 +54,22 @@ bool UClass_Entity::IsEnemyWith(TEnumAsByte<EntityType> otherEntity){
 	}
 	return false;
 }
+bool UClass_Entity::IsFriendlyWith(TEnumAsByte<EntityType> otherEntity){
+	if(otherEntity == type){
+		return true;
+	}
+	switch(type){
+		case FRIENDLY_NPC:
+			if(otherEntity == FRIENDLY_NPC || otherEntity == RACER)
+				return true;
+			return false;
+		case RACER:
+			if(otherEntity == FRIENDLY_NPC || otherEntity == RACER)
+				return true;
+			return false;
+	}
+	return false;
+}
 
 
 TEnumAsByte<EntityState> UClass_Entity::GetState(){ return state; }

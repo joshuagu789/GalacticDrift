@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Class_VisualEffects.h"
+#include "ActorComponents/Class_VisualEffects.h"
 
 // Sets default values for this component's properties
 UClass_VisualEffects::UClass_VisualEffects()
@@ -20,7 +20,7 @@ void UClass_VisualEffects::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+	entityPtr = GetOwner()->GetComponentByClass<UClass_Entity>();
 }
 
 

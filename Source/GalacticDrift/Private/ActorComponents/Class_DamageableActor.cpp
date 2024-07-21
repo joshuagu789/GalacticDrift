@@ -5,7 +5,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Class_DamageableActor.h"
+#include "ActorComponents/Class_DamageableActor.h"
 
 // Sets default values for this component's properties
 UClass_DamageableActor::UClass_DamageableActor()
@@ -24,6 +24,7 @@ void UClass_DamageableActor::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+	entityPtr = GetOwner()->GetComponentByClass<UClass_Entity>();
 	immunityTimer = timeImmuneAfterSpawning;
 	actualHealth = health;
 	if(type == RAGDOLLABLE){
@@ -76,7 +77,7 @@ void UClass_DamageableActor::TickComponent(float DeltaTime, ELevelTick TickType,
 float UClass_DamageableActor::CalculateAndApplyDamage(UPrimitiveComponent* collisionSource){
 
 	UClass_Entity* collisionEntity = collisionSource->GetOwner()->FindComponentByClass<UClass_Entity>();
-	if(collisionTimer > 0 || immunityTimer > 0 || collisionEntity && entityPtr && collisionEntity->GetType() == entityPtr->GetType()){
+	if(collisionTimer > 0 || immunityTimer > 0 || collisionEntity && entityPtr && entityPtr->IsFriendlyWith(collisionEntity->GetType())){
 		return 0;
 	}
 	collisionTimer += 0.05;	//Damaging collisions can only occur every 0.05 seconds

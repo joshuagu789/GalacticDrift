@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Class_Beacon.h"
+#include "ActorComponents/Class_Beacon.h"
 
 // Sets default values for this component's properties
 UClass_Beacon::UClass_Beacon()
