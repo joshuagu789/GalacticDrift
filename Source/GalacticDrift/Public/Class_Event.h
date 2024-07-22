@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Class_RacingGameInstance.h"
 #include "Kismet/GameplayStatics.h"
+#include "Header_Enumerations.h"
 #include "Class_Event.generated.h"
 
 UCLASS()

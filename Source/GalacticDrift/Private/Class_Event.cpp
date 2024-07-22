@@ -19,6 +19,7 @@ void AClass_Event::BeginPlay()
 	server = Cast<UClass_RacingGameInstance>(UGameplayStatics::GetGameInstance(this));
 	if(server){
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("success"));
+		server->AddEntityToServer(RACER, this);
 	}
 	else{
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Class_Event cant find game instance???"));

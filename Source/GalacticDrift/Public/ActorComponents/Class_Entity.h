@@ -8,6 +8,10 @@
 #include "CoreMinimal.h"
 #include "Header_Enumerations.h"
 #include "Components/ActorComponent.h"
+
+#include "Class_RacingGameInstance.h"
+#include "Kismet/GameplayStatics.h"
+
 #include "Class_Entity.generated.h"
 
 
@@ -37,8 +41,11 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	UPROPERTY()
+		UClass_RacingGameInstance* server;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TEnumAsByte<EntityType> type;
+		TEnumAsByte<EntityType> type = EMPTY;
 	UPROPERTY()
 		TEnumAsByte<EntityState> state = DEFAULT;
 public:	
