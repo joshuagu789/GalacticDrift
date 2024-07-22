@@ -63,9 +63,9 @@ void AClass_Spawner::SpawnActorsEllipse(int min, int max, float max_x, float max
 
 				// temp->GetRootComponent()->AttachToComponent(GetRootComponent(), FAttachmentTransformRules{ EAttachmentRule::KeepWorld, EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative,  true});
 				
-				// if(revolvingObject){
-				// 	revolvingObject->SetRevolveTarget(this, 0, 0, 7.5);;
-				// }
+				if(revolvingObject){
+					revolvingObject->SetRevolveTarget(this, 0, 0, 7.5);;
+				}
 
 
 				// APawn* pawn = Cast<APawn>(temp);

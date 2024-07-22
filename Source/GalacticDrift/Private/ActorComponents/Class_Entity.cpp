@@ -25,7 +25,6 @@ void UClass_Entity::BeginPlay()
 	server = Cast<UClass_RacingGameInstance>(UGameplayStatics::GetGameInstance(GetOwner()));
 	if(server){
 		if(type != EMPTY){
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("success"));
 			server->AddEntityToServer(type, GetOwner());
 		}
 	}

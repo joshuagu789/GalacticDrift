@@ -16,6 +16,9 @@ void AClass_Event::BeginPlay()
 {
 	Super::BeginPlay();
 
+	eventStartDetection->OnComponentBeginOverlap.AddDynamic( this, &AClass_Event::BeginOverlap );
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("dynamic time"));
+
 	server = Cast<UClass_RacingGameInstance>(UGameplayStatics::GetGameInstance(this));
 	if(server){
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("success"));
@@ -34,3 +37,11 @@ void AClass_Event::Tick(float DeltaTime)
 
 }
 
+void AClass_Event::BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
+                      AActor* OtherActor, 
+                      UPrimitiveComponent* OtherComp, 
+                      int32 OtherBodyIndex, 
+                      bool bFromSweep, 
+                      const FHitResult &SweepResult ){
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("SOEMATHING OVERLAP MEEEE"));
+}
