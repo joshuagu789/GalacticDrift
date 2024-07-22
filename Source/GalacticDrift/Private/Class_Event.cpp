@@ -15,7 +15,15 @@ AClass_Event::AClass_Event()
 void AClass_Event::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	server = Cast<UClass_RacingGameInstance>(UGameplayStatics::GetGameInstance(this));
+	if(server){
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("success"));
+	}
+	else{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Class_Event cant find game instance???"));
+	}
+
 }
 
 // Called every frame

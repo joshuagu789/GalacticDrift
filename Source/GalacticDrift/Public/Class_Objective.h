@@ -18,14 +18,14 @@ public:
 	// Sets default values for this actor's properties
 	AClass_Objective();
 
-	UFUNCTION()
-		virtual void RewardPlayer(AActor* player);
+	// UFUNCTION()
+	// 	virtual void RewardPlayer(AActor* player);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int numberOfRewards;
 
 public:	

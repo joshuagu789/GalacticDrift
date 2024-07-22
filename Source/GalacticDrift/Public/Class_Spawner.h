@@ -7,7 +7,7 @@ For generating asteroid fields
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "ActorComponents/Class_RevolvingObject.h"
-#include "Class_Objective"
+#include "Class_Objective.h"
 #include "Class_Spawner.generated.h"
 
 UCLASS()

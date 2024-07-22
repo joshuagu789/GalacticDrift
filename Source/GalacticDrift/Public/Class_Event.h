@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Class_RacingGameInstance.h"
+#include "Kismet/GameplayStatics.h"
 #include "Class_Event.generated.h"
 
 UCLASS()
@@ -15,15 +17,15 @@ public:
 	// Sets default values for this actor's properties
 	AClass_Event();
 
-	UFUNCTION()
-		/*
-		Returns false if event already playing
-		*/
-		virtual bool BeginEvent();
-	UFUNCTION()
-		virtual void EndEvent();
-	UFUNCTION()
-		virtual bool RevealToRacers();	// typically through marker component
+	// UFUNCTION()
+	// 	/*
+	// 	Returns false if event already playing
+	// 	*/
+	// 	virtual bool BeginEvent();
+	// UFUNCTION()
+	// 	virtual void EndEvent();
+	// UFUNCTION()
+	// 	virtual bool RevealToRacers();	// typically through marker component
 	
 
 protected:
@@ -31,8 +33,10 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		startEventOnBeginPlay = false;
+		bool startEventOnBeginPlay = false;
 
+	UPROPERTY()
+		UClass_RacingGameInstance* server;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
