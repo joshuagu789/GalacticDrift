@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Class_Entity.h"
+#include "ActorComponents/Class_Entity.h"
 
 // Sets default values for this component's properties
 UClass_Entity::UClass_Entity()

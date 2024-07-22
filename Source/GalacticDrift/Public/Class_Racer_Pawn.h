@@ -6,7 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "Class_Combatant.h"
 #include "GameFramework/FloatingPawnMovement.h"
-#include "Class_Entity.h"
+#include "ActorComponents/Class_Entity.h"
 #include "Ragdollable.h"
 #include "Header_Enumerations.h"
 #include "Class_ActorInformationTracker.h"

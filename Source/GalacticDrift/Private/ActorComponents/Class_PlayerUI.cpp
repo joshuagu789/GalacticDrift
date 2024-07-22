@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Class_PlayerUI.h"
+#include "ActorComponents/Class_PlayerUI.h"
 
 // Sets default values for this component's properties
 UClass_PlayerUI::UClass_PlayerUI()

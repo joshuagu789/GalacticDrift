@@ -1,14 +1,17 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+/*
+For generating asteroid fields
+*/
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Class_RevolvingObject.h"
+#include "ActorComponents/Class_RevolvingObject.h"
+#include "Class_Objective"
 #include "Class_Spawner.generated.h"
 
 UCLASS()
-class GALACTICDRIFT_API AClass_Spawner : public AActor
+class GALACTICDRIFT_API AClass_Spawner : public AClass_Objective
 {
 	GENERATED_BODY()
 	

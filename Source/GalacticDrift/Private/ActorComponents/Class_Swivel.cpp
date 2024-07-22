@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Class_Swivel.h"
+#include "ActorComponents/Class_Swivel.h"
 
 // Sets default values for this component's properties
 UClass_Swivel::UClass_Swivel()

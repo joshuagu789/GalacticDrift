@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Class_RevolvingObject.h"
+#include "ActorComponents/Class_RevolvingObject.h"
 
 // Sets default values for this component's properties
 UClass_RevolvingObject::UClass_RevolvingObject()

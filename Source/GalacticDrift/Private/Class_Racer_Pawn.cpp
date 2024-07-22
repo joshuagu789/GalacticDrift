@@ -119,7 +119,7 @@ void AClass_Racer_Pawn::DriftLeft(float rotateSpeed)
         entityPtr->SetState(FLYING_WHILE_DRIFTING);
 
         rotation.Yaw -= rotateSpeed;
-        if(rotation.Roll >= -90)
+        if(rotation.Roll >= -450)
             rotation.Roll -= 1 * rotateSpeed;
         FHitResult dummy;
 //        rotation.Clamp();
@@ -148,7 +148,7 @@ void AClass_Racer_Pawn::DriftRight(float rotateSpeed)
         entityPtr->SetState(FLYING_WHILE_DRIFTING);
         
         rotation.Yaw += rotateSpeed;
-        if(rotation.Roll <= 90)
+        if(rotation.Roll <= 450)
             rotation.Roll += 1 * rotateSpeed;
         FHitResult dummy;
 //        rotation.Clamp();

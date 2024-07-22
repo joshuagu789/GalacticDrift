@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Class_Optimizer.h"
+#include "ActorComponents/Class_Optimizer.h"
 
 // Sets default values for this component's properties
 UClass_Optimizer::UClass_Optimizer()
