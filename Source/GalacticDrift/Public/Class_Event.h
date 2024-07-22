@@ -7,6 +7,7 @@
 #include "Class_RacingGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "Header_Enumerations.h"
+#include "Components/SphereComponent.h"
 #include "Class_Event.generated.h"
 
 UCLASS()
@@ -34,6 +35,8 @@ protected:
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UPrimitiveComponent* eventStartDetection;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USphereComponent* collider;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool startEventOnBeginPlay = false;
@@ -44,14 +47,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-    // UFUNCTION( )
+    UFUNCTION(BlueprintCallable )
     void BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
                       AActor* OtherActor, 
                       UPrimitiveComponent* OtherComp, 
                       int32 OtherBodyIndex, 
                       bool bFromSweep, 
                       const FHitResult &SweepResult );
-	// void UClass_Optimizer::OnActorBeginOverlap(AActor* OtherActor){
+
+	void OnActorBeginOverlap(AActor* OtherActor);
 // 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("u shall work!"));
 // }
 

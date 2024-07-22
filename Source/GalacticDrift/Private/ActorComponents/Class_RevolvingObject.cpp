@@ -25,7 +25,6 @@ void UClass_RevolvingObject::BeginPlay()
 	Super::BeginPlay();
 
 	// ...	
-	SetComponentTickEnabled(false);
 }
 
 

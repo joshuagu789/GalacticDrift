@@ -9,6 +9,11 @@ AClass_Event::AClass_Event()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// eventStartDetection->OnComponentBeginOverlap.AddDynamic( this, &AClass_Event::BeginOverlap );
+	// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("dynamic time"));
+	collider = CreateDefaultSubobject<USphereComponent>("EventStartDetection");
+	collider->InitSphereRadius(400.f);
+	collider->OnComponentBeginOverlap.AddDynamic( this, &AClass_Event::BeginOverlap );
 }
 
 // Called when the game starts or when spawned
@@ -16,8 +21,10 @@ void AClass_Event::BeginPlay()
 {
 	Super::BeginPlay();
 
-	eventStartDetection->OnComponentBeginOverlap.AddDynamic( this, &AClass_Event::BeginOverlap );
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("dynamic time"));
+	if(eventStartDetection){
+		// eventStartDetection->OnComponentBeginOverlap.AddDynamic( this, &AClass_Event::BeginOverlap );
+		// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("dynamic time"));
+	}
 
 	server = Cast<UClass_RacingGameInstance>(UGameplayStatics::GetGameInstance(this));
 	if(server){
@@ -44,4 +51,8 @@ void AClass_Event::BeginOverlap(UPrimitiveComponent* OverlappedComponent,
                       bool bFromSweep, 
                       const FHitResult &SweepResult ){
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("SOEMATHING OVERLAP MEEEE"));
+}
+
+void AClass_Event::OnActorBeginOverlap(AActor* OtherActor){
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("SOEMATHING OVERLAP MEEEE2"));
 }
