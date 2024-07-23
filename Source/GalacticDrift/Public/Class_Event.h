@@ -33,10 +33,11 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		UPrimitiveComponent* eventStartDetection;
+		USphereComponent* eventCollider;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		USphereComponent* collider;
+		float detectionRange;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool startEventOnBeginPlay = false;
@@ -47,7 +48,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-    UFUNCTION(BlueprintCallable )
+	UFUNCTION(BlueprintCallable)
     void BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
                       AActor* OtherActor, 
                       UPrimitiveComponent* OtherComp, 
@@ -55,7 +56,7 @@ public:
                       bool bFromSweep, 
                       const FHitResult &SweepResult );
 
-	void OnActorBeginOverlap(AActor* OtherActor);
+	void ActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 // 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("u shall work!"));
 // }
 

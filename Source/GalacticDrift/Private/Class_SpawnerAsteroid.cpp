@@ -25,7 +25,7 @@ void AClass_Spawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	FHitResult* dummy = nullptr;
-	// GetRootComponent()->AddWorldRotation(FRotator{0,1 * DeltaTime,0}, true, dummy, ETeleportType::TeleportPhysics);
+	GetRootComponent()->AddWorldRotation(FRotator{0,60 * DeltaTime,0}, true, dummy, ETeleportType::TeleportPhysics);
 
 }
 

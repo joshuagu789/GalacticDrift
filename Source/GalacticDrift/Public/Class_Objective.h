@@ -26,10 +26,23 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USphereComponent* rewardCollider;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float rewardRange;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int numberOfRewards;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
+    void RewardBeginOverlap(UPrimitiveComponent* OverlappedComponent, 
+                      AActor* OtherActor, 
+                      UPrimitiveComponent* OtherComp, 
+                      int32 OtherBodyIndex, 
+                      bool bFromSweep, 
+                      const FHitResult &SweepResult );
+	void ActorBeginOverlapReward(AActor* OverlappedActor, AActor* OtherActor);
 };
