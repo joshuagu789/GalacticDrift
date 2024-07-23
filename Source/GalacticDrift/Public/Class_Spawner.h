@@ -24,6 +24,8 @@ public:
 			min and max for range of actors to spawn, max_x is furthest x distance from center, same pattern for max_y and max_z
 		*/
         void SpawnActorsEllipse(int min, int max, float max_x, float max_y, float max_z, float min_scale, float max_scale);
+	
+	bool BeginEvent() override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -35,6 +37,7 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSubclassOf<AActor> actorPtr;
 
+	bool hasSpawned = false;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

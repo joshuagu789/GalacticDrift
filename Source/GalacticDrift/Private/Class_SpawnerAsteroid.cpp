@@ -82,3 +82,12 @@ void AClass_Spawner::SpawnActorsEllipse(int min, int max, float max_x, float max
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Pointer for subclass of AActor is null for Class_SpawnerAsteroid, method cancelled"));
     }
 }
+
+bool AClass_Spawner::BeginEvent(){
+	if(Super::BeginEvent() && !hasSpawned){
+		SpawnActorsEllipse(10,10,1000,1000, 7500,4,25);
+		hasSpawned = true;
+		return true;
+	}
+	return false;
+}

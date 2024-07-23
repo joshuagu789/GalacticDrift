@@ -22,14 +22,14 @@ void UClass_Entity::BeginPlay()
 	// ...
 	SetComponentTickEnabled(false);
 
-	server = Cast<UClass_RacingGameInstance>(UGameplayStatics::GetGameInstance(GetOwner()));
+	server = Cast<AClass_RacingGameMode>(UGameplayStatics::GetGameMode(GetOwner()));
 	if(server){
 		if(type != EMPTY){
 			server->AddEntityToServer(type, GetOwner());
 		}
 	}
 	else{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Class_Event cant find game instance???"));
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Class_Event cant find game mode???"));
 	}
 }
 

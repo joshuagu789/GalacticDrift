@@ -1,13 +1,16 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+/*
+NOTE: collider overlap detection only detects physics bodies- AKA ONLY DETECTS RACERS!
+*/
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Class_RacingGameInstance.h"
+// #include "Class_RacingGameInstance.h"
+#include "Class_RacingGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Header_Enumerations.h"
 #include "Components/SphereComponent.h"
+#include "Class_Racer_Pawn.h"
 #include "Class_Event.generated.h"
 
 UCLASS()
@@ -19,15 +22,15 @@ public:
 	// Sets default values for this actor's properties
 	AClass_Event();
 
-	// UFUNCTION()
-	// 	/*
-	// 	Returns false if event already playing
-	// 	*/
-	// 	virtual bool BeginEvent();
-	// UFUNCTION()
-	// 	virtual void EndEvent();
-	// UFUNCTION()
-	// 	virtual bool RevealToRacers();	// typically through marker component
+	UFUNCTION()
+		/*
+		Returns false if event already playing
+		*/
+		virtual bool BeginEvent();
+	UFUNCTION()
+		virtual void EndEvent();
+	UFUNCTION()
+		virtual bool RevealToRacers();	// typically through marker component
 	
 
 protected:
@@ -42,8 +45,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool startEventOnBeginPlay = false;
 
+	bool eventActive = false;
+	bool isRevealed = false;
 	UPROPERTY()
-		UClass_RacingGameInstance* server;
+		AClass_RacingGameMode* server;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

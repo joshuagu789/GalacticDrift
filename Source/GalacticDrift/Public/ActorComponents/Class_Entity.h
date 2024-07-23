@@ -9,7 +9,8 @@
 #include "Header_Enumerations.h"
 #include "Components/ActorComponent.h"
 
-#include "Class_RacingGameInstance.h"
+// #include "Class_RacingGameInstance.h"
+#include "Class_RacingGameMode.h"
 #include "Kismet/GameplayStatics.h"
 
 #include "Class_Entity.generated.h"
@@ -42,7 +43,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		UClass_RacingGameInstance* server;
+		AClass_RacingGameMode* server;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TEnumAsByte<EntityType> type = EMPTY;
