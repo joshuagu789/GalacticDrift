@@ -22,8 +22,8 @@ public:
 	// 	virtual void RewardPlayer(AActor* player);
 	bool BeginEvent();
 	void EndEvent();
-	bool RevealToRacers();
-	
+	bool RevealToRacers(AClass_Racer_Pawn* racer);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

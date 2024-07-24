@@ -3,9 +3,28 @@
 
 #include "Class_RacingGameMode.h"
 
-// void AClass_RacingGameMode::BeginPlay(){
-// 	Super::BeginPlay();
-// }
+void AClass_RacingGameMode::BeginPlay(){
+	Super::BeginPlay();
+
+    SetActorTickInterval(0.5);
+
+    if(objectives.Num() >= 1){
+        FTransform blankTransform;
+        blankTransform.SetLocation(FVector{20000,1240,1870});
+        FActorSpawnParameters spawnParams;			
+
+        AActor* temp = GetWorld()->SpawnActor<AActor>(objectives[0], blankTransform, spawnParams);
+        if(temp){
+            temp->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+        }
+    }
+}
+
+// Called every frame
+void AClass_RacingGameMode::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
 
 bool AClass_RacingGameMode::AddEntityToServer(TEnumAsByte<EntityType> type, AActor* actor){
     // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("received on instance"));

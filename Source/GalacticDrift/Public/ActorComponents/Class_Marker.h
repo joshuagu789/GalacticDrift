@@ -8,6 +8,8 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Header_Enumerations.h"
+#include "Class_RacingGameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "Class_Marker.generated.h"
 
 
@@ -42,6 +44,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Initialization")
 		FString GetMarkerName();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AClass_RacingGameMode* server;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

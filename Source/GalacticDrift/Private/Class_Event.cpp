@@ -66,6 +66,7 @@ void AClass_Event::BeginOverlap(UPrimitiveComponent* OverlappedComponent,
 		if(racer && !eventActive){
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("starting event for racer"));
 			BeginEvent();
+			RevealToRacers(racer);
 		}
 	}
 
@@ -82,10 +83,36 @@ bool AClass_Event::BeginEvent(){
 void AClass_Event::EndEvent(){
 	eventActive = false;
 }
-bool AClass_Event::RevealToRacers(){
+bool AClass_Event::RevealToRacers(AClass_Racer_Pawn* racer){	// should get racers from server?
 	if(isRevealed){
 		return false;
 	}
+	// AActor* temp = Cast<AActor>(waypoint);
+	// if()
+	if(!waypoint){
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: waypoint for Class Event is nullptr, returning"));
+		return false;
+	}
+
+	FTransform blankTransform;
+	blankTransform.SetLocation(GetActorLocation());
+    FActorSpawnParameters spawnParams;			
+
+	AActor* temp = GetWorld()->SpawnActor<AActor>(waypoint, blankTransform, spawnParams);
+	if(temp){
+		temp->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		temp->AttachToActor(this, FAttachmentTransformRules{EAttachmentRule::SnapToTarget, false});
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("create waypoint for event"));
+
+		currentWaypointActor = Cast<AClass_Waypoint_Actor>(temp);
+		if(!currentWaypointActor){
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: spawned waypoint for Class Event is not of type Class Waypoint Actor"));
+		}
+		else{
+			currentWaypointActor->ConfigureWaypoint(FText::FromString("EVENT"), waypointTitle, racer);
+		}
+	}
+
 	isRevealed = true;
 	return true;
 }	

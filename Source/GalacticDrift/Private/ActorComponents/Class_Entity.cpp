@@ -29,7 +29,7 @@ void UClass_Entity::BeginPlay()
 		}
 	}
 	else{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Class_Event cant find game mode???"));
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Class_Entity cant find game mode???"));
 	}
 }
 

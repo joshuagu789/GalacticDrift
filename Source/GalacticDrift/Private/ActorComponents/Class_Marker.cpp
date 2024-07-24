@@ -20,7 +20,13 @@ void UClass_Marker::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+	server = Cast<AClass_RacingGameMode>(UGameplayStatics::GetGameMode(GetOwner()));
+	if(server){
+		server->AddMarkerToServer(GetOwner());
+	}
+	else{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Class_Marker cant find game mode???"));
+	}
 }
 
 

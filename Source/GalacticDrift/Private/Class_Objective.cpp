@@ -36,6 +36,7 @@ void AClass_Objective::BeginPlay()
 
 	// FAttachmentTransformRules rules{EAttachmentRule::SnapToTarget, false};
 	// rewardCollider->AttachToComponent(GetRootComponent(), rules);
+	// RevealToRacers();
 }
 
 // Called every frame
@@ -54,6 +55,10 @@ bool AClass_Objective::BeginEvent(){
 void AClass_Objective::EndEvent(){
 	Super::EndEvent();
 }
-bool AClass_Objective::RevealToRacers(){
-	return Super::RevealToRacers();
+bool AClass_Objective::RevealToRacers(AClass_Racer_Pawn* racer){
+	return Super::RevealToRacers(racer);
+
+	if(currentWaypointActor){
+		currentWaypointActor->SetCategory(FText::FromString("OBJECTIVE"));
+	}
 }

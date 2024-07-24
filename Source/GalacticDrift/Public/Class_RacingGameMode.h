@@ -65,7 +65,7 @@ public:
 		void BeginGame();
 		
 protected:	
-	// virtual void BeginPlay() override;
+	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSet<AActor*> racerList;
@@ -73,8 +73,17 @@ protected:
 		TSet<AActor*> markerList;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSet<AActor*> emptyList;	// WARNING: SHOULD BE EMPTY
-	UPROPERTY()
-		int test = 0;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<TSubclassOf<AActor>> objectives;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int totalStagesObjectives = 2;	//includes goal objective
+
 
 private:
+
+public:
+	virtual void Tick(float DeltaTime) override;
+
 };
