@@ -9,6 +9,7 @@
 // #include "Containers/Array.h"
 #include "Kismet/KismetMathLibrary.h"
 // #include "Kismet/KismetTextLibrary.h"
+// #include "Class_Objective.h"
 #include "Class_RacingGameMode.generated.h"
 
 /**
@@ -61,6 +62,12 @@ public:
 		*/
 		AActor* GetClosestEntityToFOV(const TArray<TEnumAsByte<EntityType>> &entityTypes, const AActor* actor, const FVector& actorDirection, float angle, float range);
 	
+	UFUNCTION(BlueprintCallable)
+		void LoadObjectivesOfStage(int stage);
+
+	UFUNCTION(BlueprintCallable)
+		void BroadcastToPlayerConsoles(FString message);
+
 	UFUNCTION()
 		void BeginGame();
 		
@@ -78,10 +85,10 @@ protected:
 		TArray<TSubclassOf<AActor>> objectives;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int totalStagesObjectives = 2;	//includes goal objective
-
+		int totalStagesObjectives = 8;	//includes goal objective
 
 private:
+	// int timer = 1;
 
 public:
 	virtual void Tick(float DeltaTime) override;

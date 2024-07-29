@@ -21,6 +21,9 @@ public:
 	// void EndEvent();
 	// bool RevealToRacers();
 
+	UFUNCTION()
+		virtual void RewardRacer(AClass_Racer_Pawn* racer);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -33,6 +36,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int numberOfRewards;
 
+	bool readyToReward = false;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -22,13 +22,20 @@ public:
 	// 	virtual void RewardPlayer(AActor* player);
 	bool BeginEvent();
 	void EndEvent();
-	bool RevealToRacers(AClass_Racer_Pawn* racer);
+	void RevealToRacers(const TSet<AActor*>& racers) override;
+
+	void RewardRacer(AClass_Racer_Pawn* racer) override;
+
+	UFUNCTION()
+		void SetStage(int stage, bool isFinal);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-
+	int stageNumber;
+	bool isFinalStage = false;
+	bool hasCalledNextStages = false;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

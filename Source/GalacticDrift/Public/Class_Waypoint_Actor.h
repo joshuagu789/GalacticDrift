@@ -20,7 +20,7 @@ public:
 	AClass_Waypoint_Actor();
 
 	UFUNCTION()
-		void ConfigureWaypoint(FText categoryText, FText titleText, AClass_Racer_Pawn* racerTarget);
+		void ConfigureWaypoint(const FText& categoryText, const FText& titleText, AClass_Racer_Pawn* racerTarget);
 
 	UFUNCTION()
 		void UpdateWaypointText();

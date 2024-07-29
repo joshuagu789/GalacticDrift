@@ -30,6 +30,7 @@ AClass_Event::AClass_Event()
 void AClass_Event::BeginPlay()
 {
 	Super::BeginPlay();
+	// SetActorTickInterval(0.5);
 	// OnActorBeginOverlap.AddDynamic( this, &AClass_Event::ActorBeginOverlap );	//notify? receive?
 
 	eventCollider->SetSphereRadius(detectionRange, false);
@@ -64,13 +65,15 @@ void AClass_Event::BeginOverlap(UPrimitiveComponent* OverlappedComponent,
 		// 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("racer in event range"));
 		// }
 		if(racer && !eventActive){
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("starting event for racer"));
+			// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("starting event for racer"));
 			BeginEvent();
-			RevealToRacers(racer);
+			TSet<AActor*> temp;
+			temp.Add(OtherActor);
+			RevealToRacers(temp);
 		}
 	}
 
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("SOEMATHING OVERLAP MEEEE"));
+	// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("SOEMATHING OVERLAP MEEEE"));
 }
 
 bool AClass_Event::BeginEvent(){
@@ -83,36 +86,49 @@ bool AClass_Event::BeginEvent(){
 void AClass_Event::EndEvent(){
 	eventActive = false;
 }
-bool AClass_Event::RevealToRacers(AClass_Racer_Pawn* racer){	// should get racers from server?
+// void AClass_Event::RevealToRacers(AClass_Racer_Pawn* racer){	// should get racers from server?
+void AClass_Event::RevealToRacers(const TSet<AActor*>& racers){	// should get racers from server?
 	if(isRevealed){
-		return false;
+		return;
 	}
 	// AActor* temp = Cast<AActor>(waypoint);
 	// if()
 	if(!waypoint){
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: waypoint for Class Event is nullptr, returning"));
-		return false;
+		return;
 	}
 
-	FTransform blankTransform;
-	blankTransform.SetLocation(GetActorLocation());
-    FActorSpawnParameters spawnParams;			
-
-	AActor* temp = GetWorld()->SpawnActor<AActor>(waypoint, blankTransform, spawnParams);
-	if(temp){
-		temp->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		temp->AttachToActor(this, FAttachmentTransformRules{EAttachmentRule::SnapToTarget, false});
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("create waypoint for event"));
-
-		currentWaypointActor = Cast<AClass_Waypoint_Actor>(temp);
-		if(!currentWaypointActor){
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: spawned waypoint for Class Event is not of type Class Waypoint Actor"));
+	for(AActor* racer: racers){
+		AClass_Racer_Pawn* tempRacer = Cast<AClass_Racer_Pawn>(racer);
+		if(!tempRacer){
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: actor isn't class racer pawn in RevealToRacers in Class Event"));
+			return;
 		}
-		else{
-			currentWaypointActor->ConfigureWaypoint(FText::FromString("EVENT"), waypointTitle, racer);
+		UClass_PlayerUI* playerUI = tempRacer->FindComponentByClass<UClass_PlayerUI>();
+
+		if(playerUI && !activeWaypoints.Contains(tempRacer)){
+			FTransform blankTransform;
+			blankTransform.SetLocation(GetActorLocation());
+			FActorSpawnParameters spawnParams;			
+
+			AActor* temp = GetWorld()->SpawnActor<AActor>(waypoint, blankTransform, spawnParams);
+			if(temp){
+				temp->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+				temp->AttachToActor(this, FAttachmentTransformRules{EAttachmentRule::SnapToTarget, false});
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("create waypoint for event"));
+
+				AClass_Waypoint_Actor* currentWaypointActor = Cast<AClass_Waypoint_Actor>(temp);
+				if(!currentWaypointActor){
+					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: spawned waypoint for Class Event is not of type Class Waypoint Actor"));
+					temp->K2_DestroyActor();
+				}
+				else{
+					currentWaypointActor->ConfigureWaypoint(FText::FromString("EVENT"), waypointTitle, tempRacer);
+					activeWaypoints.Add(tempRacer, currentWaypointActor);
+				}
+			}
 		}
 	}
 
 	isRevealed = true;
-	return true;
 }	

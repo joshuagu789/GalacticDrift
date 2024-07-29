@@ -22,7 +22,10 @@ class GALACTICDRIFT_API UClass_InGameWidget : public UUserWidget
 	GENERATED_BODY()
 public:
 	UFUNCTION(BlueprintCallable, Category="UI")
-		void PushToOutputConsole(const TArray<FString> &lines);
+		void PushToOutputConsole(const TArray<FString>& lines);
+
+	UFUNCTION(BlueprintCallable)
+		void PushLineToOutputConsole(const FString& newLine);
 
 	UFUNCTION(BlueprintCallable)
 		/*

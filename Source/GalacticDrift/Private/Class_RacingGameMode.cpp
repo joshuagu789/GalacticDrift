@@ -2,22 +2,15 @@
 
 
 #include "Class_RacingGameMode.h"
+#include "Class_Objective.h"
+#include "ActorComponents/Class_PlayerUI.h"
 
 void AClass_RacingGameMode::BeginPlay(){
 	Super::BeginPlay();
 
     SetActorTickInterval(0.5);
-
-    if(objectives.Num() >= 1){
-        FTransform blankTransform;
-        blankTransform.SetLocation(FVector{20000,1240,1870});
-        FActorSpawnParameters spawnParams;			
-
-        AActor* temp = GetWorld()->SpawnActor<AActor>(objectives[0], blankTransform, spawnParams);
-        if(temp){
-            temp->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-        }
-    }
+    
+    // LoadObjectivesOfStage(1);   
 }
 
 // Called every frame
@@ -172,4 +165,43 @@ AActor* AClass_RacingGameMode::GetClosestEntityToFOV(const TArray<TEnumAsByte<En
 
 void AClass_RacingGameMode::BeginGame(){
     GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("beginning game in racing game mode"));
+}
+
+void AClass_RacingGameMode::LoadObjectivesOfStage(int stage){
+    // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("spawning objective"));
+
+    if(objectives.Num() >= 1){
+        FTransform blankTransform;
+        blankTransform.SetLocation(FVector{-140000 + 250000 * stage, UKismetMathLibrary::RandomFloatInRange(-100000,100000), UKismetMathLibrary::RandomFloatInRange(-100000,100000)});
+        FActorSpawnParameters spawnParams;			
+
+        AActor* temp = GetWorld()->SpawnActor<AActor>(objectives[0], blankTransform, spawnParams);
+        if(!temp){
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("actor spawned is nullptr in LoadObjectivesOfStage of class racinggamemode"));
+            return;   
+        }
+        temp->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+        AClass_Objective* temp2 = Cast<AClass_Objective>(temp);
+
+        if(!temp2){
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("actor spawned is not of type objective in LoadObjectivesOfStage of class racinggamemode"));
+            return;
+        }
+        if(stage == totalStagesObjectives){
+            temp2->SetStage(stage, true);
+        }
+        else{
+            temp2->SetStage(stage, false);
+        }
+    }
+}
+
+void AClass_RacingGameMode::BroadcastToPlayerConsoles(FString message){
+    for(auto& x: racerList){
+        UClass_PlayerUI* UI = x->FindComponentByClass<UClass_PlayerUI>();
+        if(UI){
+            UI->RelayMessageToConsole(message);
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("relaying message to console"));
+        }
+    }
 }

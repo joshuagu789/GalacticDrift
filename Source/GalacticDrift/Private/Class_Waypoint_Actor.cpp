@@ -60,14 +60,14 @@ void AClass_Waypoint_Actor::Tick(float DeltaTime)
 	}
 }
 
-void AClass_Waypoint_Actor::ConfigureWaypoint(FText categoryText, FText titleText, AClass_Racer_Pawn* racerTarget){
+void AClass_Waypoint_Actor::ConfigureWaypoint(const FText& categoryText, const FText& titleText, AClass_Racer_Pawn* racerTarget){
 	category = categoryText;
 	title = titleText;
 
 	outputText = FText::Join(NSLOCTEXT("a","b",""), FText::FromString("["), category);	// need FString("[")?
 	outputText = FText::Join(NSLOCTEXT("a","b",""), outputText, FText::FromString("]\n"));
 	outputText = FText::Join(NSLOCTEXT("a","b",""), outputText, title);
-	outputText = FText::Join(NSLOCTEXT("a","b",""), outputText, FText::FromString("\nETA "));
+	outputText = FText::Join(NSLOCTEXT("a","b",""), outputText, FText::FromString("\nDIST "));
 
 	if(!racerTarget){
 	    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: racerTarget is nullptr in ConfigureWaypoint in AClass Waypoint Actor"));
@@ -83,11 +83,11 @@ void AClass_Waypoint_Actor::UpdateWaypointText(){
 		if(speedSquared <= 0){
 			speedSquared = 1;
 		}
-		int time = (int) (GetActorLocation() - racer->GetActorLocation()).SizeSquared()  / (speedSquared);	// DO NOT DIVIDE BY ZERO
+		// int time = (int) (GetActorLocation() - racer->GetActorLocation()).SizeSquared()  / (speedSquared);	// DO NOT DIVIDE BY ZERO
 		                    // FText character = FText::FromString( line.Mid(lineIndex, 1) );
-
+		int distance  = (GetActorLocation() - racer->GetActorLocation()).Size() / 1000;
 		// FText temp =  FText::Join(NSLOCTEXT("a","b",""), outputText,  FText::FromString( FString::FromInt(time) ));
-		textPtr->SetText( FText::Join(NSLOCTEXT("a","b",""), outputText,  FText::FromString(FString::FromInt(time))) );
+		textPtr->SetText( FText::Join(NSLOCTEXT("a","b",""), outputText,  FText::FromString(FString::FromInt(distance))) );
 	}
 	else{
 	    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: UpdateWaypointText called when textPtr and/or racer null in AClass Waypoint Actor"));
@@ -99,5 +99,5 @@ void AClass_Waypoint_Actor::SetCategory(FText categoryText){
 	outputText = FText::Join(NSLOCTEXT("a","b",""), FText::FromString("["), category);	// need FString("[")?
 	outputText = FText::Join(NSLOCTEXT("a","b",""), outputText, FText::FromString("]\n"));
 	outputText = FText::Join(NSLOCTEXT("a","b",""), outputText, title);
-	outputText = FText::Join(NSLOCTEXT("a","b",""), outputText, FText::FromString("\nETA "));
+	outputText = FText::Join(NSLOCTEXT("a","b",""), outputText, FText::FromString("\nDIST "));
 }

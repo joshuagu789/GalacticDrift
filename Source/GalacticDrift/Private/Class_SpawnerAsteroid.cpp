@@ -17,23 +17,29 @@ AClass_Spawner::AClass_Spawner()
 void AClass_Spawner::BeginPlay()
 {
 	Super::BeginPlay();
-	// SetActorTickInterval(0.5);
+	// SetActorTickInterval(0.1);
 }
 
 // Called every frame
 void AClass_Spawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	FHitResult* dummy = nullptr;
-	GetRootComponent()->AddWorldRotation(FRotator{0,60 * DeltaTime,0}, true, dummy, ETeleportType::TeleportPhysics);
+	// FHitResult* dummy = nullptr;
+	// GetRootComponent()->AddWorldRotation(FRotator{0,60 * DeltaTime,0}, true, dummy, ETeleportType::TeleportPhysics);
+	if(amountLeftToSpawn > 0){
+		int amount = (amountLeftToSpawn >= 20) ? (20) : (amountLeftToSpawn);
+		amountLeftToSpawn -= amount;
+		SpawnActorsEllipse(amount, x, y, z, scale1, scale2);
+	}
 
 }
 
-void AClass_Spawner::SpawnActorsEllipse(int min, int max, float max_x, float max_y, float max_z, float min_scale, float max_scale)
+void AClass_Spawner::SpawnActorsEllipse(int amount, float max_x, float max_y, float max_z, float min_scale, float max_scale)
 {
+
 	if(actorPtr){
-		int count = UKismetMathLibrary::RandomIntegerInRange(min,max);
-		for(int i = 0; i < count; i++){
+		// int count = UKismetMathLibrary::RandomIntegerInRange(min,max);
+		for(int i = 0; i < amount; i++){
 			FVector location = GetTransform().GetLocation();	// hopefully copies FVector not reference
 
 			location.X += UKismetMathLibrary::RandomFloatInRange(-max_x,max_x);
@@ -64,7 +70,7 @@ void AClass_Spawner::SpawnActorsEllipse(int min, int max, float max_x, float max
 				// temp->GetRootComponent()->AttachToComponent(GetRootComponent(), FAttachmentTransformRules{ EAttachmentRule::KeepWorld, EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative,  true});
 				
 				if(revolvingObject){
-					revolvingObject->SetRevolveTarget(this, 0, 0, 7.5);;
+					// revolvingObject->SetRevolveTarget(this, 0, 0, 7.5);;
 				}
 
 
@@ -85,7 +91,15 @@ void AClass_Spawner::SpawnActorsEllipse(int min, int max, float max_x, float max
 
 bool AClass_Spawner::BeginEvent(){
 	if(Super::BeginEvent() && !hasSpawned){
-		SpawnActorsEllipse(10,10,1000,1000, 7500,4,25);
+
+		amountLeftToSpawn = UKismetMathLibrary::RandomIntegerInRange(10000,10000);
+		x = 60000;
+		y = 60000;
+		z = 60000;
+		scale1 = 10;
+		scale2 = 35;
+
+		// SpawnActorsEllipse(10000,10000,60000,60000, 60000,10,35);
 		hasSpawned = true;
 		return true;
 	}

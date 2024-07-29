@@ -41,6 +41,8 @@ public:
     
     UFUNCTION(BlueprintCallable, Category="Action")
         void SetState(TEnumAsByte<EntityState> newState);
+    UFUNCTION(BlueprintCallable)
+        const FString& GetUserName(); 
 
     UFUNCTION(BlueprintCallable, Category="Action")
         void StunFor(float duration);
@@ -56,7 +58,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-    
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+        FString username;
     UPROPERTY(EditAnywhere)
         float speed = 0;
     UPROPERTY(BlueprintReadWrite)

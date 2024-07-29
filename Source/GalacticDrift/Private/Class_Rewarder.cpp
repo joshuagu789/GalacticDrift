@@ -19,13 +19,6 @@ AClass_Rewarder::AClass_Rewarder()
 	rewardCollider->InitSphereRadius(rewardRange);
 	rewardCollider->SetLineThickness(10.f);
 	rewardCollider->SetGenerateOverlapEvents(true);
-	rewardCollider->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	rewardCollider->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
-
-	rewardCollider->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-	rewardCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_PhysicsBody, ECollisionResponse::ECR_Overlap);
-
-	rewardCollider->OnComponentBeginOverlap.AddDynamic( this, &AClass_Rewarder::RewardBeginOverlap );
 	// this->OnActorBeginOverlap.AddDynamic( this, &AClass_Event::ActorBeginOverlap );	//notify? receive?
 }
 
@@ -37,6 +30,16 @@ void AClass_Rewarder::BeginPlay()
 	FAttachmentTransformRules rules{EAttachmentRule::SnapToTarget, false};
 	rewardCollider->AttachToComponent(GetRootComponent(), rules);
 	rewardCollider->SetSphereRadius(rewardRange, false);
+
+	rewardCollider->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	rewardCollider->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+
+	rewardCollider->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	rewardCollider->SetCollisionResponseToChannel(ECollisionChannel::ECC_PhysicsBody, ECollisionResponse::ECR_Overlap);
+
+	rewardCollider->OnComponentBeginOverlap.AddDynamic( this, &AClass_Rewarder::RewardBeginOverlap );
+	readyToReward = true;
+
 }
 
 // Called every frame
@@ -52,19 +55,13 @@ void AClass_Rewarder::RewardBeginOverlap(UPrimitiveComponent* OverlappedComponen
                       int32 OtherBodyIndex, 
                       bool bFromSweep, 
                       const FHitResult &SweepResult ){
-	// Super::BeginOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 
-	// USphereComponent* collider = Cast<USphereComponent>(OverlappedComponent);
-	UPrimitiveComponent* test1 = Cast<UPrimitiveComponent>(eventCollider);
-	UPrimitiveComponent* test2 = Cast<UPrimitiveComponent>(rewardCollider);
+	AClass_Racer_Pawn* racer = Cast<AClass_Racer_Pawn>(OtherActor);
 
-	if(OverlappedComponent && test1 && OverlappedComponent == test1){
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("event collider hit"));
+	if(racer && readyToReward){
+    	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("sreward collider hit???"));
+		RewardRacer(racer);
 	}
-	else if(OverlappedComponent && test2 && OverlappedComponent == test2){
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("reward collider hit"));
-	}
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("SOEMATHING OVERLAP MEEEE 3"));
 
 }
 
@@ -77,3 +74,5 @@ void AClass_Rewarder::RewardBeginOverlap(UPrimitiveComponent* OverlappedComponen
 // bool AClass_Rewarder::RevealToRacers(){
 // 	return Super::RevealToRacers();
 // }
+
+void AClass_Rewarder::RewardRacer(AClass_Racer_Pawn* racer){}

@@ -12,6 +12,7 @@ NOTE: collider overlap detection only detects physics bodies- AKA ONLY DETECTS R
 #include "Components/SphereComponent.h"
 #include "Class_Racer_Pawn.h"
 #include "Class_Waypoint_Actor.h"
+#include "ActorComponents/Class_PlayerUI.h"
 #include "Class_Event.generated.h"
 
 UCLASS()
@@ -31,7 +32,7 @@ public:
 	UFUNCTION()
 		virtual void EndEvent();
 	UFUNCTION()
-		virtual bool RevealToRacers(AClass_Racer_Pawn* racer);	// typically through marker component
+		virtual void RevealToRacers(const TSet<AActor*>& racers);	// typically through marker component
 	
 
 protected:
@@ -40,8 +41,10 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSubclassOf<AActor> waypoint;
+	// UPROPERTY()
+	// 	AClass_Waypoint_Actor* currentWaypointActor;
 	UPROPERTY()
-		AClass_Waypoint_Actor* currentWaypointActor;
+		TMap<AClass_Racer_Pawn*, AClass_Waypoint_Actor*> activeWaypoints;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FText waypointTitle;

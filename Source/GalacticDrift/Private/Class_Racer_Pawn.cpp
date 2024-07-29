@@ -162,6 +162,8 @@ void AClass_Racer_Pawn::StopDrift(){
 
 void AClass_Racer_Pawn::SetState(TEnumAsByte<EntityState> newState){entityPtr->SetState(newState);}
 
+const FString& AClass_Racer_Pawn::GetUserName(){ return username; }
+
 
 void AClass_Racer_Pawn::StunFor(float duration)
 {

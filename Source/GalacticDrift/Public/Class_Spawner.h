@@ -23,7 +23,7 @@ public:
 		/*
 			min and max for range of actors to spawn, max_x is furthest x distance from center, same pattern for max_y and max_z
 		*/
-        void SpawnActorsEllipse(int min, int max, float max_x, float max_y, float max_z, float min_scale, float max_scale);
+        void SpawnActorsEllipse(int amount, float max_x, float max_y, float max_z, float min_scale, float max_scale);
 	
 	bool BeginEvent() override;
 
@@ -38,6 +38,15 @@ protected:
 		TSubclassOf<AActor> actorPtr;
 
 	bool hasSpawned = false;
+
+	int amountLeftToSpawn = 0;
+	int x = 0;
+	int y = 0;
+	int z = 0;
+	int scale1 = 1;
+	int scale2 = 1;
+private:
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -36,7 +36,7 @@ void AClass_Objective::BeginPlay()
 
 	// FAttachmentTransformRules rules{EAttachmentRule::SnapToTarget, false};
 	// rewardCollider->AttachToComponent(GetRootComponent(), rules);
-	// RevealToRacers();
+	RevealToRacers(server->GetContainerForEnum(EntityType::RACER));
 }
 
 // Called every frame
@@ -55,10 +55,35 @@ bool AClass_Objective::BeginEvent(){
 void AClass_Objective::EndEvent(){
 	Super::EndEvent();
 }
-bool AClass_Objective::RevealToRacers(AClass_Racer_Pawn* racer){
-	return Super::RevealToRacers(racer);
+void AClass_Objective::RevealToRacers(const TSet<AActor*>& racers){
+	Super::RevealToRacers(racers);
 
-	if(currentWaypointActor){
-		currentWaypointActor->SetCategory(FText::FromString("OBJECTIVE"));
+	for(auto& x: activeWaypoints){
+		x.Value->SetCategory(FText::FromString("OBJECTIVE"));
+	}
+	// if(currentWaypointActor){
+	// 	currentWaypointActor->SetCategory(FText::FromString("OBJECTIVE"));
+	// }
+
+}
+
+void AClass_Objective::SetStage(int stage, bool isFinal){
+	stageNumber = stage;
+	isFinalStage = isFinal;
+}
+
+void AClass_Objective::RewardRacer(AClass_Racer_Pawn* racer){
+	Super::RewardRacer(racer);
+	if(activeWaypoints.Contains(racer)){
+		activeWaypoints[racer]->K2_DestroyActor();
+		activeWaypoints.Remove(racer);
+		server->BroadcastToPlayerConsoles(FString("HOLY CRAP!!! Racer ") + racer->GetUserName() + FString(" just completed Objective " + FString::FromInt(stageNumber)) + FString("!!!!"));
+	}
+	if(!isFinalStage && !hasCalledNextStages){
+		server->LoadObjectivesOfStage(stageNumber + 1);
+		hasCalledNextStages = true;
+		// if(currentWaypointActor){
+		// 	currentWaypointActor->K2_DestroyActor();
+		// }
 	}
 }

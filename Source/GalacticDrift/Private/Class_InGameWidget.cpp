@@ -27,6 +27,11 @@ void UClass_InGameWidget::PushToOutputConsole(const TArray<FString> &lines){
         linesToPrint.Enqueue(i);
 }
 
+void UClass_InGameWidget::PushLineToOutputConsole(const FString& newLine){
+    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("received message in ingamewidget"));
+    linesToPrint.Enqueue(newLine);
+}
+
 void UClass_InGameWidget::SwitchToMenu(TEnumAsByte<UI_Command_Menu> newMenuState){
     UCanvasPanel* oldCanvas = GetCanvasCorrespondingToEnum(menuState);
     if(oldCanvas){
