@@ -16,11 +16,13 @@ AClass_StaticSpawner::AClass_StaticSpawner()
 void AClass_StaticSpawner::BeginPlay()
 {
 	Super::BeginPlay();
-	staticMesh = FindComponentByClass<UStaticMeshComponent>();
-	if(!staticMesh){
-        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: no static mesh found for static spawner"));
+
+	if(!staticMeshPtr){
+		staticMeshPtr = GetComponentByClass<UStaticMeshComponent>();
 	}
-	
+	if(!staticMeshPtr){
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: no static mesh found for static spawner"));
+	}
 }
 
 // Called every frame
@@ -28,21 +30,25 @@ void AClass_StaticSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	if(amountLeftToSpawn > 0){
-		int amount = (amountLeftToSpawn >= 50) ? (50) : (amountLeftToSpawn);
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("SPAWNING WAVE"));
+		int amount = (amountLeftToSpawn >= 1000) ? (1000) : (amountLeftToSpawn);
 		amountLeftToSpawn -= amount;
 		SpawnStaticsRectangle(amount, x, y, z, scale1, scale2);
 	}
+	FHitResult* dummy = nullptr;
+	GetRootComponent()->AddWorldRotation(FRotator{0,12 * DeltaTime,0}, true, dummy, ETeleportType::TeleportPhysics);
 }
 
 void AClass_StaticSpawner::SpawnStaticsRectangle(int amount, float max_x, float max_y, float max_z, float min_scale, float max_scale){
-	if(staticMesh){
+	if(staticMeshPtr){
 		// int count = UKismetMathLibrary::RandomIntegerInRange(min,max);
 		for(int i = 0; i < amount; i++){
-			FVector location = GetTransform().GetLocation();	// hopefully copies FVector not reference
+			// FVector location = GetTransform().GetLocation();	// hopefully copies FVector not reference
+			FVector location;
 
-			location.X += UKismetMathLibrary::RandomFloatInRange(-max_x,max_x);
-			location.Y += UKismetMathLibrary::RandomFloatInRange(-max_y,max_y);
-			location.Z += UKismetMathLibrary::RandomFloatInRange(-max_z,max_z);
+			location.X = UKismetMathLibrary::RandomFloatInRange(-max_x,max_x);
+			location.Y = UKismetMathLibrary::RandomFloatInRange(-max_y,max_y);
+			location.Z = UKismetMathLibrary::RandomFloatInRange(-max_z,max_z);
 
 			FRotator rotation{UKismetMathLibrary::RandomFloatInRange(0,360),UKismetMathLibrary::RandomFloatInRange(0,360),UKismetMathLibrary::RandomFloatInRange(0,360)};
 			
@@ -50,40 +56,53 @@ void AClass_StaticSpawner::SpawnStaticsRectangle(int amount, float max_x, float 
 			FVector scaleVector{scale,scale,scale}; 
 
 			FTransform blankTransform;
-			blankTransform.SetLocation(location);
+
+			blankTransform.SetLocation(location);	//blankTransform is relative here 
 			blankTransform.SetRotation(rotation.Quaternion());
 			blankTransform.SetScale3D(scaleVector);
 			//plan to also have random rotation and scale
 
        		FActorSpawnParameters spawnParams;			
 
-			UStaticMeshComponent* temp = DuplicateObject <UStaticMeshComponent> (staticMesh, this);
-			FHitResult* dummy = nullptr;
-			temp->SetWorldTransform(blankTransform, false, dummy, ETeleportType::None);
+				
+			// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("attempting to spawn"));
 
-			// AActor* temp = GetWorld()->SpawnActor<AActor>(actorPtr, blankTransform, spawnParams);
-			// if(temp){
-			// 	temp->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-			// 	temp->GetRootComponent()->SetWorldScale3D(FVector{scale, scale, scale});
-			// 	//setactorscaleworld3d
-			// }
+			UStaticMeshComponent* temp = DuplicateObject <UStaticMeshComponent> (staticMeshPtr, this);
+			if(temp){
+				temp->SetStaticMesh(staticMeshPtr->GetStaticMesh());
+				FinishAddComponent(Cast<UActorComponent>(temp), false, blankTransform);
+				// temp->SetHiddenInGame(true,true);
+				meshes.Add(temp, 100);
+				// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("successfully spawned"));
+			}
+			FHitResult* dummy = nullptr;
+			FHitResult dummyy;
+			// temp->K2_SetWorldTransform(blankTransform, false, dummy, ETeleportType::ResetPhysics);
+			// temp->K2_SetWorldTransform(blankTransform, false, dummyy, false);
+			// temp->SetRelativeTransform(blankTransform, false, dummy, ETeleportType::None);
 		}
 	}
     else{
-        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Pointer for staticmesh is null for Class StaticSpawner, method cancelled"));
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Pointer for staticMeshPtr is null for Class StaticSpawner, method cancelled"));
     }
 }
 
 
 bool AClass_StaticSpawner::BeginEvent(){
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("begin static asteroid field event"));
+
 	if(Super::BeginEvent() && !hasSpawned){
 
-		amountLeftToSpawn = UKismetMathLibrary::RandomIntegerInRange(100,100);
-		x = 5000;
-		y = 5000;
-		z = 5000;
-		scale1 = 5;
-		scale2 = 10;
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("begin spawning for static asteroid field event"));
+
+
+		amountLeftToSpawn = UKismetMathLibrary::RandomIntegerInRange(2500,2500);
+		x = 55000;
+		y = 55000;
+		z = 55000;
+		scale1 = 10;
+		scale2 = 30;
 
 		// SpawnActorsEllipse(10000,10000,60000,60000, 60000,10,35);
 		hasSpawned = true;

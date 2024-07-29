@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Class_Objective.h"
+#include "Engine/StaticMesh.h"
 #include "Class_StaticSpawner.generated.h"
 
 UCLASS()
@@ -25,8 +26,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY()
-		UStaticMeshComponent* staticMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UStaticMeshComponent* staticMeshPtr;
+	// UPROPERTY()
+	// 	UStaticMesh* actualMeshPtr;
 	UPROPERTY()
 		TMap<UStaticMeshComponent*, float> meshes;
 
