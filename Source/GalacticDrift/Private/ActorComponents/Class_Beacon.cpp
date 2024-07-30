@@ -38,7 +38,7 @@ void UClass_Beacon::SpawnFan(){
 	FRotator offsetRotation{UKismetMathLibrary::RandomFloatInRange(-30,30),UKismetMathLibrary::RandomFloatInRange(-30,30), UKismetMathLibrary::RandomFloatInRange(0,360)};
 	spawnLocationOffset = offsetRotation.RotateVector(spawnLocationOffset);
 
-    blankTransform.SetLocation(GetOwner()->GetRootComponent()->GetComponentLocation() + spawnLocationOffset);	
+    blankTransform.SetLocation(GetOwner()->GetRootComponent()->GetComponentLocation() + GetOwner()->GetVelocity() * 2.5 + spawnLocationOffset);	
 
     FActorSpawnParameters spawnParams;
 	// AClass_AdoringFan* fan = Cast<AClass_AdoringFan>(fanPtr);

@@ -28,10 +28,17 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UStaticMeshComponent* staticMeshPtr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TSubclassOf<AActor> destroyedMeshPtr;
+
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// 	UStaticMeshComponent* staticMeshTemplate;
 	// UPROPERTY()
 	// 	UStaticMesh* actualMeshPtr;
 	UPROPERTY()
 		TMap<UStaticMeshComponent*, float> meshes;
+	// UPROPERTY()
+	// 	TSet<AActor*> destroyedMeshes;
 
 	UPROPERTY()
 		bool destroyable = false;
@@ -49,4 +56,35 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// UFUNCTION()
+	// void BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
+    //                   AActor* OtherActor, 
+    //                   UPrimitiveComponent* OtherComp, 
+    //                   int32 OtherBodyIndex, 
+    //                   bool bFromSweep, 
+    //                   const FHitResult &SweepResult );
+
+	UFUNCTION()
+	void EventHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector normalImpulse, const FHitResult& Hit);
+	// void EventHit(UPrimitiveComponent* MyComp, 
+    //                   AActor* OtherActor, 
+    //                   UPrimitiveComponent* OtherComp, 
+	// 				  bool selfMoved,
+	// 				  FVector hitLocation,
+	// 				  FVector hitNormal,
+    //                   FVector normalImpulse, 
+	// 				  const FHitResult& Hit);
+
+	// UFUNCTION()
+	// void ReceiveHit
+	// (
+	// 	class UPrimitiveComponent * MyComp,
+	// 	AActor * Other,
+	// 	class UPrimitiveComponent * OtherComp,
+	// 	bool bSelfMoved,
+	// 	FVector HitLocation,
+	// 	FVector HitNormal,
+	// 	FVector NormalImpulse,
+	// 	const FHitResult & Hit
+	// );
 };

@@ -35,7 +35,6 @@ void UClass_VisualEffects::TickComponent(float DeltaTime, ELevelTick TickType, F
 		checkTimer += 0.1;
 
 		if(entityPtr->GetState() == RAGDOLLED && !thrustersDisabled){
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("disabling thrusters"));
 			thrustersDisabled = true;
 			DisableParticlesOf(thrusters);
 			// for(auto &particleComponent: particleComponents){

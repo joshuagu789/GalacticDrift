@@ -92,7 +92,8 @@ void AClass_Spawner::SpawnActorsEllipse(int amount, float max_x, float max_y, fl
 bool AClass_Spawner::BeginEvent(){
 	if(Super::BeginEvent() && !hasSpawned){
 
-		amountLeftToSpawn = UKismetMathLibrary::RandomIntegerInRange(10000,10000);
+		// amountLeftToSpawn = UKismetMathLibrary::RandomIntegerInRange(10000,10000);
+		amountLeftToSpawn = UKismetMathLibrary::RandomIntegerInRange(100,100);
 		x = 60000;
 		y = 60000;
 		z = 60000;
