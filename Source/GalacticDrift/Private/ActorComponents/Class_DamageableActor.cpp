@@ -97,6 +97,10 @@ float UClass_DamageableActor::CalculateAndApplyDamage(UPrimitiveComponent* colli
 	return damage;
 }
 
+void UClass_DamageableActor::SetImmunityTime(float duration){
+	immunityTimer = duration;
+}
+
 TEnumAsByte<DamageableActor_Type> UClass_DamageableActor::GetType(){ return type; }
 
 bool UClass_DamageableActor::IsDestroyed(){ return actualHealth <= 0; }

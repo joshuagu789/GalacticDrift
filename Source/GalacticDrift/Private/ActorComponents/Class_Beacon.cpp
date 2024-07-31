@@ -34,11 +34,11 @@ void UClass_Beacon::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 void UClass_Beacon::SpawnFan(){
     FTransform blankTransform;
-	FVector spawnLocationOffset{UKismetMathLibrary::RandomFloatInRange(2000,4000 + 50000 - 50000 * accuracy),0,0};
+	FVector spawnLocationOffset{UKismetMathLibrary::RandomFloatInRange(5000,10000 + 50000 - 50000 * accuracy),0,0};
 	FRotator offsetRotation{UKismetMathLibrary::RandomFloatInRange(-30,30),UKismetMathLibrary::RandomFloatInRange(-30,30), UKismetMathLibrary::RandomFloatInRange(0,360)};
 	spawnLocationOffset = offsetRotation.RotateVector(spawnLocationOffset);
 
-    blankTransform.SetLocation(GetOwner()->GetRootComponent()->GetComponentLocation() + GetOwner()->GetVelocity() * 2.5 + spawnLocationOffset);	
+    blankTransform.SetLocation(GetOwner()->GetRootComponent()->GetComponentLocation() + GetOwner()->GetVelocity() * 3 + spawnLocationOffset);	
 
     FActorSpawnParameters spawnParams;
 	// AClass_AdoringFan* fan = Cast<AClass_AdoringFan>(fanPtr);
@@ -64,11 +64,11 @@ void UClass_Beacon::SpawnFan(){
 void UClass_Beacon::SpawnPolice(){
 
     FTransform blankTransform;
-	FVector spawnLocationOffset{UKismetMathLibrary::RandomFloatInRange(2000,4000 + 50000 - 50000 * accuracy),0,0};
+	FVector spawnLocationOffset{UKismetMathLibrary::RandomFloatInRange(5000,10000 + 50000 - 50000 * accuracy),0,0};
 	FRotator offsetRotation{UKismetMathLibrary::RandomFloatInRange(-30,30),UKismetMathLibrary::RandomFloatInRange(-30,30), UKismetMathLibrary::RandomFloatInRange(0,360)};
 	spawnLocationOffset = offsetRotation.RotateVector(spawnLocationOffset);
 
-    blankTransform.SetLocation(GetOwner()->GetRootComponent()->GetComponentLocation() + spawnLocationOffset);	
+    blankTransform.SetLocation(GetOwner()->GetRootComponent()->GetComponentLocation() + GetOwner()->GetVelocity() * 3 + spawnLocationOffset);	
 
     FActorSpawnParameters spawnParams;
 	// AClass_AdoringFan* fan = Cast<AClass_AdoringFan>(fanPtr);
@@ -104,11 +104,11 @@ void UClass_Beacon::SpawnPolice(){
 }
 void UClass_Beacon::SpawnAttacker(AActor* target){
     FTransform blankTransform;
-	FVector spawnLocationOffset{UKismetMathLibrary::RandomFloatInRange(2000,4000 + 50000 - 50000 * accuracy),0,0};
+	FVector spawnLocationOffset{UKismetMathLibrary::RandomFloatInRange(5000,10000 + 50000 - 50000 * accuracy),0,0};
 	FRotator offsetRotation{UKismetMathLibrary::RandomFloatInRange(-30,30),UKismetMathLibrary::RandomFloatInRange(-30,30), UKismetMathLibrary::RandomFloatInRange(0,360)};
 	spawnLocationOffset = offsetRotation.RotateVector(spawnLocationOffset);
 
-    blankTransform.SetLocation(target->GetRootComponent()->GetComponentLocation() + spawnLocationOffset);	
+    blankTransform.SetLocation(GetOwner()->GetRootComponent()->GetComponentLocation() + GetOwner()->GetVelocity() * 3 + spawnLocationOffset);	
 
     FActorSpawnParameters spawnParams;
 	// AClass_AdoringFan* fan = Cast<AClass_AdoringFan>(fanPtr);

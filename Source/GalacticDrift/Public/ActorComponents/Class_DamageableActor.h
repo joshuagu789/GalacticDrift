@@ -29,6 +29,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		float CalculateAndApplyDamage(UPrimitiveComponent* collisionSource);
 	UFUNCTION(BlueprintCallable)
+		void SetImmunityTime(float duration);
+	UFUNCTION(BlueprintCallable)
 		TEnumAsByte<DamageableActor_Type> GetType();
 	UFUNCTION(BlueprintCallable)
 		bool IsDestroyed();

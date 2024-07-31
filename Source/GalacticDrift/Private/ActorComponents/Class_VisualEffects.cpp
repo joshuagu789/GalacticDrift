@@ -34,14 +34,14 @@ void UClass_VisualEffects::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 		checkTimer += 0.1;
 
-		if(entityPtr->GetState() == RAGDOLLED && !thrustersDisabled){
+		if(entityPtr->GetState() != FLYING && !thrustersDisabled && entityPtr->GetState() != FLYING_WHILE_DRIFTING){
 			thrustersDisabled = true;
 			DisableParticlesOf(thrusters);
 			// for(auto &particleComponent: particleComponents){
 			// 	particleComponent->EndTrails();
 			// }
 		}
-		else if(entityPtr->GetState() != RAGDOLLED && thrustersDisabled){
+		else if(entityPtr->GetState() == FLYING && thrustersDisabled || entityPtr->GetState() == FLYING_WHILE_DRIFTING && thrustersDisabled){
 			thrustersDisabled = false;
 			EnableParticlesOf(thrusters);
 			// for(auto &particleComponent: particleComponents){

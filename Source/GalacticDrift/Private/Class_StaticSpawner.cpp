@@ -68,8 +68,8 @@ void AClass_StaticSpawner::Tick(float DeltaTime)
 		amountLeftToSpawn -= amount;
 		SpawnStaticsRectangle(amount, x, y, z, scale1, scale2);
 	}
-	FHitResult* dummy = nullptr;
-	GetRootComponent()->AddWorldRotation(FRotator{0,12 * DeltaTime,0}, true, dummy, ETeleportType::TeleportPhysics);
+	// FHitResult* dummy = nullptr;
+	// GetRootComponent()->AddWorldRotation(FRotator{0,12 * DeltaTime,0}, true, dummy, ETeleportType::TeleportPhysics);
 }
 
 void AClass_StaticSpawner::SpawnStaticsRectangle(int amount, float max_x, float max_y, float max_z, float min_scale, float max_scale){
@@ -127,7 +127,7 @@ bool AClass_StaticSpawner::BeginEvent(){
 
 	if(Super::BeginEvent() && !hasSpawned){
 
-		amountLeftToSpawn = UKismetMathLibrary::RandomIntegerInRange(2500,2500);
+		amountLeftToSpawn = UKismetMathLibrary::RandomIntegerInRange(2000,2000);
 		x = 55000;
 		y = 55000;
 		z = 55000;
