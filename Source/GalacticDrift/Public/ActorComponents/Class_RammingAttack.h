@@ -7,6 +7,7 @@
 #include "Class_Attack.h"
 #include "Class_Entity.h"
 #include "Class_DamageableActor.h"
+#include "Components/SphereComponent.h"
 #include "Class_RammingAttack.generated.h"
 
 

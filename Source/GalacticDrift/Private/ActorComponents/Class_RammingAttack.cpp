@@ -73,28 +73,40 @@ void UClass_RammingAttack::TickComponent(float DeltaTime, ELevelTick TickType, F
 			if(entityPtr){
 				entityPtr->SetState(FLYING);
 			}
-			ramCollider->SetSphereRadius(0, false);
+			if(ramCollider){
+				ramCollider->SetAllMassScale(originalMassScale);
+				ramCollider->SetSphereRadius(0, false);
+			}
 
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("ramming over"));	
 		}
 	}
-	if(cooldownTimer <= 0){
+	if(cooldownTimer <= 0 && immunityDurationTimer <= 0){
 		if(isAttacking){
 			attackDelayTimer -= DeltaTime;
 
 			if(attackDelayTimer <= 0){
-				if(entityPtr && entityPtr->GetState() != RAGDOLLED && skeletalMeshPtr || !entityPtr && skeletalMeshPtr){
-					skeletalMeshPtr->SetAllMassScale(massMultiplier);
+				if(entityPtr && entityPtr->GetState() != RAGDOLLED || !entityPtr){
+					if(skeletalMeshPtr){
+						skeletalMeshPtr->SetAllMassScale(massMultiplier);
+					}
+					
 					if(damageComponentPtr){
 						damageComponentPtr->SetImmunityTime(immunityDuration);
-						immunityDurationTimer = immunityDuration;
-						cooldownTimer+= cooldown;
 					}
 					if(entityPtr){
 						entityPtr->SetState(RAMMING);
 					}
+
+					immunityDurationTimer = immunityDuration;
 					attackDelayTimer = attackDelay;
-					ramCollider->SetSphereRadius(collisionRange, false);
+					cooldownTimer+= cooldown;
+
+					if(ramCollider){
+						ramCollider->SetAllMassScale(massMultiplier);
+						ramCollider->SetSphereRadius(collisionRange, false);
+						GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("ADJUSTING RADIUSW"));	
+					}
 					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("RAMMING NOW"));	
 				}
 				else{
