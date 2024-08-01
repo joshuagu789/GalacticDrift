@@ -25,3 +25,41 @@ void AClass_Encounter::Tick(float DeltaTime)
 
 }
 
+// bool AClass_Encounter::BeginEvent(){
+// 	return Super::BeginEvent();
+// }
+
+void AClass_Encounter::RevealToRacers(const TSet<AActor*>& racers){
+	Super::RevealToRacers(racers);
+
+	for(auto& x: activeWaypoints){
+		x.Value->SetCategory(FText::FromString("ENCOUNTER"));
+	}
+	// if(currentWaypointActor){
+	// 	currentWaypointActor->SetCategory(FText::FromString("OBJECTIVE"));
+	// }
+
+}
+
+void AClass_Encounter::BeginOverlap
+(
+	UPrimitiveComponent* OverlappedComponent, 
+	AActor* OtherActor, 
+	UPrimitiveComponent* OtherComp, 
+	int32 OtherBodyIndex, 
+	bool bFromSweep, 
+	const FHitResult &SweepResult 
+)
+{
+	Super::BeginOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+	
+	AClass_Racer_Pawn* racer = Cast<AClass_Racer_Pawn>(OtherActor);
+	if(racer && !victims.Contains(OtherActor)){
+		victims.Add(OtherActor);
+	}
+}
+
+void AClass_Encounter::EndEvent(){
+	Super::EndEvent();
+	K2_DestroyActor();
+}

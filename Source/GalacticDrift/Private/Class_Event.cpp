@@ -85,6 +85,12 @@ bool AClass_Event::BeginEvent(){
 }
 void AClass_Event::EndEvent(){
 	eventActive = false;
+	for(auto& pair: activeWaypoints){
+		pair.Value->K2_DestroyActor();
+		
+	}
+	activeWaypoints.Empty();
+
 }
 // void AClass_Event::RevealToRacers(AClass_Racer_Pawn* racer){	// should get racers from server?
 void AClass_Event::RevealToRacers(const TSet<AActor*>& racers){	// should get racers from server?

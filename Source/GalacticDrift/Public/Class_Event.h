@@ -70,7 +70,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-    void BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
+    virtual void BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
                       AActor* OtherActor, 
                       UPrimitiveComponent* OtherComp, 
                       int32 OtherBodyIndex, 
