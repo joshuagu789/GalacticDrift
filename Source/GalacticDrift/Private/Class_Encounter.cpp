@@ -61,5 +61,6 @@ void AClass_Encounter::BeginOverlap
 
 void AClass_Encounter::EndEvent(){
 	Super::EndEvent();
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("end asteroid storm event in encounter class"));
 	K2_DestroyActor();
 }

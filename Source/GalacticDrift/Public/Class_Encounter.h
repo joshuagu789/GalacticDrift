@@ -23,8 +23,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY()
-		float duration;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float duration = 60;
 	UPROPERTY()
 		TArray<AActor*> victims;
 public:	

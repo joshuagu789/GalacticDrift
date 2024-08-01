@@ -81,13 +81,16 @@ bool AClass_Event::BeginEvent(){
 		return false;
 	}
 	eventActive = true;
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("event active in begin event"));
 	return true;
 }
 void AClass_Event::EndEvent(){
 	eventActive = false;
 	for(auto& pair: activeWaypoints){
-		pair.Value->K2_DestroyActor();
-		
+		AActor* temp = pair.Value;
+		if(temp){
+			temp->K2_DestroyActor();
+		}		
 	}
 	activeWaypoints.Empty();
 

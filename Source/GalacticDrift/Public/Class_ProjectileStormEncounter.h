@@ -18,6 +18,8 @@ public:
 
 	UFUNCTION()
 		void SpawnProjectile();
+	
+	void EndEvent() override;
 
 protected:
 	// Called when the game starts or when spawned

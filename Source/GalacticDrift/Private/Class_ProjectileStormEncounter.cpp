@@ -27,6 +27,8 @@ void AClass_ProjectileStormEncounter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if(eventActive){
 		duration -= DeltaTime;
+		UE_LOG(LogTemp, Warning, TEXT("The float value is: %f"), duration);
+        // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("event active"));
 
 		if(duration > 0){
 			SpawnProjectile();
@@ -35,6 +37,7 @@ void AClass_ProjectileStormEncounter::Tick(float DeltaTime)
 			EndEvent();
 		}
 	}
+
 	if(timeQueue.IsEmpty() && projectileQueue.IsEmpty()){
 		timePassed = 0;
 	}
@@ -64,6 +67,24 @@ void AClass_ProjectileStormEncounter::Tick(float DeltaTime)
 	else{
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: timeQueue and projectileQueue not same size in Class ProjectileStormEncounter?"));
 	}
+}
+
+void AClass_ProjectileStormEncounter::EndEvent(){
+	while(!projectileQueue.IsEmpty()){
+		AActor* actor = *projectileQueue.Peek();
+		if(actor){
+			actor->K2_DestroyActor();
+		}
+		else{
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Couldnt get actor ptr off queue peek in Class ProjectileStormEncounter?"));
+		}
+		projectileQueue.Pop();
+		if(!timeQueue.IsEmpty()){
+			timeQueue.Pop();
+		}
+	}
+	Super::EndEvent();
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("end asteroid storm event"));
 }
 
 void AClass_ProjectileStormEncounter::BeginOverlap
@@ -114,6 +135,9 @@ void AClass_ProjectileStormEncounter::SpawnProjectile(){
 	AActor* temp = GetWorld()->SpawnActor<AActor>(projectilePtr, blankTransform, spawnParams);
 
 	if(temp){
+		temp->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		temp->GetRootComponent()->SetWorldScale3D(FVector{scale, scale, scale});
+
 		if(applyPhysics){
 			UPrimitiveComponent* physicsBody = Cast<UPrimitiveComponent>(temp->GetRootComponent());
 			if(!physicsBody){
