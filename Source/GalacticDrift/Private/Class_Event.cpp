@@ -86,11 +86,12 @@ bool AClass_Event::BeginEvent(){
 }
 void AClass_Event::EndEvent(){
 	eventActive = false;
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("end asteroid storm event in class event"));
 	for(auto& pair: activeWaypoints){
 		AActor* temp = pair.Value;
-		if(temp){
+		if(temp && !temp->IsPendingKillPending()){
 			temp->K2_DestroyActor();
-		}		
+		}	
 	}
 	activeWaypoints.Empty();
 
@@ -127,7 +128,7 @@ void AClass_Event::RevealToRacers(const TSet<AActor*>& racers){	// should get ra
 				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("create waypoint for event"));
 
 				AClass_Waypoint_Actor* currentWaypointActor = Cast<AClass_Waypoint_Actor>(temp);
-				if(!currentWaypointActor){
+				if(!currentWaypointActor && !temp->IsPendingKillPending()){
 					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: spawned waypoint for Class Event is not of type Class Waypoint Actor"));
 					temp->K2_DestroyActor();
 				}

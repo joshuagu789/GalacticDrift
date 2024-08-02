@@ -201,7 +201,7 @@ void AClass_RacingGameMode::BroadcastToPlayerConsoles(FString message){
         UClass_PlayerUI* UI = x->FindComponentByClass<UClass_PlayerUI>();
         if(UI){
             UI->RelayMessageToConsole(message);
-            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("relaying message to console"));
+            // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("relaying message to console"));
         }
     }
 }

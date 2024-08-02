@@ -25,42 +25,74 @@ void AClass_ProjectileStormEncounter::BeginPlay()
 void AClass_ProjectileStormEncounter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if(eventActive){
+	if(eventActive && duration > 0){
 		duration -= DeltaTime;
-		UE_LOG(LogTemp, Warning, TEXT("The float value is: %f"), duration);
+		// UE_LOG(LogTemp, Warning, TEXT("The float value is: %f"), duration);
         // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("event active"));
-
-		if(duration > 0){
-			SpawnProjectile();
+		if(duration <= 0){
+			// EndEvent();
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("END EVENT NOW"));
 		}
 		else{
-			EndEvent();
+			// spawnTimer = spawnInterval;
+			SpawnProjectile();
 		}
+		// if(spawnTimer <= 0){
+
+		// }
+		// else{
+		// 	spawnTimer -= DeltaTime;
+		// }
+
 	}
 
 	if(timeQueue.IsEmpty() && projectileQueue.IsEmpty()){
 		timePassed = 0;
+		// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("timePassed = 0"));
+		if(eventActive && duration <= 0){
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("calling end event"));
+			EndEvent();
+		}
 	}
 	else if(!timeQueue.IsEmpty() && !projectileQueue.IsEmpty()){
+
 		float* mostRecent = timeQueue.Peek();
-		(*mostRecent) -= DeltaTime;
+		if(!mostRecent){
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("HOW IS IT POSSIBLE FLOAT NULLPTR"));
+		}
+		else{
+			(*mostRecent) -= DeltaTime;
+		}
 
 		timePassed += DeltaTime;
 
+		// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FText::FromString(FString::SanitizeFloat(timePassed)));
 		if(*mostRecent <= 0){
-			AActor* actor = *projectileQueue.Peek();
-			if(actor){
-				actor->K2_DestroyActor();
-			}
-			else{
-        		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Couldnt get actor ptr off queue peek in Class ProjectileStormEncounter?"));
+		// if(timePassed >= *mostRecent){
+			// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("ready to destroy asteroid"));
+
+			if(projectileQueue.Peek()){
+				AActor* actor = *projectileQueue.Peek();
+				if(actor && !actor->IsPendingKillPending()){
+					actor->K2_DestroyActor();
+					// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("destroying asteroid in projectile storm"));
+				}
+				else{
+					// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Couldnt get actor ptr off queue peek in Class ProjectileStormEncounter?"));
+				}
 			}
 			projectileQueue.Pop();
 			timeQueue.Pop();
 
+			// timePassed -= spawnInterval;
 			if(!timeQueue.IsEmpty()){
 				float* nextRecent = timeQueue.Peek();
-				(*nextRecent) -= timePassed;
+				if(nextRecent){
+					(*nextRecent) -= timePassed;
+				}
+				else{
+					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("HOW IS IT POSSIBLE FLOAT NULLPTR"));
+				}
 			}
 		}
 	}
@@ -70,21 +102,23 @@ void AClass_ProjectileStormEncounter::Tick(float DeltaTime)
 }
 
 void AClass_ProjectileStormEncounter::EndEvent(){
-	while(!projectileQueue.IsEmpty()){
-		AActor* actor = *projectileQueue.Peek();
-		if(actor){
-			actor->K2_DestroyActor();
-		}
-		else{
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Couldnt get actor ptr off queue peek in Class ProjectileStormEncounter?"));
-		}
-		projectileQueue.Pop();
-		if(!timeQueue.IsEmpty()){
-			timeQueue.Pop();
-		}
-	}
 	Super::EndEvent();
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("end asteroid storm event"));
+	// while(!projectileQueue.IsEmpty()){
+	// 	if(projectileQueue.Peek()){
+	// 		AActor* actor = *projectileQueue.Peek();
+	// 		if(actor){
+	// 			actor->K2_DestroyActor();
+	// 		}
+	// 		else{
+	// 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Couldnt get actor ptr off queue peek in Class ProjectileStormEncounter?"));
+	// 		}
+	// 	}
+	// 	projectileQueue.Pop();
+	// 	if(!timeQueue.IsEmpty()){
+	// 		timeQueue.Pop();
+	// 	}
+	// }
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("end asteroid storm event in projectilestormencounter"));
 }
 
 void AClass_ProjectileStormEncounter::BeginOverlap
@@ -124,7 +158,8 @@ void AClass_ProjectileStormEncounter::SpawnProjectile(){
 
     FTransform blankTransform;
 	// float random = detectionRange / 2; 
-    blankTransform.SetLocation(	GetActorLocation() + random.RotateVector(projectileOriginOffset) );	
+    // blankTransform.SetLocation(	GetActorLocation() + random.RotateVector(projectileOriginOffset) );	
+    blankTransform.SetLocation(	GetActorLocation() + projectileOriginOffset );	
 	blankTransform.SetRotation(rotation.Quaternion());
 
 	float scale = UKismetMathLibrary::RandomFloatInRange(minScale,maxScale);

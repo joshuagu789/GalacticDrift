@@ -32,7 +32,7 @@ void UClass_LifetimeComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	// ...
 	if(lifeTime > 0){
 		lifeTime -= DeltaTime;
-		if(lifeTime <= 0){
+		if(lifeTime <= 0 && !GetOwner()->IsPendingKillPending()){
 			GetOwner()->K2_DestroyActor();
 		}
 	}

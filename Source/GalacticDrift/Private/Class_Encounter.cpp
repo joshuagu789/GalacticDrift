@@ -58,9 +58,17 @@ void AClass_Encounter::BeginOverlap
 		victims.Add(OtherActor);
 	}
 }
-
+bool AClass_Encounter::BeginEvent(){
+	if(Super::BeginEvent()){
+		server->BroadcastToPlayerConsoles(FString("Warning all Racers: ") + waypointTitle.ToString() + FString(" discovered, proceed with caution"));
+		return true;
+	}
+	return false;
+}
 void AClass_Encounter::EndEvent(){
 	Super::EndEvent();
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("end asteroid storm event in encounter class"));
-	K2_DestroyActor();
+	// if(!IsPendingKillPending()){
+	// 	K2_DestroyActor();
+	// }
 }

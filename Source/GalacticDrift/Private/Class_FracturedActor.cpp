@@ -23,7 +23,7 @@ void AClass_FracturedActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	lifeTime -= DeltaTime;
-	if(lifeTime <= 0){
+	if(lifeTime <= 0 && !IsPendingKillPending()){
 		K2_DestroyActor();
 	}
 }

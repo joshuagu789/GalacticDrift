@@ -75,7 +75,9 @@ void AClass_Objective::SetStage(int stage, bool isFinal){
 void AClass_Objective::RewardRacer(AClass_Racer_Pawn* racer){
 	Super::RewardRacer(racer);
 	if(activeWaypoints.Contains(racer)){
-		activeWaypoints[racer]->K2_DestroyActor();
+		if(!activeWaypoints[racer]->IsPendingKillPending()){
+			activeWaypoints[racer]->K2_DestroyActor();
+		}
 		activeWaypoints.Remove(racer);
 		server->BroadcastToPlayerConsoles(FString("HOLY CRAP!!! Racer ") + racer->GetUserName() + FString(" just completed Objective " + FString::FromInt(stageNumber)) + FString("!!!!"));
 	}

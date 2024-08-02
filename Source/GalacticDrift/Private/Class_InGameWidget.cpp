@@ -28,7 +28,7 @@ void UClass_InGameWidget::PushToOutputConsole(const TArray<FString> &lines){
 }
 
 void UClass_InGameWidget::PushLineToOutputConsole(const FString& newLine){
-    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("received message in ingamewidget"));
+    // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("received message in ingamewidget"));
     linesToPrint.Enqueue(newLine);
 }
 
@@ -98,7 +98,7 @@ void UClass_InGameWidget::UpdateOutputConsole(float InDeltaTime){
 
                     if(lineIndex > line.Len()){
                         character = FText::Join(character, FText::FromString(FString("\n")) );
-	                    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("adding new line character"));
+	                    // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("adding new line character"));
                         line.Empty();
                     }
                     outputConsolePtr->SetText( FText::Join(NSLOCTEXT("a","b",""), temp, character) );
@@ -119,7 +119,7 @@ void UClass_InGameWidget::UpdateOutputConsole(float InDeltaTime){
 
         FString temp;
         linesToPrint.Dequeue(temp);     // does dequeue store into temp???
-        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("dequeue called"));
+        // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("dequeue called"));
         line = temp;
         // line = linesToPrint.Dequeue();
         // add next line to output

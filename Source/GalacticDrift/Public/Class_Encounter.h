@@ -18,6 +18,7 @@ public:
 
 	// bool BeginEvent() override;
 	void RevealToRacers(const TSet<AActor*>& racers) override;
+	bool BeginEvent() override;
 	void EndEvent() override;
 protected:
 	// Called when the game starts or when spawned

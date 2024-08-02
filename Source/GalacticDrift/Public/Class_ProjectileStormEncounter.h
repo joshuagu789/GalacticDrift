@@ -66,7 +66,8 @@ private:
 	// std::queue<float> test;
 
 	int currentIndex = 0;
-	int timePassed = 0;
+	float timePassed = 0;
+	float spawnTimer = 0;
 	bool hasSetProjectileOrigin = false;
 public:	
 	// Called every frame

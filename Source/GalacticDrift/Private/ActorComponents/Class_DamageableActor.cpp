@@ -101,6 +101,7 @@ float UClass_DamageableActor::CalculateAndApplyDamage(UPrimitiveComponent* colli
 	damage *= 0.2;
 	actualHealth -= damage;
 	mostRecentDamage = damage;
+
 	return damage;
 }
 

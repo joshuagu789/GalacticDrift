@@ -57,7 +57,7 @@ void UClass_PlayerUI::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 }
 
 void UClass_PlayerUI::RelayMessageToConsole(FString message){
-    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("relaying message to console in playerui"));
+    // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("relaying message to console in playerui"));
 	if(widget){
 		widget->PushLineToOutputConsole(message);
 	}
