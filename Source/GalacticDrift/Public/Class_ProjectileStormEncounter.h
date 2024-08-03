@@ -20,7 +20,7 @@ public:
 		void SpawnProjectile();
 	
 	void EndEvent() override;
-
+	bool BeginEvent() override;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

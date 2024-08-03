@@ -50,7 +50,7 @@ void AClass_ProjectileStormEncounter::Tick(float DeltaTime)
 		timePassed = 0;
 		// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("timePassed = 0"));
 		if(eventActive && duration <= 0){
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("calling end event"));
+			// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("calling end event"));
 			EndEvent();
 		}
 	}
@@ -101,8 +101,18 @@ void AClass_ProjectileStormEncounter::Tick(float DeltaTime)
 	}
 }
 
+bool AClass_ProjectileStormEncounter::BeginEvent(){
+	bool result = AClass_Encounter::BeginEvent();
+	if(result && eventCollider){
+		eventCollider->SetGenerateOverlapEvents(false);
+	}else if(result){
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("no eventCollider in encounter???"));
+	}
+	return result;
+}
+
 void AClass_ProjectileStormEncounter::EndEvent(){
-	Super::EndEvent();
+	AClass_Encounter::EndEvent();
 	// while(!projectileQueue.IsEmpty()){
 	// 	if(projectileQueue.Peek()){
 	// 		AActor* actor = *projectileQueue.Peek();
@@ -158,8 +168,8 @@ void AClass_ProjectileStormEncounter::SpawnProjectile(){
 
     FTransform blankTransform;
 	// float random = detectionRange / 2; 
-    // blankTransform.SetLocation(	GetActorLocation() + random.RotateVector(projectileOriginOffset) );	
-    blankTransform.SetLocation(	GetActorLocation() + projectileOriginOffset );	
+    blankTransform.SetLocation(	GetActorLocation() + random.RotateVector(projectileOriginOffset) );	
+    // blankTransform.SetLocation(	GetActorLocation() + projectileOriginOffset );	
 	blankTransform.SetRotation(rotation.Quaternion());
 
 	float scale = UKismetMathLibrary::RandomFloatInRange(minScale,maxScale);

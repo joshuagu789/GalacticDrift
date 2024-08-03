@@ -66,9 +66,14 @@ bool AClass_Encounter::BeginEvent(){
 	return false;
 }
 void AClass_Encounter::EndEvent(){
-	Super::EndEvent();
+	AClass_Event::EndEvent();
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("end asteroid storm event in encounter class"));
 	// if(!IsPendingKillPending()){
 	// 	K2_DestroyActor();
+	// }
+	// if(eventCollider){
+	// 	eventCollider->SetGenerateOverlapEvents(false);
+	// }else{
+	// 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("no eventCollider in encounter???"));
 	// }
 }
