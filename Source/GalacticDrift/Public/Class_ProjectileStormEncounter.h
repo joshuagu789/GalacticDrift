@@ -30,8 +30,18 @@ protected:
 		*/
 		float spawnInterval = 0.25;
 
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// 	TSubclassOf<AActor> projectilePtr;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TSubclassOf<AActor> projectilePtr;
+		UStaticMeshComponent* projectile;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float projectileHealth = 10;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TSubclassOf<AActor> destroyedProjectilePtr;
+	UPROPERTY()
+		TMap<UStaticMeshComponent*, float> projectiles;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float projectileSpeed = 3000;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -61,8 +71,10 @@ protected:
 
 private:
 	// tracking lifetimes
-	TQueue<AActor*> projectileQueue;
+	TQueue<UStaticMeshComponent*> projectileQueue;
 	TQueue<float> timeQueue;
+	// TQueue<AActor*> projectileQueue;
+	// TQueue<float> timeQueue;
 	// std::queue<float> test;
 
 	int currentIndex = 0;
@@ -72,6 +84,9 @@ private:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION()
+	void EventHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector normalImpulse, const FHitResult& Hit);
 
     void BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
                       AActor* OtherActor, 

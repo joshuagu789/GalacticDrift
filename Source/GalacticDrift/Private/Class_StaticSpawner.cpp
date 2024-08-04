@@ -203,6 +203,7 @@ void AClass_StaticSpawner::EventHit
 					// }
 				}
 				myComp->DestroyComponent(true);
+				meshes.Remove(myComp);
 			}
 		}
 	}
