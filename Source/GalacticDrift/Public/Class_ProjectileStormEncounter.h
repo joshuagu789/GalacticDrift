@@ -46,6 +46,11 @@ protected:
 		float projectileSpeed = 3000;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		/*
+		IN DEGREES
+		*/
+		float projectileRotationSpeed = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		/*
 		Negative lifetime means projectile has no expiration time
 		*/
 		float projectileLifetime = -1;

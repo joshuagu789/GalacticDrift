@@ -50,6 +50,7 @@ void AClass_ProjectileStormEncounter::BeginPlay()
 
 		projectile->OnComponentHit.AddDynamic(this, &AClass_ProjectileStormEncounter::EventHit);
 		projectile->SetRelativeScale3D(FVector{0,0,0});
+		// projectile->SetScale3D(FVector{0,0,0});
 
 		// staticMeshTemplate->OnComponentBeginOverlap.AddDynamic( this, &AClass_StaticSpawner::BeginOverlap );
 
@@ -249,8 +250,8 @@ void AClass_ProjectileStormEncounter::SpawnProjectile(){
 
     FTransform blankTransform;
 	// float random = detectionRange / 2; 
-    // blankTransform.SetLocation(	GetActorLocation() + random.RotateVector(projectileOriginOffset) );	
-    blankTransform.SetLocation(	GetActorLocation() + projectileOriginOffset );	
+    blankTransform.SetLocation(	GetActorLocation() + random.RotateVector(projectileOriginOffset) );	
+    // blankTransform.SetLocation(	GetActorLocation() + projectileOriginOffset );	
 	blankTransform.SetRotation(rotation.Quaternion());
 
 	float scale = UKismetMathLibrary::RandomFloatInRange(minScale,maxScale);
@@ -267,6 +268,12 @@ void AClass_ProjectileStormEncounter::SpawnProjectile(){
 		FVector impulseVector = (projectileDestination - (projectileOriginOffset + GetActorLocation())).GetSafeNormal() * projectileSpeed;
 		temp->SetSimulatePhysics(true);
 		temp->AddImpulse(impulseVector, "", true);
+
+		if(projectileRotationSpeed > 0){
+			FVector randomAngular{UKismetMathLibrary::RandomFloatInRange(-1,1), UKismetMathLibrary::RandomFloatInRange(-1,1), UKismetMathLibrary::RandomFloatInRange(-1,1)};
+			temp->AddAngularImpulseInDegrees(randomAngular.GetSafeNormal() * projectileRotationSpeed, "", true);
+		}
+		
 		// temp->SetHiddenInGame(true,true);
 		projectiles.Add(temp, projectileHealth);
 
@@ -329,8 +336,13 @@ void AClass_ProjectileStormEncounter::EventHit
 
 					temp->GetRootComponent()->SetWorldScale3D(myComp->GetComponentTransform().GetScale3D());
 				}
+				UPrimitiveComponent* tempRoot = Cast<UPrimitiveComponent>(temp->GetRootComponent());
+				if(tempRoot){
+					tempRoot->AddImpulse(myComp->GetComponentVelocity(),"",true);
+				}
 				projectiles.Remove(myComp);
 				myComp->DestroyComponent(true);
+
 			}
 		}
 	}

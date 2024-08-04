@@ -101,6 +101,7 @@ float UClass_DamageableActor::CalculateAndApplyDamage(UPrimitiveComponent* colli
 	damage *= 0.2;
 	actualHealth -= damage;
 	mostRecentDamage = damage;
+    // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("take damage in Class_DamageableActor"));
 
 	return damage;
 }
