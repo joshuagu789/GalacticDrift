@@ -36,7 +36,11 @@ void AClass_Objective::BeginPlay()
 
 	// FAttachmentTransformRules rules{EAttachmentRule::SnapToTarget, false};
 	// rewardCollider->AttachToComponent(GetRootComponent(), rules);
+	if(!visualEffectsPtr){
+		visualEffectsPtr = GetComponentByClass<UClass_VisualEffects>();
+	}
 	RevealToRacers(server->GetContainerForEnum(EntityType::RACER));
+
 }
 
 // Called every frame
@@ -80,6 +84,11 @@ void AClass_Objective::RewardRacer(AClass_Racer_Pawn* racer){
 		}
 		activeWaypoints.Remove(racer);
 		server->BroadcastToPlayerConsoles(FString("HOLY CRAP!!! Racer ") + racer->GetUserName() + FString(" just completed Objective " + FString::FromInt(stageNumber)) + FString("!!!!"));
+		if(visualEffectsPtr){
+			visualEffectsPtr->EnableParticlesFor(6.0);
+    		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("enabling particles of stadium"));
+
+		}
 	}
 	if(!isFinalStage && !hasCalledNextStages){
 		server->LoadObjectivesOfStage(stageNumber + 1);

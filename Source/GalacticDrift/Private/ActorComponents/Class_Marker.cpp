@@ -20,6 +20,7 @@ void UClass_Marker::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+	SetComponentTickEnabled(false);
 	server = Cast<AClass_RacingGameMode>(UGameplayStatics::GetGameMode(GetOwner()));
 	if(server){
 		server->AddMarkerToServer(GetOwner());

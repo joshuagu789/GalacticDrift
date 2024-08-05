@@ -83,7 +83,12 @@ protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<TSubclassOf<AActor>> objectives;
-	
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<TSubclassOf<AActor>> nonObjectiveEvents;
+	UPROPERTY()
+		TMap<int, FVector> objectiveLocations;	//int is stage number
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int totalStagesObjectives = 8;	//includes goal objective
 

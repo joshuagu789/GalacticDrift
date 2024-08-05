@@ -25,6 +25,8 @@ public:
 		void DisableParticlesOf(TArray<UParticleSystemComponent*> &particleComponents);
 	UFUNCTION(BlueprintCallable)
 		void EnableParticlesOf(TArray<UParticleSystemComponent*> &particleComponents);
+	UFUNCTION(BlueprintCallable)
+		void EnableParticlesFor(float duration);
 
 protected:
 	// Called when the game starts
@@ -35,6 +37,8 @@ protected:
 		// TArray<TSubclassOf<UParticleSystemComponent>> thrusters;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UClass_Entity* entityPtr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool disableOnStart = false;
 	float checkTimer;
 	bool thrustersDisabled;
 public:	

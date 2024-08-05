@@ -127,7 +127,8 @@ bool AClass_StaticSpawner::BeginEvent(){
 
 	if(Super::BeginEvent() && !hasSpawned){
 
-		amountLeftToSpawn = UKismetMathLibrary::RandomIntegerInRange(2000,2000);
+		// amountLeftToSpawn = UKismetMathLibrary::RandomIntegerInRange(2000,2000);
+		amountLeftToSpawn = 0;
 		x = 55000;
 		y = 55000;
 		z = 55000;

@@ -243,7 +243,8 @@ void AClass_ProjectileStormEncounter::SpawnProjectile(){
 	// currentIndex++;
 	// currentIndex %= victims.Num();
 	
-	FRotator random = {UKismetMathLibrary::RandomFloatInRange(-90,90), UKismetMathLibrary::RandomFloatInRange(-90,90), UKismetMathLibrary::RandomFloatInRange(-90,90)};
+	// FRotator random = {UKismetMathLibrary::RandomFloatInRange(-90,90), UKismetMathLibrary::RandomFloatInRange(-90,90), UKismetMathLibrary::RandomFloatInRange(-90,90)};
+	FRotator random = {UKismetMathLibrary::RandomFloatInRange(-70,70), UKismetMathLibrary::RandomFloatInRange(-70,70), UKismetMathLibrary::RandomFloatInRange(-70,70)};
 	
 	FRotator rotation{UKismetMathLibrary::RandomFloatInRange(0,360),UKismetMathLibrary::RandomFloatInRange(0,360),UKismetMathLibrary::RandomFloatInRange(0,360)};
 			
@@ -337,8 +338,9 @@ void AClass_ProjectileStormEncounter::EventHit
 					temp->GetRootComponent()->SetWorldScale3D(myComp->GetComponentTransform().GetScale3D());
 				}
 				UPrimitiveComponent* tempRoot = Cast<UPrimitiveComponent>(temp->GetRootComponent());
-				if(tempRoot){
-					tempRoot->AddImpulse(myComp->GetComponentVelocity(),"",true);
+				if(tempRoot && OtherComp){
+					// tempRoot->AddImpulse(myComp->GetComponentVelocity(),"",true);
+					tempRoot->AddImpulse(OtherComp->GetComponentLocation() - myComp->GetComponentLocation(),"",true);
 				}
 				projectiles.Remove(myComp);
 				myComp->DestroyComponent(true);

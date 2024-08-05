@@ -30,7 +30,7 @@ void AClass_Racer_Pawn::BeginPlay()
 void AClass_Racer_Pawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-    if(CanDrift()){
+    if(CanDrift() && entityPtr){
         // moveComponentPtr->AddInputVector(GetActorForwardVector() * speed, isAccelerating);
         if(moveComponentPtr && entityPtr->GetState() == FLYING_WHILE_DRIFTING || entityPtr->GetState() == FLYING){
             moveComponentPtr->AddInputVector(GetActorForwardVector() * 2000, isAccelerating);

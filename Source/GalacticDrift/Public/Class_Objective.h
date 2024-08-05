@@ -7,6 +7,7 @@ Goal for racers to reach that rewards racers on reaching destination, typically 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Class_Rewarder.h"
+#include "ActorComponents/Class_VisualEffects.h"
 #include "Class_Objective.generated.h"
 
 UCLASS()
@@ -32,6 +33,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY()
+		UClass_VisualEffects* visualEffectsPtr;
 
 	int stageNumber;
 	bool isFinalStage = false;

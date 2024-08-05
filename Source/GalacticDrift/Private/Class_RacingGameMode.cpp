@@ -9,7 +9,7 @@ void AClass_RacingGameMode::BeginPlay(){
 	Super::BeginPlay();
 
     SetActorTickInterval(0.5);
-    
+    objectiveLocations.Add(0, FVector{0,0,0});
     // LoadObjectivesOfStage(1);   
 }
 
@@ -170,9 +170,14 @@ void AClass_RacingGameMode::BeginGame(){
 void AClass_RacingGameMode::LoadObjectivesOfStage(int stage){
     // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("spawning objective"));
 
+    if(stage < 1){
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("cannot have stage number less than 1 in class racinggamemode"));
+        return;
+    }
     if(objectives.Num() >= 1){
         FTransform blankTransform;
         blankTransform.SetLocation(FVector{-140000 + 250000 * stage, UKismetMathLibrary::RandomFloatInRange(-100000,100000), UKismetMathLibrary::RandomFloatInRange(-100000,100000)});
+        // blankTransform.SetLocation(FVector{300000 * stage, UKismetMathLibrary::RandomFloatInRange(-100000,100000), UKismetMathLibrary::RandomFloatInRange(-100000,100000)});
         FActorSpawnParameters spawnParams;			
 
         AActor* temp = GetWorld()->SpawnActor<AActor>(objectives[0], blankTransform, spawnParams);
@@ -187,6 +192,40 @@ void AClass_RacingGameMode::LoadObjectivesOfStage(int stage){
             GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("actor spawned is not of type objective in LoadObjectivesOfStage of class racinggamemode"));
             return;
         }
+
+        objectiveLocations.Add(stage, temp->GetActorLocation());
+        if(!objectiveLocations.Contains(stage) || !objectiveLocations.Contains(stage-1)){
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("locations of stage and stage-1 not found in class racinggamemode"));
+            return;
+        }
+        /*
+        SPAWNING NON OBJECTIVE EVENTS ON PATH TO OBJECTIVE
+        */
+        FVector from = objectiveLocations[stage-1];
+        FVector to = objectiveLocations[stage];
+        float distance = (from-to).Size();
+
+        if(nonObjectiveEvents.Num() >= 1){
+            // for(int i = 0; i < 15; i++){
+            for(int i = 0; i < -1; i++){
+                FVector spawnLocation = (to-from).GetSafeNormal();
+                FRotator random = {UKismetMathLibrary::RandomFloatInRange(-60,60), UKismetMathLibrary::RandomFloatInRange(-60,60), UKismetMathLibrary::RandomFloatInRange(-60,60)};
+                spawnLocation = random.RotateVector(spawnLocation) * UKismetMathLibrary::RandomFloatInRange(distance/3,distance*2/3);
+                // spawnLocation *= UKismetMathLibrary::RandomFloatInRange(distance/3,distance*2/3);
+
+                blankTransform.SetLocation(spawnLocation);
+                AActor* tempEvent =  GetWorld()->SpawnActor<AActor>(nonObjectiveEvents[0], blankTransform, spawnParams);
+                if(tempEvent){
+                    tempEvent->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+                    // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("spawn non objective event"));
+
+                }
+                else{
+                    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("non objective event not spawned in class racinggamemode"));
+                }
+            }
+        }
+
         if(stage == totalStagesObjectives){
             temp2->SetStage(stage, true);
         }
@@ -195,6 +234,7 @@ void AClass_RacingGameMode::LoadObjectivesOfStage(int stage){
         }
     }
 }
+
 
 void AClass_RacingGameMode::BroadcastToPlayerConsoles(FString message){
     for(auto& x: racerList){
