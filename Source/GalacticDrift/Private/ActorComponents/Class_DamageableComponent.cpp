@@ -20,7 +20,7 @@ void UClass_DamageableComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+	health = maxHealth;
 }
 
 
@@ -32,5 +32,17 @@ void UClass_DamageableComponent::TickComponent(float DeltaTime, ELevelTick TickT
 	// ...
 }
 
-void UClass_DamageableComponent::TakeDamage(float damage){ GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: there typically shouldn't be instances of UClass_Equipment instead of a child class")); }
-void UClass_DamageableComponent::Repair(float amount){ GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: there typically shouldn't be instances of UClass_Equipment instead of a child class")); }
+void UClass_DamageableComponent::TakeDamage(float damage){ 
+	if(damage <= 0){
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("why damage <= 0 in takedamage of class damageablecomponent"));
+	}
+	health -= damage;
+}
+
+void UClass_DamageableComponent::Repair(float amount){ 
+	health = (health + amount <= maxHealth) ? (health + amount) : (maxHealth);
+}
+
+void UClass_DamageableComponent::FullRepair(){ 
+	health = maxHealth;
+}

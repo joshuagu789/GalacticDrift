@@ -23,7 +23,6 @@ void UClass_VisualEffects::BeginPlay()
 	entityPtr = GetOwner()->GetComponentByClass<UClass_Entity>();
 	if(disableOnStart){
 		DisableParticlesOf(thrusters);
-	    	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("disable thrusters on start in class visual effects"));
 	}
 	SetComponentTickInterval(0.1);
 }
@@ -58,19 +57,16 @@ void UClass_VisualEffects::TickComponent(float DeltaTime, ELevelTick TickType, F
 		if(checkTimer <= 0){
 			thrustersDisabled = true;
 			DisableParticlesOf(thrusters);
-	    	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("disable thrusters with check timer class visual effects"));
 		}
 	}
 }
 
 void UClass_VisualEffects::DisableParticlesOf(TArray<UParticleSystemComponent*> &particleComponents){
-	    	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("disable thrusters in class visual effects 2"));
 	for(auto &particleComponent: particleComponents){
 		particleComponent->EndTrails();
 	}
 }
 void UClass_VisualEffects::EnableParticlesOf(TArray<UParticleSystemComponent*> &particleComponents){
-	    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("enable thrusters in class visual effects"));
 	for(auto &particleComponent: particleComponents){
 		particleComponent->BeginTrails("","",ETrailWidthMode_FromCentre,1.0);
 	}	

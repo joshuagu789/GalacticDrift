@@ -39,7 +39,7 @@ void AClass_Objective::BeginPlay()
 	if(!visualEffectsPtr){
 		visualEffectsPtr = GetComponentByClass<UClass_VisualEffects>();
 	}
-	RevealToRacers(server->GetContainerForEnum(EntityType::RACER));
+	// RevealToRacers(server->GetContainerForEnum(EntityType::RACER));
 
 }
 

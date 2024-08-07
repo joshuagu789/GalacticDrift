@@ -40,6 +40,13 @@ void AClass_Rewarder::BeginPlay()
 	rewardCollider->OnComponentBeginOverlap.AddDynamic( this, &AClass_Rewarder::RewardBeginOverlap );
 	readyToReward = true;
 
+	if(server){
+		RevealToRacers(server->GetContainerForEnum(EntityType::RACER));
+    	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("reveal on begin play"));
+	}
+	else{
+    	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("server is nullptr when trying to revealtoracers in beginplay class rewarder???"));
+	}
 }
 
 // Called every frame

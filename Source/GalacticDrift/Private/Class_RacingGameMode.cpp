@@ -207,7 +207,7 @@ void AClass_RacingGameMode::LoadObjectivesOfStage(int stage){
 
         if(nonObjectiveEvents.Num() >= 1){
             // for(int i = 0; i < 15; i++){
-            for(int i = 0; i < -1; i++){
+            for(int i = 0; i < 10; i++){
                 FVector spawnLocation = (to-from).GetSafeNormal();
                 FRotator random = {UKismetMathLibrary::RandomFloatInRange(-60,60), UKismetMathLibrary::RandomFloatInRange(-60,60), UKismetMathLibrary::RandomFloatInRange(-60,60)};
                 spawnLocation = random.RotateVector(spawnLocation) * UKismetMathLibrary::RandomFloatInRange(distance/3,distance*2/3);

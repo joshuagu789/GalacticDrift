@@ -32,5 +32,3 @@ void UClass_Equipment::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// ...
 }
 
-void UClass_Equipment::TakeDamage(float damage){ GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: there typically shouldn't be instances of UClass_Equipment instead of a child class")); }
-void UClass_Equipment::Repair(float amount) {GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: there typically shouldn't be instances of UClass_Equipment instead of a child class")); }

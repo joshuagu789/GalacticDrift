@@ -54,8 +54,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float detectionRange;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool startEventOnBeginPlay = false;
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// 	bool startEventOnBeginPlay = false;
 
 	bool eventActive = false;
 	bool isRevealed = false;
