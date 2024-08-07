@@ -125,7 +125,7 @@ void AClass_Event::RevealToRacers(const TSet<AActor*>& racers){	// should get ra
 			if(temp){
 				temp->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 				temp->AttachToActor(this, FAttachmentTransformRules{EAttachmentRule::SnapToTarget, false});
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("create waypoint for event"));
+				// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("create waypoint for event"));
 
 				AClass_Waypoint_Actor* currentWaypointActor = Cast<AClass_Waypoint_Actor>(temp);
 				if(!currentWaypointActor && !temp->IsPendingKillPending()){

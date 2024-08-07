@@ -42,7 +42,7 @@ void AClass_Rewarder::BeginPlay()
 
 	if(server){
 		RevealToRacers(server->GetContainerForEnum(EntityType::RACER));
-    	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("reveal on begin play"));
+    	// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("reveal on begin play"));
 	}
 	else{
     	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("server is nullptr when trying to revealtoracers in beginplay class rewarder???"));
@@ -65,7 +65,7 @@ void AClass_Rewarder::RewardBeginOverlap(UPrimitiveComponent* OverlappedComponen
 
 	AClass_Racer_Pawn* racer = Cast<AClass_Racer_Pawn>(OtherActor);
 
-	if(racer && readyToReward){
+	if(racer && readyToReward && !rewarded.Contains(racer)){
     	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("sreward collider hit???"));
 		RewardRacer(racer);
 	}
@@ -82,4 +82,6 @@ void AClass_Rewarder::RewardBeginOverlap(UPrimitiveComponent* OverlappedComponen
 // 	return Super::RevealToRacers();
 // }
 
-void AClass_Rewarder::RewardRacer(AClass_Racer_Pawn* racer){}
+void AClass_Rewarder::RewardRacer(AClass_Racer_Pawn* racer){
+	rewarded.Add(racer);
+}

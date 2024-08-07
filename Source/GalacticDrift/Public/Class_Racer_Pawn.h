@@ -15,7 +15,8 @@
 #include "Class_Racer_Pawn.generated.h"
 
 UCLASS()
-class GALACTICDRIFT_API AClass_Racer_Pawn : public AClass_Combatant, public IRagdollable, public IClass_ActorInformationTracker
+// class GALACTICDRIFT_API AClass_Racer_Pawn : public AClass_Combatant, public IRagdollable, public IClass_ActorInformationTracker
+class GALACTICDRIFT_API AClass_Racer_Pawn : public AClass_Combatant, public IClass_ActorInformationTracker
 {
 	GENERATED_BODY()
 
@@ -25,6 +26,11 @@ public:
 
     UFUNCTION(BlueprintCallable, Category="Movement")
         void StartFlying(float initialSpeed, bool accelerate, float floppiness);
+
+    UFUNCTION()
+        void LandOn(AActor* actor, const FVector& worldLandLocation);
+    UFUNCTION(BlueprintCallable)
+        void TakeOff();
 
     UFUNCTION(BlueprintCallable, Category="Movement")
         bool CanDrift();
@@ -48,8 +54,8 @@ public:
         void StunFor(float duration);
     
     // From interfaces
-    void RagdollFor(float duration);
-    void UnRagdoll();
+    // void RagdollFor(float duration);
+    // void UnRagdoll();
     FString GetSpeedIntAsString();
     FString GetRootComponentSpeedIntAsString();
     float GetSpeedFloat(int decimalPlaces);
@@ -73,10 +79,17 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
         USkeletalMeshComponent* skeletalMeshPtr;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+        bool isLanded = false;
+
     float popularity = 0;
     bool isAccelerating = false;
     FRotator rotation = {0,0,0};
-    
+
+private:
+    float landTime = 0;
+    float takeOffTime = 0;
+    FVector landLocation;
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

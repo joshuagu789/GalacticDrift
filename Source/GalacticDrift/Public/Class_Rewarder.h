@@ -36,6 +36,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int numberOfRewards;
 
+	UPROPERTY()
+		TSet<AClass_Racer_Pawn*> rewarded;
 	bool readyToReward = false;
 public:	
 	// Called every frame

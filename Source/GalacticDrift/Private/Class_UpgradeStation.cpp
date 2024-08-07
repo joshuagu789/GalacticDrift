@@ -45,6 +45,7 @@ void AClass_UpgradeStation::RewardRacer(AClass_Racer_Pawn* racer){
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Equipment fully repaired in class upgrade station"));
 
 		}
+		racer->LandOn(this, GetActorLocation()+FVector{0,0,370});
 	}
 }
 

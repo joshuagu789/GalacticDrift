@@ -32,11 +32,8 @@ void AClass_Racer_Pawn::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
     if(CanDrift() && entityPtr){
         // moveComponentPtr->AddInputVector(GetActorForwardVector() * speed, isAccelerating);
-        if(moveComponentPtr && entityPtr->GetState() == FLYING_WHILE_DRIFTING || entityPtr->GetState() == FLYING){
+        if(moveComponentPtr && (entityPtr->GetState() == FLYING_WHILE_DRIFTING || entityPtr->GetState() == FLYING ) ){
             moveComponentPtr->AddInputVector(GetActorForwardVector() * 2000, isAccelerating);
-        }
-        else if(moveComponentPtr){
-            moveComponentPtr->ConsumeInputVector();
         }
         if(entityPtr->GetState() != FLYING_WHILE_DRIFTING){
 //            if(rotation.Roll > 2 || rotation.Roll < 2 && rotation.Pitch > 2 || rotation.Pitch < 2){
@@ -49,6 +46,37 @@ void AClass_Racer_Pawn::Tick(float DeltaTime)
             }
         }
     }
+    else if(moveComponentPtr){
+        // moveComponentPtr->ConsumeInputVector();
+        // moveComponentPtr->AddInputVector(GetActorLocation(), false);
+        moveComponentPtr->StopMovementImmediately();
+        // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I SHOULD VE LANDING AND NOT MOVING"));
+    }
+
+    if(landTime > 0){
+        FRotator targetRotation = GetActorRotation();
+        targetRotation.Roll = 0;
+        targetRotation.Pitch = 0;
+
+        SetActorRotation(GetActorRotation() + (targetRotation-GetActorRotation()) * 2 * DeltaTime);
+        SetActorLocation(GetActorLocation() + ((landLocation - GetActorLocation()) * 2 * DeltaTime));
+        landTime -= DeltaTime;
+    }
+    if(takeOffTime > 0){
+        takeOffTime -= DeltaTime;
+        if(takeOffTime <= 3){
+            entityPtr->SetState(FLYING);
+        }
+        if(takeOffTime <= 0){
+
+            UPrimitiveComponent* mesh = Cast<UPrimitiveComponent>(GetRootComponent());
+
+            if(mesh){
+                mesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+                mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+            }
+        }
+    }
 }
 
 // Called to bind functionality to input
@@ -56,6 +84,35 @@ void AClass_Racer_Pawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AClass_Racer_Pawn::LandOn(AActor* actor, const FVector& worldLandLocation){
+    if(entityPtr && actor && !isLanded && takeOffTime <= 0){
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I SHOULD BE TAKING OFF"));
+
+        UPrimitiveComponent* mesh = Cast<UPrimitiveComponent>(GetRootComponent());
+
+        if(mesh){
+    		mesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+            mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+        }
+
+        // AttachToActor();
+        landLocation = worldLandLocation;
+        entityPtr->SetState(LANDED);
+
+        AttachToActor(actor, FAttachmentTransformRules{ EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld,  false});
+        isLanded = true;
+        landTime = 3;
+    }
+}
+void AClass_Racer_Pawn::TakeOff(){
+    if(landTime <= 0 && isLanded){
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I SHOULD BE TAKING OFF"));
+        DetachFromActor(FDetachmentTransformRules{FAttachmentTransformRules{ EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepRelative,  false}, false});
+        isLanded = false;
+        takeOffTime = 9;
+    }
 }
 
 /*
@@ -175,35 +232,35 @@ void AClass_Racer_Pawn::StunFor(float duration)
     
 }
 
-void AClass_Racer_Pawn::RagdollFor(float duration){
-    // state = RAGDOLLED;
-    entityPtr->SetState(RAGDOLLED);
+// void AClass_Racer_Pawn::RagdollFor(float duration){
+//     // state = RAGDOLLED;
+//     entityPtr->SetState(RAGDOLLED);
 
-    if(skeletalMeshPtr){
-        skeletalMeshPtr->SetPhysicsBlendWeight(1.0f);
-        skeletalMeshPtr->SetAllBodiesSimulatePhysics(true);
-    }
-    else{ GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Pointer for USkeletalMeshComponent for Class_Racer_Pawn is null, method cancelled"));}
-}
+//     if(skeletalMeshPtr){
+//         skeletalMeshPtr->SetPhysicsBlendWeight(1.0f);
+//         skeletalMeshPtr->SetAllBodiesSimulatePhysics(true);
+//     }
+//     else{ GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Pointer for USkeletalMeshComponent for Class_Racer_Pawn is null, method cancelled"));}
+// }
 
-void AClass_Racer_Pawn::UnRagdoll(){
-    if(skeletalMeshPtr){
-//        AActor::K2_SetActorLocationAndRotation(skeletalMeshPtr->GetComponentLocation())
-        FHitResult dummy;
-//        AActor::K2_SetActorLocation(skeletalMeshPtr->GetComponentLocation(), false, dummy, true);
-        AActor::K2_SetActorLocation(skeletalMeshPtr->GetSkeletalCenterOfMass(), true, dummy, true);
-        // skeletalMeshPtr->K2_SetRelativeLocation(FVector{0,0,0}, true, dummy, true);
+// void AClass_Racer_Pawn::UnRagdoll(){
+//     if(skeletalMeshPtr){
+// //        AActor::K2_SetActorLocationAndRotation(skeletalMeshPtr->GetComponentLocation())
+//         FHitResult dummy;
+// //        AActor::K2_SetActorLocation(skeletalMeshPtr->GetComponentLocation(), false, dummy, true);
+//         AActor::K2_SetActorLocation(skeletalMeshPtr->GetSkeletalCenterOfMass(), true, dummy, true);
+//         // skeletalMeshPtr->K2_SetRelativeLocation(FVector{0,0,0}, true, dummy, true);
         
-        // state = FLYING;
-        entityPtr->SetState(FLYING);
+//         // state = FLYING;
+//         entityPtr->SetState(FLYING);
 
-        DriftUp(1.0);
-        skeletalMeshPtr->ResetAllBodiesSimulatePhysics();
-        skeletalMeshPtr->SetPhysicsBlendWeight(0.1f);
-        DriftUp(1.0);   // to fix glitch of torso and chest being separated
-    }
-    else{ GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Pointer for USkeletalMeshComponent for Class_Racer_Pawn is null, method cancelled")); }
-}
+//         DriftUp(1.0);
+//         skeletalMeshPtr->ResetAllBodiesSimulatePhysics();
+//         skeletalMeshPtr->SetPhysicsBlendWeight(0.1f);
+//         DriftUp(1.0);   // to fix glitch of torso and chest being separated
+//     }
+//     else{ GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: Pointer for USkeletalMeshComponent for Class_Racer_Pawn is null, method cancelled")); }
+// }
 
 FString AClass_Racer_Pawn::GetSpeedIntAsString(){
     int speedInt = static_cast<int>(round( UKismetMathLibrary::VSize(GetVelocity()) ));

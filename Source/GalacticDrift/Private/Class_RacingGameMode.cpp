@@ -214,6 +214,9 @@ void AClass_RacingGameMode::LoadObjectivesOfStage(int stage){
                 // spawnLocation *= UKismetMathLibrary::RandomFloatInRange(distance/3,distance*2/3);
 
                 blankTransform.SetLocation(spawnLocation);
+                FRotator spawnRotation{0,UKismetMathLibrary::RandomFloatInRange(0,360),0};
+                blankTransform.SetRotation(spawnRotation.Quaternion());
+
                 AActor* tempEvent =  GetWorld()->SpawnActor<AActor>(nonObjectiveEvents[0], blankTransform, spawnParams);
                 if(tempEvent){
                     tempEvent->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
