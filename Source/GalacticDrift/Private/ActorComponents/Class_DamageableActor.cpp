@@ -82,7 +82,7 @@ float UClass_DamageableActor::CalculateAndApplyDamage(UPrimitiveComponent* colli
 	
 	if(collisionSource){
 		UClass_Entity* collisionEntity = collisionSource->GetOwner()->FindComponentByClass<UClass_Entity>();
-		if(collisionEntity && entityPtr && entityPtr->IsFriendlyWith(collisionEntity->GetType())){
+		if(collisionEntity && entityPtr && entityPtr->GetType() != RACER && entityPtr->IsFriendlyWith(collisionEntity->GetType())){
 			return 0;
 		}
 	}

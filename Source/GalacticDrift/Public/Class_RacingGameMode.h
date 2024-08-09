@@ -9,7 +9,7 @@
 // #include "Containers/Array.h"
 #include "Kismet/KismetMathLibrary.h"
 // #include "Kismet/KismetTextLibrary.h"
-// #include "Class_Objective.h"
+
 #include "Class_RacingGameMode.generated.h"
 
 /**
@@ -51,6 +51,9 @@ public:
 		TSet<AActor*>& GetMarkers();
 
 	UFUNCTION(BlueprintCallable)
+		TSet<AActor*>& GetObjectives();
+
+	UFUNCTION(BlueprintCallable)
 		/*
 			WARNING: THIS CAN RETURN NULL POINTER
 		*/
@@ -80,6 +83,8 @@ protected:
 		TSet<AActor*> markerList;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSet<AActor*> emptyList;	// WARNING: SHOULD BE EMPTY
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TSet<AActor*> objectiveList;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<TSubclassOf<AActor>> objectives;

@@ -3,7 +3,7 @@
 
 #include "Class_Racer_Pawn.h"
 #include "Kismet/KismetMathLibrary.h"
-
+#include "ActorComponents/Class_DamageableActor.h"
 using namespace std;
 
 /*
@@ -13,29 +13,45 @@ AClass_Racer_Pawn::AClass_Racer_Pawn()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-//    moveComponentPtr = FindComponentByClass<UFloatingPawnMovement>();
-//    moveComponentPtr = GetMovementComponent();
-//    skeletalMeshPtr = FindComponentByClass<USkeletalMeshComponent>();
+
 }
 
 // Called when the game starts or when spawned
 void AClass_Racer_Pawn::BeginPlay()
 {
 	Super::BeginPlay();
-//    moveComponentPtr = GetMovementComponent();
-//    skeletalMeshPtr = FindComponentByClass<USkeletalMeshComponent>();
+
+    if(!moveComponentPtr){
+        moveComponentPtr = GetComponentByClass<UFloatingPawnMovement>();
+        if(!moveComponentPtr){
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: moveComponentPtr is nullptr for Class_Racer_Pawn"));
+        }
+    }
+    if(!skeletalMeshPtr){
+        skeletalMeshPtr = GetComponentByClass<USkeletalMeshComponent>();
+        if(!skeletalMeshPtr){
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: skeletalMeshPtr is nullptr for Class_Racer_Pawn"));
+        }
+    }
+    if(!entityPtr){
+        entityPtr = GetComponentByClass<UClass_Entity>();
+        if(!entityPtr){
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: entityPtr is nullptr for Class_Racer_Pawn"));
+        }
+    }
+    StartFlying(0.7, true, 0.1);
 }
 
 // Called every frame
 void AClass_Racer_Pawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-    if(CanDrift() && entityPtr){
+    if(entityPtr){
         // moveComponentPtr->AddInputVector(GetActorForwardVector() * speed, isAccelerating);
-        if(moveComponentPtr && (entityPtr->GetState() == FLYING_WHILE_DRIFTING || entityPtr->GetState() == FLYING ) ){
+        if(moveComponentPtr && (entityPtr->GetState() == FLYING_WHILE_DRIFTING || entityPtr->GetState() == FLYING || entityPtr->GetState() == RAMMING ) ){
             moveComponentPtr->AddInputVector(GetActorForwardVector() * 2000, isAccelerating);
         }
-        if(entityPtr->GetState() != FLYING_WHILE_DRIFTING){
+        if(CanDrift() && entityPtr->GetState() != FLYING_WHILE_DRIFTING){
 //            if(rotation.Roll > 2 || rotation.Roll < 2 && rotation.Pitch > 2 || rotation.Pitch < 2){
             if(rotation.Roll > 2 || rotation.Roll < 2){
                 rotation.Roll += -3 * rotation.Roll * DeltaTime;
@@ -64,18 +80,27 @@ void AClass_Racer_Pawn::Tick(float DeltaTime)
     }
     if(takeOffTime > 0){
         takeOffTime -= DeltaTime;
-        if(takeOffTime <= 3){
-            entityPtr->SetState(FLYING);
-        }
-        if(takeOffTime <= 0){
 
+        if(takeOffTime <= 0){
+            entityPtr->SetState(FLYING);
+
+            UClass_DamageableActor* damager = GetComponentByClass<UClass_DamageableActor>();
             UPrimitiveComponent* mesh = Cast<UPrimitiveComponent>(GetRootComponent());
 
+            if(damager){
+                damager->SetImmunityTime(5);
+            }
             if(mesh){
-                mesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
                 mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+                mesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
             }
         }
+        // if(takeOffTime <= 0){
+        //     if(mesh){
+        //         // mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+        //         // mesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+        //     }
+        // }
     }
 }
 
@@ -88,7 +113,7 @@ void AClass_Racer_Pawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void AClass_Racer_Pawn::LandOn(AActor* actor, const FVector& worldLandLocation){
     if(entityPtr && actor && !isLanded && takeOffTime <= 0){
-        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I SHOULD BE TAKING OFF"));
+        // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I SHOULD BE TAKING OFF"));
 
         UPrimitiveComponent* mesh = Cast<UPrimitiveComponent>(GetRootComponent());
 
@@ -108,10 +133,10 @@ void AClass_Racer_Pawn::LandOn(AActor* actor, const FVector& worldLandLocation){
 }
 void AClass_Racer_Pawn::TakeOff(){
     if(landTime <= 0 && isLanded){
-        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I SHOULD BE TAKING OFF"));
+        // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I SHOULD BE TAKING OFF"));
         DetachFromActor(FDetachmentTransformRules{FAttachmentTransformRules{ EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepRelative,  false}, false});
         isLanded = false;
-        takeOffTime = 9;
+        takeOffTime = 4;
     }
 }
 

@@ -87,3 +87,4 @@ TEnumAsByte<EntityType> UClass_Entity::GetType(){ return type; };
 
 void UClass_Entity::SetState(TEnumAsByte<EntityState> newState){ state = newState; }
 
+AClass_RacingGameMode* UClass_Entity::GetServer(){ return server; }

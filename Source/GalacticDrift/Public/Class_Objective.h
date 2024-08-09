@@ -29,7 +29,8 @@ public:
 
 	UFUNCTION()
 		void SetStage(int stage, bool isFinal);
-
+	UFUNCTION()
+		int GetStageNumber();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -37,7 +38,7 @@ protected:
 	UPROPERTY()
 		UClass_VisualEffects* visualEffectsPtr;
 
-	int stageNumber;
+	int stageNumber = 0;
 	bool isFinalStage = false;
 	bool hasCalledNextStages = false;
 public:	

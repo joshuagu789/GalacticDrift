@@ -76,6 +76,8 @@ void AClass_Objective::SetStage(int stage, bool isFinal){
 	isFinalStage = isFinal;
 }
 
+int AClass_Objective::GetStageNumber(){ return stageNumber; } 
+
 void AClass_Objective::RewardRacer(AClass_Racer_Pawn* racer){
 	Super::RewardRacer(racer);
 	if(activeWaypoints.Contains(racer)){
@@ -83,11 +85,11 @@ void AClass_Objective::RewardRacer(AClass_Racer_Pawn* racer){
 			activeWaypoints[racer]->K2_DestroyActor();
 		}
 		activeWaypoints.Remove(racer);
+		racer->LandOn(this, GetActorLocation()+FVector{0,0,370});
 		server->BroadcastToPlayerConsoles(FString("HOLY CRAP!!! Racer ") + racer->GetUserName() + FString(" just completed Objective " + FString::FromInt(stageNumber)) + FString("!!!!"));
 		if(visualEffectsPtr){
 			visualEffectsPtr->EnableParticlesFor(6.0);
-    		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("enabling particles of stadium"));
-
+    		// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("enabling particles of stadium"));
 		}
 	}
 	if(!isFinalStage && !hasCalledNextStages){
@@ -98,3 +100,4 @@ void AClass_Objective::RewardRacer(AClass_Racer_Pawn* racer){
 		// }
 	}
 }
+

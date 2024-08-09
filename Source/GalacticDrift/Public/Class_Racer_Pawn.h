@@ -71,6 +71,7 @@ protected:
         float speed = 0;
     UPROPERTY(BlueprintReadWrite)
         UClass_Entity* entityPtr;
+    int lastCompletedObjective = 0;
 
     // TEnumAsByte<EntityState> state = DEFAULT;
     

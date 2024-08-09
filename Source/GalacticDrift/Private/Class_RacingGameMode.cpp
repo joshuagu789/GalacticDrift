@@ -98,6 +98,9 @@ TSet<AActor*>& AClass_RacingGameMode::GetContainerForEnum(const TEnumAsByte<Enti
 
 TSet<AActor*>& AClass_RacingGameMode::GetMarkers(){ return markerList; }
 
+TSet<AActor*>& AClass_RacingGameMode::GetObjectives(){ return objectiveList; }
+
+
 AActor* AClass_RacingGameMode::GetClosestEntityTo(const TArray<TEnumAsByte<EntityType>> &entityTypes, const AActor* actor){
 
     AActor* currentClosest = nullptr;
@@ -193,6 +196,7 @@ void AClass_RacingGameMode::LoadObjectivesOfStage(int stage){
             return;
         }
 
+        objectiveList.Add(temp);
         objectiveLocations.Add(stage, temp->GetActorLocation());
         if(!objectiveLocations.Contains(stage) || !objectiveLocations.Contains(stage-1)){
             GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("locations of stage and stage-1 not found in class racinggamemode"));
@@ -210,7 +214,7 @@ void AClass_RacingGameMode::LoadObjectivesOfStage(int stage){
             for(int i = 0; i < 10; i++){
                 FVector spawnLocation = (to-from).GetSafeNormal();
                 FRotator random = {UKismetMathLibrary::RandomFloatInRange(-60,60), UKismetMathLibrary::RandomFloatInRange(-60,60), UKismetMathLibrary::RandomFloatInRange(-60,60)};
-                spawnLocation = random.RotateVector(spawnLocation) * UKismetMathLibrary::RandomFloatInRange(distance/3,distance*2/3);
+                spawnLocation = from + random.RotateVector(spawnLocation) * UKismetMathLibrary::RandomFloatInRange(distance/3,distance*2/3);
                 // spawnLocation *= UKismetMathLibrary::RandomFloatInRange(distance/3,distance*2/3);
 
                 blankTransform.SetLocation(spawnLocation);

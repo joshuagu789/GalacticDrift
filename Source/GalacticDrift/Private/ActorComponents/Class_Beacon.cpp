@@ -30,9 +30,21 @@ void UClass_Beacon::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+	if(fanTimer > 0){
+		fanTimer -= DeltaTime;
+	}
+	if(policeTimer > 0){
+		policeTimer -= DeltaTime;
+	}
+	if(attackerTimer > 0){
+		attackerTimer -= DeltaTime;
+	}
 }
 
 void UClass_Beacon::SpawnFan(){
+	if(!CanSpawnFan()){
+		return;
+	}
     FTransform blankTransform;
 	FVector spawnLocationOffset{UKismetMathLibrary::RandomFloatInRange(5000,10000 + 50000 - 50000 * accuracy),0,0};
 	FRotator offsetRotation{UKismetMathLibrary::RandomFloatInRange(-30,30),UKismetMathLibrary::RandomFloatInRange(-30,30), UKismetMathLibrary::RandomFloatInRange(0,360)};
@@ -60,9 +72,12 @@ void UClass_Beacon::SpawnFan(){
 
 	fanClass->SetRacer(Cast<AClass_Racer_Pawn>(GetOwner()));
 	fanClass->SpawnDefaultController();
+	fanTimer = fanCooldown;
 }
 void UClass_Beacon::SpawnPolice(){
-
+	if(!CanSpawnPolice()){
+		return;
+	}
     FTransform blankTransform;
 	FVector spawnLocationOffset{UKismetMathLibrary::RandomFloatInRange(5000,10000 + 50000 - 50000 * accuracy),0,0};
 	FRotator offsetRotation{UKismetMathLibrary::RandomFloatInRange(-30,30),UKismetMathLibrary::RandomFloatInRange(-30,30), UKismetMathLibrary::RandomFloatInRange(0,360)};
@@ -101,8 +116,13 @@ void UClass_Beacon::SpawnPolice(){
 		swivel->BeginFacing(GetOwner());
 	}
 
+	policeTimer = policeCooldown;
 }
 void UClass_Beacon::SpawnAttacker(AActor* target){
+	if(!CanSpawnAttacker()){
+		return;
+	}
+
     FTransform blankTransform;
 	FVector spawnLocationOffset{UKismetMathLibrary::RandomFloatInRange(5000,10000 + 50000 - 50000 * accuracy),0,0};
 	FRotator offsetRotation{UKismetMathLibrary::RandomFloatInRange(-30,30),UKismetMathLibrary::RandomFloatInRange(-30,30), UKismetMathLibrary::RandomFloatInRange(0,360)};
@@ -132,6 +152,7 @@ void UClass_Beacon::SpawnAttacker(AActor* target){
 	// fanClass->SetRacer(Cast<AClass_Racer_Pawn>(GetOwner()));
 
 	combatantClass->SpawnDefaultController();
+	attackerTimer = attackerCooldown;
 }
 
 bool UClass_Beacon::CanSpawnFan(){ return fanTimer <= 0; }

@@ -35,9 +35,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 		TEnumAsByte<EntityState> GetState();
 	UFUNCTION(BlueprintCallable)
-		TEnumAsByte<EntityType> GetType();
+		void SetState(TEnumAsByte<EntityState> newState);
 	UFUNCTION(BlueprintCallable)
-		void SetState(TEnumAsByte<EntityState> newState);		
+		TEnumAsByte<EntityType> GetType();
+
+	UFUNCTION(BlueprintCallable)
+		AClass_RacingGameMode* GetServer();
+		
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
