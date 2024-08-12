@@ -164,9 +164,9 @@ AActor* AClass_RacingGameMode::GetClosestEntityToFOV(const TArray<TEnumAsByte<En
                 if (actor && entity && entity != actor){
 
                 	//FRotator rotationToTarget = UKismetMathLibrary::FindLookAtRotation(actor->GetActorLocation(), entity->GetActorLocation()) - actor->GetActorRotation();
-                    FVector from = actor->GetActorLocation().GetSafeNormal();
-                    FVector to = entity->GetActorLocation().GetSafeNormal();
-                    float angleToTarget = FMath::RadiansToDegrees(acosf(FVector::DotProduct(from,to)));
+                    FVector vectorToTarget = (entity->GetActorLocation() - actor->GetActorLocation()).GetSafeNormal();
+                    // FVector to = 
+                    float angleToTarget = FMath::RadiansToDegrees(acosf(FVector::DotProduct(vectorToTarget,actorDirection)));
 
                     UE_LOG(LogTemp, Warning, TEXT("The angle value is: %f"), angleToTarget);
 

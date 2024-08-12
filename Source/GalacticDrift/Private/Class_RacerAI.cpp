@@ -211,7 +211,7 @@ void AClass_RacerAI::ToggleAggression(){
 		return;
 	}
 
-	AActor* closestRacerToFOV = server->GetClosestEntityToFOV(TArray<TEnumAsByte<EntityType>>{RACER}, this, GetActorForwardVector(), 30, 30000);
+	AActor* closestRacerToFOV = server->GetClosestEntityToFOV(TArray<TEnumAsByte<EntityType>>{RACER}, this, GetActorForwardVector(), 20, 30000);
 	if(closestRacerToFOV){
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("RUNNNN RUNNN U R IN MY WAYY!!!")); 
 		destination = closestRacerToFOV;
