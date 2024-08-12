@@ -7,6 +7,7 @@
 #include "Class_Combatant.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "ActorComponents/Class_Entity.h"
+#include "ActorComponents/Class_Beacon.h"
 #include "Ragdollable.h"
 #include "Header_Enumerations.h"
 #include "Class_ActorInformationTracker.h"
@@ -31,7 +32,8 @@ public:
         void LandOn(AActor* actor, const FVector& worldLandLocation);
     UFUNCTION(BlueprintCallable)
         void TakeOff();
-
+    UFUNCTION()
+        bool GetIsLanded();
     UFUNCTION(BlueprintCallable, Category="Movement")
         bool CanDrift();
     UFUNCTION(BlueprintCallable, Category="Movement")
@@ -53,6 +55,8 @@ public:
     UFUNCTION(BlueprintCallable, Category="Action")
         void StunFor(float duration);
     
+    UFUNCTION()
+        void CompleteObjective(int stage, float points);
     // From interfaces
     // void RagdollFor(float duration);
     // void UnRagdoll();
@@ -79,6 +83,8 @@ protected:
         UFloatingPawnMovement* moveComponentPtr;    // floating pawn movement
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
         USkeletalMeshComponent* skeletalMeshPtr;
+    UPROPERTY()
+        UClass_Beacon* beaconPtr;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
         bool isLanded = false;

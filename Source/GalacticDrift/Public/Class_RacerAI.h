@@ -22,10 +22,18 @@ protected:
 
 	UPROPERTY()
 		AActor* destination;
-
+	// UPROPERTY()
+	// 	AActor* enemy;
 private:
-	void DriftTowards(FVector location);
+	void DriftTowardsDestination();
 	bool AcquireDestination();
+	void ToggleAggression();
+
+
+	float decisionTimer = 4;
+	//float aggressionTimer = 0;	// 0 means not aggressive, positive means time left of aggression
+	bool isAggressive;
+	float timeAggressive = 0;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

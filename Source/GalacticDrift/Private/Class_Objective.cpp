@@ -80,24 +80,32 @@ int AClass_Objective::GetStageNumber(){ return stageNumber; }
 
 void AClass_Objective::RewardRacer(AClass_Racer_Pawn* racer){
 	Super::RewardRacer(racer);
-	if(activeWaypoints.Contains(racer)){
-		if(!activeWaypoints[racer]->IsPendingKillPending()){
-			activeWaypoints[racer]->K2_DestroyActor();
+
+	if(racer){
+
+		if(activeWaypoints.Contains(racer)){
+			if(!activeWaypoints[racer]->IsPendingKillPending()){
+				activeWaypoints[racer]->K2_DestroyActor();
+			}
+			activeWaypoints.Remove(racer);
 		}
-		activeWaypoints.Remove(racer);
-		racer->LandOn(this, GetActorLocation()+FVector{0,0,370});
+
+		racer->LandOn(this, GetActorLocation()+FVector{UKismetMathLibrary::RandomFloatInRange(-400,400),UKismetMathLibrary::RandomFloatInRange(-400,400),340});
 		server->BroadcastToPlayerConsoles(FString("HOLY CRAP!!! Racer ") + racer->GetUserName() + FString(" just completed Objective " + FString::FromInt(stageNumber)) + FString("!!!!"));
+		racer->CompleteObjective(stageNumber, 1000);
 		if(visualEffectsPtr){
 			visualEffectsPtr->EnableParticlesFor(6.0);
-    		// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("enabling particles of stadium"));
+			// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("enabling particles of stadium"));
 		}
-	}
-	if(!isFinalStage && !hasCalledNextStages){
-		server->LoadObjectivesOfStage(stageNumber + 1);
-		hasCalledNextStages = true;
-		// if(currentWaypointActor){
-		// 	currentWaypointActor->K2_DestroyActor();
-		// }
+
+		if(!isFinalStage && !hasCalledNextStages){
+			server->LoadObjectivesOfStage(stageNumber + 1);
+			hasCalledNextStages = true;
+			// if(currentWaypointActor){
+			// 	currentWaypointActor->K2_DestroyActor();
+			// }
+		}
+
 	}
 }
 

@@ -28,7 +28,9 @@ void AClass_UpgradeStation::Tick(float DeltaTime)
 }
 
 void AClass_UpgradeStation::RewardRacer(AClass_Racer_Pawn* racer){
+
 	AClass_Rewarder::RewardRacer(racer);
+
 	if(racer){
 		TInlineComponentArray<UClass_Equipment*, 10> components;	// reserve 10 for now
 		racer->GetComponents<UClass_Equipment>(components, true);
@@ -46,6 +48,8 @@ void AClass_UpgradeStation::RewardRacer(AClass_Racer_Pawn* racer){
 
 		}
 		racer->LandOn(this, GetActorLocation()+FVector{0,0,370});
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("commanding racer to land"));
+
 	}
 }
 

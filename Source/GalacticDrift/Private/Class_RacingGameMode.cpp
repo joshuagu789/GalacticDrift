@@ -135,7 +135,7 @@ AActor* AClass_RacingGameMode::GetClosestEntityTo(const TArray<TEnumAsByte<Entit
 AActor* AClass_RacingGameMode::GetClosestEntityToFOV(const TArray<TEnumAsByte<EntityType>> &entityTypes, const AActor* actor, const FVector& actorDirection, float angle, float range){
 
     AActor* currentClosest = nullptr;
-    float currentClosestDistanceSquared;
+    float currentClosestDistanceSquared = 1000000000;
 
     if(!actor){
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: passd in actor pointer is nullptr for GetClosestEntityTo in racing game mode, returning nullptr"));  
@@ -148,14 +148,33 @@ AActor* AClass_RacingGameMode::GetClosestEntityToFOV(const TArray<TEnumAsByte<En
         if(containerPtr){
 
             for(auto &entity: *containerPtr){
-                if(!currentClosest){    // first entity always closest to prevent currentClosest from staying null
-                    currentClosest = entity;
-                    currentClosestDistanceSquared = actor->GetSquaredDistanceTo(currentClosest);
+                AClass_Racer_Pawn* racer = Cast<AClass_Racer_Pawn>(entity);
+
+
+                // if(!currentClosest && actor && entity && entity != actor){    // first entity always closest to prevent currentClosest from staying null
+                //     currentClosest = entity;
+                //     currentClosestDistanceSquared = actor->GetSquaredDistanceTo(currentClosest);
                 
                 // comparing cosines of angles (rather not take inverse cosine)
-                } else if ( currentClosestDistanceSquared > actor->GetSquaredDistanceTo(entity) && entity->GetActorLocation().CosineAngle2D(actorDirection) <= UKismetMathLibrary::Cos(angle*3.14/180)){
-                    currentClosest = entity;
-                    currentClosestDistanceSquared = actor->GetSquaredDistanceTo(currentClosest);                    
+                // float angleBetween = ((acosf(FVector::DotProduct(actorDirection, entity->GetActorLocation()))) * (180 / 3.1415926));FMath::RadiansToDegrees
+                //float angleBetween = FMath::RadiansToDegrees(acosf(FVector::DotProduct(actorDirection, entity->GetActorLocation())));
+                // } else if ( actor && entity && entity != actor && currentClosestDistanceSquared > actor->GetSquaredDistanceTo(entity) && entity->GetActorLocation().CosineAngle2D(actorDirection) <= UKismetMathLibrary::Cos(angle*3.14/180)){
+                
+                // } else if (actor && entity && entity != actor){
+                if (actor && entity && entity != actor){
+
+                	//FRotator rotationToTarget = UKismetMathLibrary::FindLookAtRotation(actor->GetActorLocation(), entity->GetActorLocation()) - actor->GetActorRotation();
+                    FVector from = actor->GetActorLocation().GetSafeNormal();
+                    FVector to = entity->GetActorLocation().GetSafeNormal();
+                    float angleToTarget = FMath::RadiansToDegrees(acosf(FVector::DotProduct(from,to)));
+
+                    UE_LOG(LogTemp, Warning, TEXT("The angle value is: %f"), angleToTarget);
+
+
+                    if (currentClosestDistanceSquared > actor->GetSquaredDistanceTo(entity) && angleToTarget <= angle){
+                        currentClosest = entity;
+                        currentClosestDistanceSquared = actor->GetSquaredDistanceTo(currentClosest);                    
+                    }
                 }
             }
         } else {
@@ -179,7 +198,7 @@ void AClass_RacingGameMode::LoadObjectivesOfStage(int stage){
     }
     if(objectives.Num() >= 1){
         FTransform blankTransform;
-        blankTransform.SetLocation(FVector{-140000 + 250000 * stage, UKismetMathLibrary::RandomFloatInRange(-100000,100000), UKismetMathLibrary::RandomFloatInRange(-100000,100000)});
+        blankTransform.SetLocation(FVector{-40000 + 100000 * stage, UKismetMathLibrary::RandomFloatInRange(-100000,100000), UKismetMathLibrary::RandomFloatInRange(-100000,100000)});
         // blankTransform.SetLocation(FVector{300000 * stage, UKismetMathLibrary::RandomFloatInRange(-100000,100000), UKismetMathLibrary::RandomFloatInRange(-100000,100000)});
         FActorSpawnParameters spawnParams;			
 
@@ -194,6 +213,13 @@ void AClass_RacingGameMode::LoadObjectivesOfStage(int stage){
         if(!temp2){
             GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("actor spawned is not of type objective in LoadObjectivesOfStage of class racinggamemode"));
             return;
+        }
+
+        if(stage == totalStagesObjectives){
+            temp2->SetStage(stage, true);
+        }
+        else{
+            temp2->SetStage(stage, false);
         }
 
         objectiveList.Add(temp);
@@ -211,7 +237,7 @@ void AClass_RacingGameMode::LoadObjectivesOfStage(int stage){
 
         if(nonObjectiveEvents.Num() >= 1){
             // for(int i = 0; i < 15; i++){
-            for(int i = 0; i < 10; i++){
+            for(int i = 0; i < 0; i++){
                 FVector spawnLocation = (to-from).GetSafeNormal();
                 FRotator random = {UKismetMathLibrary::RandomFloatInRange(-60,60), UKismetMathLibrary::RandomFloatInRange(-60,60), UKismetMathLibrary::RandomFloatInRange(-60,60)};
                 spawnLocation = from + random.RotateVector(spawnLocation) * UKismetMathLibrary::RandomFloatInRange(distance/3,distance*2/3);
@@ -231,13 +257,6 @@ void AClass_RacingGameMode::LoadObjectivesOfStage(int stage){
                     GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("non objective event not spawned in class racinggamemode"));
                 }
             }
-        }
-
-        if(stage == totalStagesObjectives){
-            temp2->SetStage(stage, true);
-        }
-        else{
-            temp2->SetStage(stage, false);
         }
     }
 }

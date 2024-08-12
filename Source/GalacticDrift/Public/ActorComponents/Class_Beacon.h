@@ -6,9 +6,6 @@
 #include "Components/ActorComponent.h"
 
 #include "Class_Equipment.h"
-#include "Class_AdoringFan.h"
-#include "Class_Combatant.h"
-#include "Class_Racer_Pawn.h"
 #include "Class_Swivel.h"
 #include "Class_OrbitMovement.h"
 #include "Kismet/KismetMathLibrary.h"

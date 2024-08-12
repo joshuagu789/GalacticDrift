@@ -24,11 +24,26 @@ void AClass_RacerAI::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if(!destination){
-		AcquireDestination();
+	decisionTimer -= DeltaTime;
+	if(isAggressive){
+		timeAggressive += DeltaTime;
 	}
-	else{
-		DriftTowards(destination->GetActorLocation());
+	if(entityPtr && (entityPtr->GetState() == FLYING_WHILE_DRIFTING || entityPtr->GetState() == FLYING)){
+		if(!destination){
+			AcquireDestination();
+		}
+		else{
+			DriftTowardsDestination();
+			if(decisionTimer <= 0){
+				ToggleAggression();
+				decisionTimer += 4;
+			}
+		}
+	}
+	else if(isLanded){
+		// destination == nullptr;
+		AcquireDestination();
+		TakeOff();
 	}
 }
 
@@ -39,7 +54,18 @@ void AClass_RacerAI::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 }
 
-void AClass_RacerAI::DriftTowards(FVector location){
+void AClass_RacerAI::DriftTowardsDestination(){
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("drift called")); 
+	if(!destination){
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("no destination")); 
+		return;
+	}
+	if(destination->IsPendingKillPending()){
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("nullptr")); 
+		destination = nullptr;
+		return;
+	}
+	FVector location = destination->GetActorLocation();
 	FRotator rotationToTarget = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), location) - GetActorRotation();
 	// SetActorRotation(rotationToTarget);
 	float pitch = rotationToTarget.Pitch;
@@ -50,22 +76,22 @@ void AClass_RacerAI::DriftTowards(FVector location){
 	yaw = (yaw < 0) ? (-1 * yaw) : (yaw);
 	roll = (roll < 0) ? (-1 * roll) : (roll);
 
-	if(pitch + yaw + roll > 30){
+	if(pitch + yaw + roll > 40){
 		if(rotationToTarget.Pitch > 0){
 			DriftUp(4.0);
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("up")); 
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("up")); 
 		}
 		else{
 			DriftDown(4.0);
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("down")); 
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("down")); 
 		}
 		if(rotationToTarget.Yaw > 0){
 			DriftRight(4.0);
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("right")); 
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("right")); 
 		}
 		else{
 			DriftLeft(4.0);
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("left")); 
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("left")); 
 		}
 	}
 
@@ -87,6 +113,7 @@ void AClass_RacerAI::DriftTowards(FVector location){
 }
 
 bool AClass_RacerAI::AcquireDestination(){
+				// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("trying to find destination")); 
 	if(entityPtr){
 		AClass_RacingGameMode* server = entityPtr->GetServer();
 		if(server){
@@ -113,7 +140,7 @@ bool AClass_RacerAI::AcquireDestination(){
 				// if(moveComponentPtr){
 				// 	moveComponentPtr->AddInputVector(destination->GetActorLocation() - GetActorLocation(), isAccelerating);
 				// }
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("destination set")); 
+				// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("destination set")); 
 
 				return true;
 			}
@@ -121,4 +148,74 @@ bool AClass_RacerAI::AcquireDestination(){
 		// entityPtr->
 	}
 	return false;
+}
+
+void AClass_RacerAI::ToggleAggression(){
+
+
+	if(timeAggressive > 5){
+		if(!destination){
+			isAggressive = false;
+			timeAggressive = 0;
+			AcquireDestination();
+		}
+		isAggressive = false;
+		timeAggressive = 0;
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("u not even worth the time!! heh")); 
+		AcquireDestination();
+		return;
+
+		// PROBLEM WITH BELOW CODE IS COMPARING "ANGLE" TO DESTINATION THAT WAS ORIGINALLY OBJECTIVE BUT NOW SET TO PLAYER
+		// FRotator rotationToTarget = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), destination->GetActorLocation()) - GetActorRotation();
+		// if(rotationToTarget.Pitch + rotationToTarget.Yaw + rotationToTarget.Roll > 90){
+		// 	isAggressive = false;
+		// 	timeAggressive = 0;
+		// 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("u not even worth the time!! heh")); 
+		// 	AcquireDestination();
+		// 	return;
+		// }
+	}
+
+	AClass_RacingGameMode* server = entityPtr->GetServer();
+
+	AActor* farthestRacer;
+
+	if(beaconPtr && server && beaconPtr->CanSpawnAttacker()){
+		TSet<AActor*> racers = server->GetContainerForEnum(RACER);
+		float maxDistance = -1000000000;
+		bool isFirst = true;
+
+		for(AActor* racer: racers){
+			//AClass_Objective* objective = Cast<AClass_Objective>(actor);
+			AClass_Racer_Pawn* racerClass = Cast<AClass_Racer_Pawn>(racer);
+			if(racerClass && !racerClass->IsPendingKillPending() && !racerClass->GetIsLanded() && racer != this){
+
+				float distance = racer->GetActorLocation().X;
+				if(distance > maxDistance || isFirst){
+					isFirst = false;
+					maxDistance = distance;
+					farthestRacer = racer;
+				}
+			}
+		}
+		 
+		if(farthestRacer){
+			//destination = minActor;
+			beaconPtr->SpawnAttacker(farthestRacer);
+			//destination = farthestRacer;
+			//return true;
+		}
+	}
+
+	if(isAggressive){
+		return;
+	}
+
+	AActor* closestRacerToFOV = server->GetClosestEntityToFOV(TArray<TEnumAsByte<EntityType>>{RACER}, this, GetActorForwardVector(), 30, 30000);
+	if(closestRacerToFOV){
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("RUNNNN RUNNN U R IN MY WAYY!!!")); 
+		destination = closestRacerToFOV;
+		isAggressive = true;
+		timeAggressive = 0;
+	}
 }

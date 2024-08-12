@@ -2,7 +2,9 @@
 
 
 #include "ActorComponents/Class_Beacon.h"
-
+#include "Class_Racer_Pawn.h"
+#include "Class_AdoringFan.h"
+#include "Class_Combatant.h"
 // Sets default values for this component's properties
 UClass_Beacon::UClass_Beacon()
 {
@@ -128,7 +130,12 @@ void UClass_Beacon::SpawnAttacker(AActor* target){
 	FRotator offsetRotation{UKismetMathLibrary::RandomFloatInRange(-30,30),UKismetMathLibrary::RandomFloatInRange(-30,30), UKismetMathLibrary::RandomFloatInRange(0,360)};
 	spawnLocationOffset = offsetRotation.RotateVector(spawnLocationOffset);
 
-    blankTransform.SetLocation(GetOwner()->GetRootComponent()->GetComponentLocation() + GetOwner()->GetVelocity() * 3 + spawnLocationOffset);	
+	if(!target){
+	    blankTransform.SetLocation(GetOwner()->GetRootComponent()->GetComponentLocation() + GetOwner()->GetVelocity() * 3 + spawnLocationOffset);	
+	}
+	else if(!target->IsPendingKillPending()){
+		blankTransform.SetLocation(target->GetActorLocation() + target->GetVelocity() * 3 + spawnLocationOffset);	
+	}
 
     FActorSpawnParameters spawnParams;
 	// AClass_AdoringFan* fan = Cast<AClass_AdoringFan>(fanPtr);

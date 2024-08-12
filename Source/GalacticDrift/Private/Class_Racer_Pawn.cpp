@@ -39,6 +39,12 @@ void AClass_Racer_Pawn::BeginPlay()
             GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: entityPtr is nullptr for Class_Racer_Pawn"));
         }
     }
+    if(!beaconPtr){
+        beaconPtr = GetComponentByClass<UClass_Beacon>();
+        if(!beaconPtr){
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: beaconPtr is nullptr for Class_Racer_Pawn"));
+        }
+    }
     StartFlying(0.7, true, 0.1);
 }
 
@@ -51,6 +57,9 @@ void AClass_Racer_Pawn::Tick(float DeltaTime)
         if(moveComponentPtr && (entityPtr->GetState() == FLYING_WHILE_DRIFTING || entityPtr->GetState() == FLYING || entityPtr->GetState() == RAMMING ) ){
             moveComponentPtr->AddInputVector(GetActorForwardVector() * 2000, isAccelerating);
         }
+        else if(moveComponentPtr){
+            moveComponentPtr->StopMovementImmediately();
+        }
         if(CanDrift() && entityPtr->GetState() != FLYING_WHILE_DRIFTING){
 //            if(rotation.Roll > 2 || rotation.Roll < 2 && rotation.Pitch > 2 || rotation.Pitch < 2){
             if(rotation.Roll > 2 || rotation.Roll < 2){
@@ -62,20 +71,20 @@ void AClass_Racer_Pawn::Tick(float DeltaTime)
             }
         }
     }
-    else if(moveComponentPtr){
-        // moveComponentPtr->ConsumeInputVector();
-        // moveComponentPtr->AddInputVector(GetActorLocation(), false);
-        moveComponentPtr->StopMovementImmediately();
-        // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I SHOULD VE LANDING AND NOT MOVING"));
-    }
+    // else if(moveComponentPtr){
+    //     // moveComponentPtr->ConsumeInputVector();
+    //     // moveComponentPtr->AddInputVector(GetActorLocation(), false);
+    //     moveComponentPtr->StopMovementImmediately();
+    //     // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I SHOULD VE LANDING AND NOT MOVING"));
+    // }
 
     if(landTime > 0){
         FRotator targetRotation = GetActorRotation();
         targetRotation.Roll = 0;
         targetRotation.Pitch = 0;
 
-        SetActorRotation(GetActorRotation() + (targetRotation-GetActorRotation()) * 2 * DeltaTime);
-        SetActorLocation(GetActorLocation() + ((landLocation - GetActorLocation()) * 2 * DeltaTime));
+        SetActorRotation(GetActorRotation() + (targetRotation-GetActorRotation()) * 6 * DeltaTime);
+        SetActorLocation(GetActorLocation() + ((landLocation - GetActorLocation()) * 6 * DeltaTime));
         landTime -= DeltaTime;
     }
     if(takeOffTime > 0){
@@ -113,7 +122,7 @@ void AClass_Racer_Pawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void AClass_Racer_Pawn::LandOn(AActor* actor, const FVector& worldLandLocation){
     if(entityPtr && actor && !isLanded && takeOffTime <= 0){
-        // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I SHOULD BE TAKING OFF"));
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I SHOULD BE LANDING NOW"));
 
         UPrimitiveComponent* mesh = Cast<UPrimitiveComponent>(GetRootComponent());
 
@@ -128,7 +137,7 @@ void AClass_Racer_Pawn::LandOn(AActor* actor, const FVector& worldLandLocation){
 
         AttachToActor(actor, FAttachmentTransformRules{ EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld,  false});
         isLanded = true;
-        landTime = 3;
+        landTime = 7;
     }
 }
 void AClass_Racer_Pawn::TakeOff(){
@@ -139,6 +148,7 @@ void AClass_Racer_Pawn::TakeOff(){
         takeOffTime = 4;
     }
 }
+bool AClass_Racer_Pawn::GetIsLanded(){ return isLanded && takeOffTime<=0; }
 
 /*
  Sets up for the movement of racer- NOTE actual movement is called in Tick
@@ -303,3 +313,8 @@ FString AClass_Racer_Pawn::GetRootComponentSpeedIntAsString(){
 
 float AClass_Racer_Pawn::GetSpeedFloat(int decimalPlaces){ return 1.0; }
 int AClass_Racer_Pawn::GetSpeedInt(){ return 1; }
+
+void AClass_Racer_Pawn::CompleteObjective(int stage, float points){
+    lastCompletedObjective = stage;
+    popularity += points;
+}
