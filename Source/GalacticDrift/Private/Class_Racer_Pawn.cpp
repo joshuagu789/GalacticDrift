@@ -39,10 +39,16 @@ void AClass_Racer_Pawn::BeginPlay()
             GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: entityPtr is nullptr for Class_Racer_Pawn"));
         }
     }
-    if(!beaconPtr){
+    if(!beaconPtr){        
         beaconPtr = GetComponentByClass<UClass_Beacon>();
         if(!beaconPtr){
             GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: beaconPtr is nullptr for Class_Racer_Pawn"));
+        }
+    }
+    if(!meleeAttackPtr){        
+        meleeAttackPtr = GetComponentByClass<UClass_RammingAttack>();
+        if(!meleeAttackPtr){
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: meleeAttackPtr is nullptr for Class_Racer_Pawn"));
         }
     }
     StartFlying(0.7, true, 0.1);

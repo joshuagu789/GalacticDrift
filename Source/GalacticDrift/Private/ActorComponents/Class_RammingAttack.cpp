@@ -75,7 +75,7 @@ void UClass_RammingAttack::TickComponent(float DeltaTime, ELevelTick TickType, F
 			}
 			if(ramCollider){
 				ramCollider->SetAllMassScale(originalMassScale);
-				ramCollider->SetSphereRadius(0, false);
+				ramCollider->SetSphereRadius(0, true);
 			}
 
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("ramming over"));	
@@ -104,7 +104,7 @@ void UClass_RammingAttack::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 					if(ramCollider){
 						ramCollider->SetAllMassScale(massMultiplier);
-						ramCollider->SetSphereRadius(collisionRange, false);
+						ramCollider->SetSphereRadius(collisionRange, true);
 						GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("ADJUSTING RADIUSW"));	
 					}
 					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("RAMMING NOW"));	

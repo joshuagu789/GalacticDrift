@@ -25,15 +25,20 @@ void AClass_RacerAI::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	decisionTimer -= DeltaTime;
+	attackTimer -= DeltaTime;
 	if(isAggressive){
 		timeAggressive += DeltaTime;
 	}
 	if(entityPtr && (entityPtr->GetState() == FLYING_WHILE_DRIFTING || entityPtr->GetState() == FLYING)){
-		if(!destination){
+		if(!destination || destination->IsPendingKillPending()){
 			AcquireDestination();
 		}
 		else{
 			DriftTowardsDestination();
+			if(isAggressive && attackTimer <= 0){
+				attackTimer = 0.25;
+				AttemptAttack();
+			}
 			if(decisionTimer <= 0){
 				ToggleAggression();
 				decisionTimer += 4;
@@ -201,7 +206,7 @@ void AClass_RacerAI::ToggleAggression(){
 		 
 		if(farthestRacer){
 			//destination = minActor;
-			beaconPtr->SpawnAttacker(farthestRacer);
+			//beaconPtr->SpawnAttacker(farthestRacer);
 			//destination = farthestRacer;
 			//return true;
 		}
@@ -211,11 +216,26 @@ void AClass_RacerAI::ToggleAggression(){
 		return;
 	}
 
-	AActor* closestRacerToFOV = server->GetClosestEntityToFOV(TArray<TEnumAsByte<EntityType>>{RACER}, this, GetActorForwardVector(), 20, 30000);
+	AActor* closestRacerToFOV = server->GetClosestEntityToFOV(TArray<TEnumAsByte<EntityType>>{RACER}, this, GetActorForwardVector(), 40, 35000);
 	if(closestRacerToFOV){
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("RUNNNN RUNNN U R IN MY WAYY!!!")); 
 		destination = closestRacerToFOV;
 		isAggressive = true;
 		timeAggressive = 0;
 	}
+}
+
+void AClass_RacerAI::AttemptAttack(){
+	if(!destination || !meleeAttackPtr || destination->IsPendingKillPending()){
+		return;
+	}
+	float speedDifferenceSquared = (GetVelocity()-destination->GetVelocity()).SizeSquared();
+	if(speedDifferenceSquared <= 1 && speedDifferenceSquared >= -1){ return; }	// avoid dividing by zero
+	float distanceDifferenceSquared = ( GetActorLocation()-destination->GetActorLocation() ).SizeSquared();
+
+	if(distanceDifferenceSquared / speedDifferenceSquared <= 3){
+		meleeAttackPtr->BeginAttacking(destination);
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I RAM YOU HAHA")); 
+	}
+	
 }

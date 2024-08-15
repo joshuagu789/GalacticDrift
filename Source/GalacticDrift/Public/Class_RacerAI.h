@@ -25,10 +25,15 @@ protected:
 	// UPROPERTY()
 	// 	AActor* enemy;
 private:
-	void DriftTowardsDestination();
-	bool AcquireDestination();
-	void ToggleAggression();
-
+	UFUNCTION()
+		void DriftTowardsDestination();
+	UFUNCTION()
+		bool AcquireDestination();
+	UFUNCTION()
+		void ToggleAggression();
+	UFUNCTION()
+		void AttemptAttack();
+	float attackTimer = 0;
 
 	float decisionTimer = 4;
 	//float aggressionTimer = 0;	// 0 means not aggressive, positive means time left of aggression

@@ -8,6 +8,7 @@
 #include "GameFramework/FloatingPawnMovement.h"
 #include "ActorComponents/Class_Entity.h"
 #include "ActorComponents/Class_Beacon.h"
+#include "ActorComponents/Class_RammingAttack.h"
 #include "Ragdollable.h"
 #include "Header_Enumerations.h"
 #include "Class_ActorInformationTracker.h"
@@ -85,6 +86,8 @@ protected:
         USkeletalMeshComponent* skeletalMeshPtr;
     UPROPERTY()
         UClass_Beacon* beaconPtr;
+    UPROPERTY()
+        UClass_RammingAttack* meleeAttackPtr;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
         bool isLanded = false;
