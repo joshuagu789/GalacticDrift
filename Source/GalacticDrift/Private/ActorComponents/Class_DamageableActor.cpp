@@ -76,10 +76,17 @@ void UClass_DamageableActor::TickComponent(float DeltaTime, ELevelTick TickType,
 
 float UClass_DamageableActor::CalculateAndApplyDamage(UPrimitiveComponent* collisionSource){
 
-	UClass_Entity* collisionEntity = collisionSource->GetOwner()->FindComponentByClass<UClass_Entity>();
-	if(collisionTimer > 0 || immunityTimer > 0 || collisionEntity && entityPtr && entityPtr->IsFriendlyWith(collisionEntity->GetType())){
+	if(collisionTimer > 0 || immunityTimer > 0){
 		return 0;
 	}
+	
+	if(collisionSource){
+		UClass_Entity* collisionEntity = collisionSource->GetOwner()->FindComponentByClass<UClass_Entity>();
+		if(collisionEntity && entityPtr && entityPtr->GetType() != RACER && entityPtr->IsFriendlyWith(collisionEntity->GetType())){
+			return 0;
+		}
+	}
+
 	collisionTimer += 0.05;	//Damaging collisions can only occur every 0.05 seconds
 
 	float damage = GetOwner()->GetRootComponent()->GetComponentVelocity().SizeSquared();
@@ -94,7 +101,13 @@ float UClass_DamageableActor::CalculateAndApplyDamage(UPrimitiveComponent* colli
 	damage *= 0.2;
 	actualHealth -= damage;
 	mostRecentDamage = damage;
+    // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("take damage in Class_DamageableActor"));
+
 	return damage;
+}
+
+void UClass_DamageableActor::SetImmunityTime(float duration){
+	immunityTimer = duration;
 }
 
 TEnumAsByte<DamageableActor_Type> UClass_DamageableActor::GetType(){ return type; }

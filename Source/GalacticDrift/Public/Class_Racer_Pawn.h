@@ -6,7 +6,9 @@
 #include "GameFramework/Pawn.h"
 #include "Class_Combatant.h"
 #include "GameFramework/FloatingPawnMovement.h"
-#include "Class_Entity.h"
+#include "ActorComponents/Class_Entity.h"
+#include "ActorComponents/Class_Beacon.h"
+#include "ActorComponents/Class_RammingAttack.h"
 #include "Ragdollable.h"
 #include "Header_Enumerations.h"
 #include "Class_ActorInformationTracker.h"
@@ -15,7 +17,8 @@
 #include "Class_Racer_Pawn.generated.h"
 
 UCLASS()
-class GALACTICDRIFT_API AClass_Racer_Pawn : public AClass_Combatant, public IRagdollable, public IClass_ActorInformationTracker
+// class GALACTICDRIFT_API AClass_Racer_Pawn : public AClass_Combatant, public IRagdollable, public IClass_ActorInformationTracker
+class GALACTICDRIFT_API AClass_Racer_Pawn : public AClass_Combatant, public IClass_ActorInformationTracker
 {
 	GENERATED_BODY()
 
@@ -26,6 +29,12 @@ public:
     UFUNCTION(BlueprintCallable, Category="Movement")
         void StartFlying(float initialSpeed, bool accelerate, float floppiness);
 
+    UFUNCTION()
+        void LandOn(AActor* actor, const FVector& worldLandLocation);
+    UFUNCTION(BlueprintCallable)
+        void TakeOff();
+    UFUNCTION()
+        bool GetIsLanded();
     UFUNCTION(BlueprintCallable, Category="Movement")
         bool CanDrift();
     UFUNCTION(BlueprintCallable, Category="Movement")
@@ -41,13 +50,17 @@ public:
     
     UFUNCTION(BlueprintCallable, Category="Action")
         void SetState(TEnumAsByte<EntityState> newState);
+    UFUNCTION(BlueprintCallable)
+        const FString& GetUserName(); 
 
     UFUNCTION(BlueprintCallable, Category="Action")
         void StunFor(float duration);
     
+    UFUNCTION()
+        void CompleteObjective(int stage, float points);
     // From interfaces
-    void RagdollFor(float duration);
-    void UnRagdoll();
+    // void RagdollFor(float duration);
+    // void UnRagdoll();
     FString GetSpeedIntAsString();
     FString GetRootComponentSpeedIntAsString();
     float GetSpeedFloat(int decimalPlaces);
@@ -56,11 +69,14 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-    
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+        FString username;
     UPROPERTY(EditAnywhere)
         float speed = 0;
     UPROPERTY(BlueprintReadWrite)
         UClass_Entity* entityPtr;
+    int lastCompletedObjective = 0;
 
     // TEnumAsByte<EntityState> state = DEFAULT;
     
@@ -68,11 +84,22 @@ protected:
         UFloatingPawnMovement* moveComponentPtr;    // floating pawn movement
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
         USkeletalMeshComponent* skeletalMeshPtr;
+    UPROPERTY()
+        UClass_Beacon* beaconPtr;
+    UPROPERTY()
+        UClass_RammingAttack* meleeAttackPtr;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+        bool isLanded = false;
 
     float popularity = 0;
     bool isAccelerating = false;
     FRotator rotation = {0,0,0};
-    
+
+private:
+    float landTime = 0;
+    float takeOffTime = 0;
+    FVector landLocation;
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -22,8 +22,8 @@ public:
 	// Sets default values for this component's properties
 	UClass_Equipment();
 
-	void TakeDamage(float damage);
-	void Repair(float amount);
+	// void TakeDamage(float damage);
+	// void Repair(float amount);
 
 protected:
 	// Called when the game starts

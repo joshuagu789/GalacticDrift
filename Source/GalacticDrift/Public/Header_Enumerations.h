@@ -72,6 +72,9 @@ enum EntityState
     FLYING,
     FLYING_WHILE_DRIFTING,
     RAGDOLLED,
+    RAMMING,
+    LANDED,
+    EMOTING
 };
 
     // FLYING = "FLYING",

@@ -1,14 +1,17 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+/*
+For generating asteroid fields
+*/
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Class_RevolvingObject.h"
+#include "ActorComponents/Class_RevolvingObject.h"
+#include "Class_Objective.h"
 #include "Class_Spawner.generated.h"
 
 UCLASS()
-class GALACTICDRIFT_API AClass_Spawner : public AActor
+class GALACTICDRIFT_API AClass_Spawner : public AClass_Objective
 {
 	GENERATED_BODY()
 	
@@ -20,7 +23,9 @@ public:
 		/*
 			min and max for range of actors to spawn, max_x is furthest x distance from center, same pattern for max_y and max_z
 		*/
-        void SpawnActorsEllipse(int min, int max, float max_x, float max_y, float max_z, float min_scale, float max_scale);
+        void SpawnActorsEllipse(int amount, float max_x, float max_y, float max_z, float min_scale, float max_scale);
+	
+	bool BeginEvent() override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -31,6 +36,16 @@ protected:
 		TSet<AActor*> actorList;	
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSubclassOf<AActor> actorPtr;
+
+	bool hasSpawned = false;
+
+	int amountLeftToSpawn = 0;
+	int x = 0;
+	int y = 0;
+	int z = 0;
+	int scale1 = 1;
+	int scale2 = 1;
+private:
 
 public:	
 	// Called every frame

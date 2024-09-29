@@ -19,57 +19,62 @@ class GALACTICDRIFT_API UClass_RacingGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
-public:
-	UFUNCTION(BlueprintCallable)
-	/*
-		Returns true if successfully added, otherwise false
-			- takes in some reference to some actor
-	*/
-	bool AddEntityToServer(TEnumAsByte<EntityType> type, AActor* actor);
+// public:
+// 	UFUNCTION(BlueprintCallable)
+// 	/*
+// 		Returns true if successfully added, otherwise false
+// 			- takes in some reference to some actor
+// 	*/
+// 	bool AddEntityToServer(TEnumAsByte<EntityType> type, AActor* actor);
 
-	UFUNCTION(BlueprintCallable)
-	/*
-		Returns true if successfully removed, otherwise false
-			- takes in some reference to some actor
-	*/
-	bool RemoveEntityFromServer(TEnumAsByte<EntityType> type, AActor* actor);
+// 	UFUNCTION(BlueprintCallable)
+// 	/*
+// 		Returns true if successfully removed, otherwise false
+// 			- takes in some reference to some actor
+// 	*/
+// 	bool RemoveEntityFromServer(TEnumAsByte<EntityType> type, AActor* actor);
 
-	UFUNCTION(BlueprintCallable)
-	/*
-		Same as AddEntityToServer but just for markers
-	*/
-	bool AddMarkerToServer(AActor* actor);
+// 	UFUNCTION(BlueprintCallable)
+// 	/*
+// 		Same as AddEntityToServer but just for markers
+// 	*/
+// 	bool AddMarkerToServer(AActor* actor);
 
-	UFUNCTION(BlueprintCallable, Category="Information")
-	/*
-		Retrieves reference to container of associated enum
-	*/
-		TSet<AActor*>& GetContainerForEnum(const TEnumAsByte<EntityType> type);
+// 	UFUNCTION(BlueprintCallable, Category="Information")
+// 	/*
+// 		Retrieves reference to container of associated enum
+// 	*/
+// 		TSet<AActor*>& GetContainerForEnum(const TEnumAsByte<EntityType> type);
 
-	UFUNCTION(BlueprintCallable)
-		TSet<AActor*>& GetMarkers();
+// 	UFUNCTION(BlueprintCallable)
+// 		TSet<AActor*>& GetMarkers();
 
-	UFUNCTION(BlueprintCallable)
-		/*
-			WARNING: THIS CAN RETURN NULL POINTER
-		*/
-		AActor* GetClosestEntityTo(const TArray<TEnumAsByte<EntityType>> &entityTypes, const AActor* actor);
+// 	UFUNCTION(BlueprintCallable)
+// 		/*
+// 			WARNING: THIS CAN RETURN NULL POINTER
+// 		*/
+// 		AActor* GetClosestEntityTo(const TArray<TEnumAsByte<EntityType>> &entityTypes, const AActor* actor);
 
-	UFUNCTION(BlueprintCallable)
-		/*
-			WARNING: THIS CAN RETURN NULL POINTER
-		*/
-		AActor* GetClosestEntityToFOV(const TArray<TEnumAsByte<EntityType>> &entityTypes, const AActor* actor, const FVector& actorDirection, float angle, float range);
+// 	UFUNCTION(BlueprintCallable)
+// 		/*
+// 			WARNING: THIS CAN RETURN NULL POINTER
+// 		*/
+// 		AActor* GetClosestEntityToFOV(const TArray<TEnumAsByte<EntityType>> &entityTypes, const AActor* actor, const FVector& actorDirection, float angle, float range);
+	
+// 	UFUNCTION()
+// 		void BeginGame();
 
-protected:	// below should be private but public for now because testing
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TSet<AActor*> racerList;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TSet<AActor*> markerList;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TSet<AActor*> emptyList;	// WARNING: SHOULD BE EMPTY
-	UPROPERTY()
-		int test = 0;
+// protected:	
+// 	// virtual void BeginPlay() override;
 
-private:
+// 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+// 		TSet<AActor*> racerList;
+// 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+// 		TSet<AActor*> markerList;
+// 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+// 		TSet<AActor*> emptyList;	// WARNING: SHOULD BE EMPTY
+// 	UPROPERTY()
+// 		int test = 0;
+
+// private:
 };

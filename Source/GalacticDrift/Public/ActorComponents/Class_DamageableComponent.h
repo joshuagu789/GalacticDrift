@@ -24,15 +24,17 @@ public:
 		void TakeDamage(float damage);
 	UFUNCTION(BlueprintCallable, Category="Action")
 		void Repair(float amount);
-
+	UFUNCTION(BlueprintCallable)
+		void FullRepair();
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-		float health = 100;
-	bool broken = false;
+		float maxHealth = 100;
 
+	bool broken = false;
+	float health = 100;
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

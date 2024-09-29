@@ -107,22 +107,22 @@ void UClass_Cannon::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
     }
 }
 
-void UClass_Cannon::BeginAttacking(AActor* actor){
-    if(actor){
-        isAttacking = true;
-        attackTarget = actor;
-    }
-    else{
-        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: actor is nullptr in BeginAttacking parameter of Class Cannon"));	
-    }
-}	
+// void UClass_Cannon::BeginAttacking(AActor* actor){
+//     if(actor){
+//         isAttacking = true;
+//         attackTarget = actor;
+//     }
+//     else{
+//         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Warning: actor is nullptr in BeginAttacking parameter of Class Cannon"));	
+//     }
+// }	
 
-void UClass_Cannon::StopAttacking(){
-    isAttacking = false;
-    attackTarget = nullptr;
-}	
+// void UClass_Cannon::StopAttacking(){
+//     isAttacking = false;
+//     attackTarget = nullptr;
+// }	
 
-bool UClass_Cannon::IsAttacking(){ return isAttacking; }
+// bool UClass_Cannon::IsAttacking(){ return isAttacking; }
 
 void UClass_Cannon::ShootAt(AActor* target, float distanceSquaredToTarget = 0){
     if(distanceSquaredToTarget == 0){

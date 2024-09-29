@@ -2,7 +2,9 @@
 
 
 #include "ActorComponents/Class_Beacon.h"
-
+#include "Class_Racer_Pawn.h"
+#include "Class_AdoringFan.h"
+#include "Class_Combatant.h"
 // Sets default values for this component's properties
 UClass_Beacon::UClass_Beacon()
 {
@@ -30,15 +32,27 @@ void UClass_Beacon::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+	if(fanTimer > 0){
+		fanTimer -= DeltaTime;
+	}
+	if(policeTimer > 0){
+		policeTimer -= DeltaTime;
+	}
+	if(attackerTimer > 0){
+		attackerTimer -= DeltaTime;
+	}
 }
 
 void UClass_Beacon::SpawnFan(){
+	if(!CanSpawnFan()){
+		return;
+	}
     FTransform blankTransform;
-	FVector spawnLocationOffset{UKismetMathLibrary::RandomFloatInRange(2000,4000 + 50000 - 50000 * accuracy),0,0};
+	FVector spawnLocationOffset{UKismetMathLibrary::RandomFloatInRange(5000,10000 + 50000 - 50000 * accuracy),0,0};
 	FRotator offsetRotation{UKismetMathLibrary::RandomFloatInRange(-30,30),UKismetMathLibrary::RandomFloatInRange(-30,30), UKismetMathLibrary::RandomFloatInRange(0,360)};
 	spawnLocationOffset = offsetRotation.RotateVector(spawnLocationOffset);
 
-    blankTransform.SetLocation(GetOwner()->GetRootComponent()->GetComponentLocation() + spawnLocationOffset);	
+    blankTransform.SetLocation(GetOwner()->GetRootComponent()->GetComponentLocation() + GetOwner()->GetVelocity() * 3 + spawnLocationOffset);	
 
     FActorSpawnParameters spawnParams;
 	// AClass_AdoringFan* fan = Cast<AClass_AdoringFan>(fanPtr);
@@ -60,15 +74,18 @@ void UClass_Beacon::SpawnFan(){
 
 	fanClass->SetRacer(Cast<AClass_Racer_Pawn>(GetOwner()));
 	fanClass->SpawnDefaultController();
+	fanTimer = fanCooldown;
 }
 void UClass_Beacon::SpawnPolice(){
-
+	if(!CanSpawnPolice()){
+		return;
+	}
     FTransform blankTransform;
-	FVector spawnLocationOffset{UKismetMathLibrary::RandomFloatInRange(2000,4000 + 50000 - 50000 * accuracy),0,0};
+	FVector spawnLocationOffset{UKismetMathLibrary::RandomFloatInRange(5000,10000 + 50000 - 50000 * accuracy),0,0};
 	FRotator offsetRotation{UKismetMathLibrary::RandomFloatInRange(-30,30),UKismetMathLibrary::RandomFloatInRange(-30,30), UKismetMathLibrary::RandomFloatInRange(0,360)};
 	spawnLocationOffset = offsetRotation.RotateVector(spawnLocationOffset);
 
-    blankTransform.SetLocation(GetOwner()->GetRootComponent()->GetComponentLocation() + spawnLocationOffset);	
+    blankTransform.SetLocation(GetOwner()->GetRootComponent()->GetComponentLocation() + GetOwner()->GetVelocity() * 3 + spawnLocationOffset);	
 
     FActorSpawnParameters spawnParams;
 	// AClass_AdoringFan* fan = Cast<AClass_AdoringFan>(fanPtr);
@@ -101,14 +118,26 @@ void UClass_Beacon::SpawnPolice(){
 		swivel->BeginFacing(GetOwner());
 	}
 
+	policeTimer = policeCooldown;
 }
 void UClass_Beacon::SpawnAttacker(AActor* target){
+	if(!CanSpawnAttacker() || !target || target->IsPendingKillPending()){
+		return;
+	}
+
     FTransform blankTransform;
-	FVector spawnLocationOffset{UKismetMathLibrary::RandomFloatInRange(2000,4000 + 50000 - 50000 * accuracy),0,0};
+	FVector spawnLocationOffset{UKismetMathLibrary::RandomFloatInRange(5000,10000 + 50000 - 50000 * accuracy),0,0};
 	FRotator offsetRotation{UKismetMathLibrary::RandomFloatInRange(-30,30),UKismetMathLibrary::RandomFloatInRange(-30,30), UKismetMathLibrary::RandomFloatInRange(0,360)};
 	spawnLocationOffset = offsetRotation.RotateVector(spawnLocationOffset);
 
-    blankTransform.SetLocation(target->GetRootComponent()->GetComponentLocation() + spawnLocationOffset);	
+	if(!target){
+	    blankTransform.SetLocation(GetOwner()->GetRootComponent()->GetComponentLocation() + GetOwner()->GetVelocity() * 3 + spawnLocationOffset);	
+	}
+	else if(target && !target->IsPendingKillPending()){
+		FVector targetLocation = target->GetActorLocation();
+		FVector targetVelocity = target->GetVelocity();
+		blankTransform.SetLocation(targetLocation + targetVelocity * 3 + spawnLocationOffset);	
+	}
 
     FActorSpawnParameters spawnParams;
 	// AClass_AdoringFan* fan = Cast<AClass_AdoringFan>(fanPtr);
@@ -132,6 +161,7 @@ void UClass_Beacon::SpawnAttacker(AActor* target){
 	// fanClass->SetRacer(Cast<AClass_Racer_Pawn>(GetOwner()));
 
 	combatantClass->SpawnDefaultController();
+	attackerTimer = attackerCooldown;
 }
 
 bool UClass_Beacon::CanSpawnFan(){ return fanTimer <= 0; }

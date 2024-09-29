@@ -15,6 +15,7 @@ AClass_Projectile::AClass_Projectile()
 void AClass_Projectile::BeginPlay()
 {
 	Super::BeginPlay();
+	SetActorTickEnabled(false);
 	
 }
 
