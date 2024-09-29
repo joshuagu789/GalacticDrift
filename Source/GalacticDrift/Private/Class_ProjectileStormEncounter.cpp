@@ -324,6 +324,13 @@ void AClass_ProjectileStormEncounter::EventHit
 	if(OtherActor != this && !isFractured){
 		UStaticMeshComponent* myComp = Cast<UStaticMeshComponent>(HitComponent);
 
+		UStaticMeshComponent* otherMeshComponent = Cast<UStaticMeshComponent>(OtherComp);
+
+		// if two projectiles of projectile storm collide with each other
+		if(otherMeshComponent && projectiles.Contains(otherMeshComponent)){
+			return;
+		}
+
 		if(myComp && projectiles.Contains(myComp)){
 			projectiles[myComp] -= 10;
 			if(projectiles[myComp] <= 0){

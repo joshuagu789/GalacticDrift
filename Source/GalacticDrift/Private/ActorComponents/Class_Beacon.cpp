@@ -121,7 +121,7 @@ void UClass_Beacon::SpawnPolice(){
 	policeTimer = policeCooldown;
 }
 void UClass_Beacon::SpawnAttacker(AActor* target){
-	if(!CanSpawnAttacker()){
+	if(!CanSpawnAttacker() || !target || target->IsPendingKillPending()){
 		return;
 	}
 
@@ -133,8 +133,10 @@ void UClass_Beacon::SpawnAttacker(AActor* target){
 	if(!target){
 	    blankTransform.SetLocation(GetOwner()->GetRootComponent()->GetComponentLocation() + GetOwner()->GetVelocity() * 3 + spawnLocationOffset);	
 	}
-	else if(!target->IsPendingKillPending()){
-		blankTransform.SetLocation(target->GetActorLocation() + target->GetVelocity() * 3 + spawnLocationOffset);	
+	else if(target && !target->IsPendingKillPending()){
+		FVector targetLocation = target->GetActorLocation();
+		FVector targetVelocity = target->GetVelocity();
+		blankTransform.SetLocation(targetLocation + targetVelocity * 3 + spawnLocationOffset);	
 	}
 
     FActorSpawnParameters spawnParams;

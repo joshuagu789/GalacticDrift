@@ -204,9 +204,9 @@ void AClass_RacerAI::ToggleAggression(){
 			}
 		}
 		 
-		if(farthestRacer){
+		if(farthestRacer && !farthestRacer->IsPendingKillPending()){
 			//destination = minActor;
-			//beaconPtr->SpawnAttacker(farthestRacer);
+			beaconPtr->SpawnAttacker(farthestRacer);
 			//destination = farthestRacer;
 			//return true;
 		}
@@ -233,7 +233,7 @@ void AClass_RacerAI::AttemptAttack(){
 	if(speedDifferenceSquared <= 1 && speedDifferenceSquared >= -1){ return; }	// avoid dividing by zero
 	float distanceDifferenceSquared = ( GetActorLocation()-destination->GetActorLocation() ).SizeSquared();
 
-	if(distanceDifferenceSquared / speedDifferenceSquared <= 3){
+	if(distanceDifferenceSquared / speedDifferenceSquared <= 2.5){
 		meleeAttackPtr->BeginAttacking(destination);
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I RAM YOU HAHA")); 
 	}

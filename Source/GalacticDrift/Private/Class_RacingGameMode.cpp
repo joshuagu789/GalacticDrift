@@ -198,8 +198,8 @@ void AClass_RacingGameMode::LoadObjectivesOfStage(int stage){
     }
     if(objectives.Num() >= 1){
         FTransform blankTransform;
-        blankTransform.SetLocation(FVector{-40000 + 100000 * stage, UKismetMathLibrary::RandomFloatInRange(-100000,100000), UKismetMathLibrary::RandomFloatInRange(-100000,100000)});
-        // blankTransform.SetLocation(FVector{300000 * stage, UKismetMathLibrary::RandomFloatInRange(-100000,100000), UKismetMathLibrary::RandomFloatInRange(-100000,100000)});
+        // blankTransform.SetLocation(FVector{-80000 + 200000 * stage, UKismetMathLibrary::RandomFloatInRange(-100000,100000), UKismetMathLibrary::RandomFloatInRange(-100000,100000)});
+        blankTransform.SetLocation(FVector{200000 * stage, UKismetMathLibrary::RandomFloatInRange(-100000,100000), UKismetMathLibrary::RandomFloatInRange(-100000,100000)});
         FActorSpawnParameters spawnParams;			
 
         AActor* temp = GetWorld()->SpawnActor<AActor>(objectives[0], blankTransform, spawnParams);
@@ -236,8 +236,8 @@ void AClass_RacingGameMode::LoadObjectivesOfStage(int stage){
         float distance = (from-to).Size();
 
         if(nonObjectiveEvents.Num() >= 1){
-            // for(int i = 0; i < 15; i++){
-            for(int i = 0; i < 0; i++){
+            for(int i = 0; i < 15; i++){
+            // for(int i = 0; i < 0; i++){
                 FVector spawnLocation = (to-from).GetSafeNormal();
                 FRotator random = {UKismetMathLibrary::RandomFloatInRange(-60,60), UKismetMathLibrary::RandomFloatInRange(-60,60), UKismetMathLibrary::RandomFloatInRange(-60,60)};
                 spawnLocation = from + random.RotateVector(spawnLocation) * UKismetMathLibrary::RandomFloatInRange(distance/3,distance*2/3);
@@ -247,7 +247,12 @@ void AClass_RacingGameMode::LoadObjectivesOfStage(int stage){
                 FRotator spawnRotation{0,UKismetMathLibrary::RandomFloatInRange(0,360),0};
                 blankTransform.SetRotation(spawnRotation.Quaternion());
 
-                AActor* tempEvent =  GetWorld()->SpawnActor<AActor>(nonObjectiveEvents[0], blankTransform, spawnParams);
+                int index = UKismetMathLibrary::RandomIntegerInRange(0,nonObjectiveEvents.Num()-1); // appears to be inclusive
+                if(index == nonObjectiveEvents.Num()){
+                    GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("WARNING: random index is out of bounds for noObjectiveEvents array, automatically setting to last valid index"));
+                    index = nonObjectiveEvents.Num() - 1;
+                }
+                AActor* tempEvent =  GetWorld()->SpawnActor<AActor>(nonObjectiveEvents[index], blankTransform, spawnParams);
                 if(tempEvent){
                     tempEvent->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
                     // GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("spawn non objective event"));
